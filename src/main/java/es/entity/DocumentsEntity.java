@@ -3,7 +3,7 @@ package es.entity;
 import javax.persistence.*;
 
 /**
- * Created by TYF on 2018/3/2.
+ * Created by TYF on 2018/3/30.
  */
 @Entity
 @Table(name = "documents", schema = "es", catalog = "")
@@ -13,7 +13,7 @@ public class DocumentsEntity {
     private boolean deleted;
 
     @Id
-    @Column(name = "title", nullable = false, length = 150)
+    @Column(name = "title", nullable = false, length = 45)
     public String getTitle() {
         return title;
     }
