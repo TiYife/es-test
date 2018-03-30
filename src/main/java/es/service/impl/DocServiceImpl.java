@@ -7,15 +7,12 @@ import es.entity.LawEntity;
 import es.esRepository.LawRepository;
 import es.jpaRepository.DocRepository;
 import es.service.DocService;
-import org.apache.commons.lang.RandomStringUtils;
-import org.apache.commons.lang.math.RandomUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.data.elasticsearch.core.query.IndexQuery;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,7 +48,7 @@ public class DocServiceImpl implements DocService{
     public boolean saveDocs(File file){
         recordDocs(file);
         int counter = 0;
-        List<LawEntity> list = createList();
+        List<LawEntity> list = createListToUp();
         try {
             if (!elasticsearchTemplate.indexExists(Constant.INDEX_NAME)) {
                 elasticsearchTemplate.createIndex(Constant.INDEX_NAME);
@@ -146,7 +143,7 @@ public class DocServiceImpl implements DocService{
     }
 
     //将还未索引的文件创建成list便于上传
-    private List<LawEntity> createList(){
+    private List<LawEntity> createListToUp(){
         List<LawEntity> lawEntities=new ArrayList<LawEntity>();
         LawEntity lawEntity;
         List<DocumentsEntity> documentsEntities=docRepository.findAllByUploadedAndAndDeleted(false,false);
