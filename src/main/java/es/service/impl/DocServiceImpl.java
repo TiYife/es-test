@@ -2,7 +2,7 @@ package es.service.impl;
 
 import com.google.gson.Gson;
 import es.Constant;
-import es.entity.DocumentsEntity;
+import es.entity.DocumentEntity;
 import es.entity.LawEntity;
 import es.esRepository.LawRepository;
 import es.jpaRepository.DocRepository;
@@ -48,7 +48,7 @@ public class DocServiceImpl implements DocService{
     public boolean saveDocs(File file){
         recordDocs(file);
         int counter = 0;
-        List<LawEntity> list = createListToUp();
+        List<LawEntity> list = listNewDocs();
         try {
             if (!elasticsearchTemplate.indexExists(Constant.INDEX_NAME)) {
                 elasticsearchTemplate.createIndex(Constant.INDEX_NAME);
@@ -86,7 +86,7 @@ public class DocServiceImpl implements DocService{
     //将所有文件信息记录到数据库，以便之后根据数据库进行索引
     private boolean recordDocs(File file) {
         try {
-            List<DocumentsEntity> list = new ArrayList<DocumentsEntity>();
+            List<DocumentEntity> list = new ArrayList<DocumentEntity>();
             if(!listDocs(file,list))
                 return false;
             docRepository.save(list);
@@ -98,7 +98,7 @@ public class DocServiceImpl implements DocService{
     }
 
     //列举出文件夹下所有的文件
-    private boolean listDocs(File file , List<DocumentsEntity> list) throws IOException {
+    private boolean listDocs(File file , List<DocumentEntity> list) throws IOException {
         if(!file.exists())return false;
         if(file.isDirectory()) {
             System.out.print("读取文件夹:");
@@ -112,9 +112,9 @@ public class DocServiceImpl implements DocService{
             String title=file.getAbsolutePath();
             System.out.print("读取文件:");
             System.out.println(title);
-            DocumentsEntity documentsEntity=new DocumentsEntity();
-            documentsEntity.setTitle(title);
-            list.add(documentsEntity);
+            DocumentEntity documentEntity=new DocumentEntity();
+            documentEntity.setId(title);
+            list.add(documentEntity);
         }
         return true;
     }
@@ -143,15 +143,15 @@ public class DocServiceImpl implements DocService{
     }
 
     //将还未索引的文件创建成list便于上传
-    private List<LawEntity> createListToUp(){
+    private List<LawEntity> listNewDocs(){
         List<LawEntity> lawEntities=new ArrayList<LawEntity>();
         LawEntity lawEntity;
-        List<DocumentsEntity> documentsEntities=docRepository.findAllByUploadedAndAndDeleted(false,false);
-        for (DocumentsEntity documentsEntity:documentsEntities
+        List<DocumentEntity> documentsEntities=docRepository.findAllByUploadedAndAndDeleted(false,false);
+        for (DocumentEntity documentEntity:documentsEntities
              ) {
             lawEntity=new LawEntity();
             lawEntity.setId(Constant.ID++);
-            File file=new File(documentsEntity.getTitle());
+            File file=new File(documentEntity.getId());
             lawEntity.setTitle(getFileName(file.getName()));
             lawEntity.setContent(readDoc(file));
             lawEntities.add(lawEntity);

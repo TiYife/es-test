@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="es.entity.DocumentEntity" table="document" schema="esWeb">
+        <id name="id">
+            <column name="id" sql-type="varchar(45)" length="45"/>
+        </id>
+        <property name="upload">
+            <column name="upload" sql-type="tinyint(4)"/>
+        </property>
+        <property name="delete">
+            <column name="delete" sql-type="tinyint(4)"/>
+        </property>
+    </class>
+</hibernate-mapping>
