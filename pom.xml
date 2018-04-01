@@ -6,6 +6,18 @@
 	<groupId>es</groupId>
 	<artifactId>es-test</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.7</source>
+					<target>1.7</target>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 	<packaging>jar</packaging>
 
 	<name>es-test</name>
@@ -19,7 +31,6 @@
 	</parent>
 
 	<dependencies>
-
 		<!-- Spring Boot Elasticsearch 依赖 -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -44,12 +55,18 @@
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 
-		<!-- Junit -->
+		<!--test-->
 		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.12</version>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
 		</dependency>
+
+		<!-- Junit -->
+		<!--<dependency>-->
+			<!--<groupId>junit</groupId>-->
+			<!--<artifactId>junit</artifactId>-->
+			<!--<version>4.12</version>-->
+		<!--</dependency>-->
 
 		<!-- Gson-->
 		<dependency>
@@ -57,6 +74,5 @@
 			<artifactId>gson</artifactId>
 			<version>2.2.4</version>
 		</dependency>
-
-    </dependencies>
+	</dependencies>
 </project>

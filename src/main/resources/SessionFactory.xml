@@ -6,8 +6,8 @@
   <session-factory>
     <property name="connection.url">jdbc:mysql://10.251.254.236:3306/esWeb</property>
     <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
-      <mapping resource="es/entity/DocumentEntity.hbm.xml"/>
-      <mapping class="es.entity.DocumentEntity"/>
+      <mapping resource="es/entity/XmlEntity.hbm.xml"/>
+      <mapping class="es.entity.XmlEntity"/>
       <!-- <property name="connection.username"/> -->
     <!-- <property name="connection.password"/> -->
 

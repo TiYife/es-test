@@ -1,8 +1,8 @@
 package es.service.impl;
 
-import es.entity.LawEntity;
+import es.entity.DocEntity;
 import es.esRepository.LawRepository;
-import es.service.LawService;
+import es.service.SearchService;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.index.query.functionscore.FunctionScoreQueryBuilder;
 import org.elasticsearch.index.query.functionscore.ScoreFunctionBuilders;
@@ -23,8 +23,8 @@ import java.util.List;
  * Created by TYF on 2018/1/29.
  */
 @Service
-public class LawServiceImpl implements LawService {
-    private static final Logger LOGGER = LoggerFactory.getLogger(LawServiceImpl.class);
+public class SearchServiceImpl implements SearchService {
+    private static final Logger LOGGER = LoggerFactory.getLogger(SearchServiceImpl.class);
 
     /* 分页参数 */
     Integer PAGE_SIZE = 12;          // 每页数量
@@ -36,13 +36,8 @@ public class LawServiceImpl implements LawService {
     @Autowired
     LawRepository lawRepository;
 
-    public String saveLaw(LawEntity law){
-        lawRepository.save(law);
-        return  law.getId()+"\n"+law.getTitle();
-    }
-
     @Override
-    public List<LawEntity> searchLaw(Integer pageNumber, Integer pageSize, String searchContent) {
+    public List<DocEntity> searchLaw(Integer pageNumber, Integer pageSize, String searchContent) {
         // 校验分页参数
         if (pageSize == null || pageSize <= 0) {
             pageSize = PAGE_SIZE;
@@ -54,7 +49,7 @@ public class LawServiceImpl implements LawService {
         SearchQuery searchQuery = getCitySearchQuery(pageNumber,pageSize,searchContent);
         LOGGER.info("\n search: searchContent [" + searchContent + "] \n " +
                 "DSL  = \n " + searchQuery.getQuery().toString());
-        Page<LawEntity> lawPage = lawRepository.search(searchQuery);
+        Page<DocEntity> lawPage = lawRepository.search(searchQuery);
         return lawPage.getContent();
     }
     /**
