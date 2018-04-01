@@ -1,7 +1,7 @@
 package es.service.impl;
 
 import es.entity.DocEntity;
-import es.esRepository.LawRepository;
+import es.esRepository.DocRepository;
 import es.service.SearchService;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.index.query.functionscore.FunctionScoreQueryBuilder;
@@ -34,7 +34,7 @@ public class SearchServiceImpl implements SearchService {
     Float  MIN_SCORE = 10.0F;      // 由于无相关性的分值默认为 1 ，设置权重分最小值为 10
 
     @Autowired
-    LawRepository lawRepository;
+    DocRepository lawRepository;
 
     @Override
     public List<DocEntity> searchLaw(Integer pageNumber, Integer pageSize, String searchContent) {

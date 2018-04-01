@@ -5,7 +5,7 @@ import es.Constant;
 import es.Util.ConvertUtil;
 import es.entity.XmlEntity;
 import es.entity.DocEntity;
-import es.esRepository.LawRepository;
+import es.esRepository.DocRepository;
 import es.jpaRepository.XmlRepository;
 import es.service.SaveService;
 import org.json.JSONObject;
@@ -25,7 +25,7 @@ import java.util.List;
 public class SaveServiceImpl implements SaveService {
 
     @Autowired
-    private LawRepository lawRepository;
+    private DocRepository docRepository;
     @Autowired
     private XmlRepository xmlRepository;
     @Autowired
@@ -35,7 +35,7 @@ public class SaveServiceImpl implements SaveService {
     public boolean saveDoc(File file){
         try {
             DocEntity docEntity = ConvertUtil.xmlToEntity(file);
-            lawRepository.save(docEntity);
+            docRepository.save(docEntity);
         } catch (Exception e) {
             e.printStackTrace();
             return false;
