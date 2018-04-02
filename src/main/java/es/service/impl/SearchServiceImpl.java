@@ -37,7 +37,7 @@ public class SearchServiceImpl implements SearchService {
     DocRepository lawRepository;
 
     @Override
-    public List<DocEntity> searchLaw(Integer pageNumber, Integer pageSize, String searchContent) {
+    public List<DocEntity> searchLaw(Integer pageNumber, Integer pageSize, String searchAttr, String searchContent) {
         // 校验分页参数
         if (pageSize == null || pageSize <= 0) {
             pageSize = PAGE_SIZE;
@@ -46,8 +46,10 @@ public class SearchServiceImpl implements SearchService {
             pageNumber = DEFAULT_PAGE_NUMBER;
         }
         // 构建搜索查询
-        SearchQuery searchQuery = getCitySearchQuery(pageNumber,pageSize,searchContent);
-        LOGGER.info("\n search: searchContent [" + searchContent + "] \n " +
+        SearchQuery searchQuery = getCitySearchQuery(pageNumber,pageSize,searchAttr,searchContent);
+        LOGGER.info("\nsearch: \n" +
+                "\tsearchAttr =" + searchAttr + "\n" +
+                "\tsearchContent =" + searchContent + " \n " +
                 "DSL  = \n " + searchQuery.getQuery().toString());
         Page<DocEntity> lawPage = lawRepository.search(searchQuery);
         return lawPage.getContent();
@@ -66,17 +68,15 @@ public class SearchServiceImpl implements SearchService {
      * @param searchContent 搜索内容
      * @return
      */
-    private SearchQuery getCitySearchQuery(Integer pageNumber, Integer pageSize, String searchContent) {
+    private SearchQuery getCitySearchQuery(Integer pageNumber, Integer pageSize, String searchAttr, String searchContent) {
         // 短语匹配到的搜索词，求和模式累加权重分
         // 权重分查询 https://www.elastic.co/guide/c ... .html
         //   - 短语匹配 https://www.elastic.co/guide/c ... .html
         //   - 字段对应权重分设置，可以优化成 enum
         //   - 由于无相关性的分值默认为 1 ，设置权重分最小值为 10
         FunctionScoreQueryBuilder functionScoreQueryBuilder = QueryBuilders.functionScoreQuery()
-                .add(QueryBuilders.matchPhraseQuery("name", searchContent),
+                .add(QueryBuilders.matchPhraseQuery(searchAttr, searchContent),
                         ScoreFunctionBuilders.weightFactorFunction(1000))
-                .add(QueryBuilders.matchPhraseQuery("description", searchContent),
-                        ScoreFunctionBuilders.weightFactorFunction(500))
                 .scoreMode(SCORE_MODE_SUM).setMinScore(MIN_SCORE);
         // 分页参数
         Pageable pageable = new PageRequest(pageNumber, pageSize);
