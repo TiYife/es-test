@@ -37,5 +37,11 @@ public class TEST {
         File file = new File(Constant.FILE_LOCATION+"20140107\\安徽\\安徽省安庆市中级人民法院\\行政案件\\bbf10813-8274-48e7-b6af-56dc1b4a29c5.xml");
         saveService.saveDoc(file);
     }
+
+    @Test
+    public void testSaveDocs(){
+        File file = new File(Constant.FILE_LOCATION+"20140107\\");
+        saveService.saveDocs(file);
+    }
 }
 

@@ -10,8 +10,8 @@ import javax.persistence.*;
 public class XmlEntity {
     private String id;
     private String location;
-    private boolean upload;
-    private boolean delete;
+    private boolean up;
+    private boolean del;
 
     @Id
     @Column(name = "id", nullable = false, length = 45)
@@ -24,7 +24,7 @@ public class XmlEntity {
     }
 
     @Basic
-    @Column(name = "location", nullable = false, length = 45)
+    @Column(name = "location", nullable = false, length = 200)
     public String getLocation() {
         return location;
     }
@@ -34,23 +34,23 @@ public class XmlEntity {
     }
 
     @Basic
-    @Column(name = "upload", nullable = false)
-    public boolean isUpload() {
-        return upload;
+    @Column(name = "up", nullable = false)
+    public boolean isUp() {
+        return up;
     }
 
-    public void setUpload(boolean upload) {
-        this.upload = upload;
+    public void setUp(boolean up) {
+        this.up = up;
     }
 
     @Basic
-    @Column(name = "delete", nullable = false)
-    public boolean isDelete() {
-        return delete;
+    @Column(name = "del", nullable = false)
+    public boolean isDel() {
+        return del;
     }
 
-    public void setDelete(boolean delete) {
-        this.delete = delete;
+    public void setDel(boolean del) {
+        this.del = del;
     }
 
     @Override
@@ -60,8 +60,8 @@ public class XmlEntity {
 
         XmlEntity xmlEntity = (XmlEntity) o;
 
-        if (upload != xmlEntity.upload) return false;
-        if (delete != xmlEntity.delete) return false;
+        if (up != xmlEntity.up) return false;
+        if (del != xmlEntity.del) return false;
         if (id != null ? !id.equals(xmlEntity.id) : xmlEntity.id != null) return false;
         if (location != null ? !location.equals(xmlEntity.location) : xmlEntity.location != null) return false;
 
@@ -72,8 +72,8 @@ public class XmlEntity {
     public int hashCode() {
         int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (location != null ? location.hashCode() : 0);
-        result = 31 * result + (upload ? 1 : 0);
-        result = 31 * result + (delete ? 1 : 0);
+        result = 31 * result + (up ? 1 : 0);
+        result = 31 * result + (del ? 1 : 0);
         return result;
     }
 }

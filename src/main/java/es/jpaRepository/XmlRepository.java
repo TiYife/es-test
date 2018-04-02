@@ -9,5 +9,5 @@ import java.util.List;
  * Created by 13051 on 2018/2/27.
  */
 public interface XmlRepository extends CrudRepository<XmlEntity,String> {
-    List<XmlEntity> findAllByUploadAndAndDelete(boolean up, boolean del);
+    List<XmlEntity> findByUpAndDel(boolean up, boolean del);
 }

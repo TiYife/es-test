@@ -31,7 +31,7 @@ public class ConvertUtil {
             List<Attribute> attributes = root.attributes();
             for (Attribute attr : attributes) {
                 hashMap.put(AttrUtil.attrConvert(attr.getName()),attr.getValue());
-                System.out.println("属性名：" + attr.getName() + "\n属性值：" + attr.getValue());
+                //System.out.println("属性名：" + attr.getName() + "\n属性值：" + attr.getValue());
             }
         } catch (DocumentException e) {
             e.printStackTrace();

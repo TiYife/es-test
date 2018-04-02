@@ -1,6 +1,5 @@
 package es.service.impl;
 
-import com.google.gson.Gson;
 import es.Constant;
 import es.Util.ConvertUtil;
 import es.entity.XmlEntity;
@@ -52,7 +51,6 @@ public class SaveServiceImpl implements SaveService {
             if (!elasticsearchTemplate.indexExists(Constant.INDEX_NAME)) {
                 elasticsearchTemplate.createIndex(Constant.INDEX_NAME);
             }
-            Gson gson = new Gson();
             List queries = new ArrayList();
             for (String fileLocation : list) {
                 counter++;
@@ -87,7 +85,7 @@ public class SaveServiceImpl implements SaveService {
     //从数据库中找到还未索引的文件，将他们的路径创建成list，便于上传
     private List<String> listNewXml(){
         List<String> list =new ArrayList<String>();
-        List<XmlEntity> xmlEntities= xmlRepository.findAllByUploadAndAndDelete(false,false);
+        List<XmlEntity> xmlEntities= xmlRepository.findByUpAndDel(false,false);
         for (XmlEntity xmlEntity:xmlEntities
                 ) {
             list.add(xmlEntity.getLocation());
@@ -125,44 +123,22 @@ public class SaveServiceImpl implements SaveService {
             System.out.print("读取文件:");
             System.out.println(location);
             XmlEntity xmlEntity=new XmlEntity();
-            xmlEntity.setId(file.getName());
+            xmlEntity.setId(getFileName(file.getName()));
             xmlEntity.setLocation(location);
+            xmlEntity.setUp(false);
+            xmlEntity.setDel(false);
             list.add(xmlEntity);
         }
         return true;
     }
 
-    //读取文件的信息并返回String
-//    private String readDoc(File file) {
-//        String encoding = Constant.ENCODING;
-//        Long length = file.length();
-//        byte[] content = new byte[length.intValue()];
-//        try {
-//            FileInputStream in = new FileInputStream(file);
-//            in.read(content);
-//            in.close();
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        try {
-//            return new String(content, encoding);
-//        } catch (UnsupportedEncodingException e) {
-//            System.out.println("The OS does not support " + encoding);
-//            e.printStackTrace();
-//            return null;
-//        }
-//    }
-//
-//    //文件名去后缀
-//    private String getFileName(String filename) {
-//        if ((filename != null) && (filename.length() > 0)) {
-//            int dot = filename.lastIndexOf('.');
-//            if ((dot >-1) && (dot < (filename.length()))) {
-//                return filename.substring(0, dot);
-//            }
-//        }
-//        return filename;
-//    }
+    private String getFileName(String filename) {
+        if ((filename != null) && (filename.length() > 0)) {
+            int dot = filename.lastIndexOf('.');
+            if ((dot >-1) && (dot < (filename.length()))) {
+                return filename.substring(0, dot);
+            }
+        }
+        return filename;
+    }
 }
