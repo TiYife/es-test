@@ -24,14 +24,15 @@ import java.util.List;
  */
 @Service
 public class SearchServiceImpl implements SearchService {
+    /*日志*/
     private static final Logger LOGGER = LoggerFactory.getLogger(SearchServiceImpl.class);
 
     /* 分页参数 */
-    Integer PAGE_SIZE = 12;          // 每页数量
-    Integer DEFAULT_PAGE_NUMBER = 0; // 默认当前页码
+    private int pageSize = 12;          // 每页数量
+    private int defaultPageNumber = 0; // 默认当前页码
     /* 搜索模式 */
-    String SCORE_MODE_SUM = "sum"; // 权重分求和模式
-    Float  MIN_SCORE = 10.0F;      // 由于无相关性的分值默认为 1 ，设置权重分最小值为 10
+    private String scoreModeSum = "sum"; // 权重分求和模式
+    private Float minScore = 10.0F;      // 由于无相关性的分值默认为 1 ，设置权重分最小值为 10
 
     @Autowired
     DocRepository lawRepository;
@@ -40,14 +41,15 @@ public class SearchServiceImpl implements SearchService {
     public List<DocEntity> searchLaw(Integer pageNumber, Integer pageSize, String searchAttr, String searchContent) {
         // 校验分页参数
         if (pageSize == null || pageSize <= 0) {
-            pageSize = PAGE_SIZE;
+            pageSize = this.pageSize;
         }
-        if (pageNumber == null || pageNumber < DEFAULT_PAGE_NUMBER) {
-            pageNumber = DEFAULT_PAGE_NUMBER;
+        if (pageNumber == null || pageNumber < defaultPageNumber) {
+            pageNumber = defaultPageNumber;
         }
         // 构建搜索查询
         SearchQuery searchQuery = getCitySearchQuery(pageNumber,pageSize,searchAttr,searchContent);
-        LOGGER.info("\nsearch: \n" +
+        LOGGER.info(
+                "\nsearch: \n" +
                 "\tsearchAttr =" + searchAttr + "\n" +
                 "\tsearchContent =" + searchContent + " \n " +
                 "DSL  = \n " + searchQuery.getQuery().toString());
@@ -77,7 +79,7 @@ public class SearchServiceImpl implements SearchService {
         FunctionScoreQueryBuilder functionScoreQueryBuilder = QueryBuilders.functionScoreQuery()
                 .add(QueryBuilders.matchPhraseQuery(searchAttr, searchContent),
                         ScoreFunctionBuilders.weightFactorFunction(1000))
-                .scoreMode(SCORE_MODE_SUM).setMinScore(MIN_SCORE);
+                .scoreMode(scoreModeSum).setMinScore(minScore);
         // 分页参数
         Pageable pageable = new PageRequest(pageNumber, pageSize);
         return new NativeSearchQueryBuilder()

@@ -30,7 +30,7 @@ public class ConvertUtil {
             //遍历root下的属性
             List<Attribute> attributes = root.attributes();
             for (Attribute attr : attributes) {
-                hashMap.put(AttrUtil.attrConvert(attr.getName()),attr.getValue());
+                hashMap.put(AttrUtil.attrConvert(attr.getName()),simplyContent(attr.getValue()));
                 //System.out.println("属性名：" + attr.getName() + "\n属性值：" + attr.getValue());
             }
         } catch (DocumentException e) {
@@ -53,5 +53,9 @@ public class ConvertUtil {
         Gson gson = new Gson();
         DocEntity doc = gson.fromJson(String.valueOf(json),DocEntity.class);
         return doc;
+    }
+    //删除正文中的换行符
+    private static String simplyContent(String sourceString){
+        return sourceString.replace("&#xA;","\n");
     }
 }
