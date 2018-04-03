@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" ></meta>
+    <title>Title</title>
+    <script src="assets/plugins/jquery-1.10.2.js"></script>
+</head>
+<body>
+test page aa
+<br/>
+<form method="post" action="/index">
+    <textarea id="input1" name="name" style="width: 300px;height: 300px" ></textarea>
+    <button>取出名词动词</button>
+</form>
+<br/>
+<span th:text="${re}"></span>
+</body>
+</html>

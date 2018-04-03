@@ -1,19 +1,19 @@
 package es.controller;
 
-import es.Constant;
-import es.entity.DocEntity;
 import es.jpaRepository.XmlRepository;
 import es.service.SaveService;
 import es.service.SearchService;
+import es.service.impl.WordSeparateServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.io.File;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * Created by TYF on 2018/1/29.
  */
-@RestController
+@Controller
 public class TestController {
 
     @Autowired
@@ -22,6 +22,7 @@ public class TestController {
     private SaveService saveService;
     @Autowired
     private XmlRepository xmlRepository;
+    private WordSeparateServiceImpl wordSeparateService = new WordSeparateServiceImpl();
 
 //    @RequestMapping("/add")
 //    @ResponseBody
@@ -66,4 +67,14 @@ public class TestController {
 //        if (saveService.saveDocs(file))return "success";
 //        return "false";
 //    }
+
+    @RequestMapping("/index")
+    public String index(HttpServletRequest request, String name){
+        request.setAttribute("text","hhh");
+        String res="";
+        if(name!=null)
+            res=wordSeparateService.getnn(name);
+        request.setAttribute("re",res);
+        return "test_page";
+    }
 }
