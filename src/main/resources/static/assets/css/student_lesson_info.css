@@ -1,0 +1,60 @@
+.lesson-select{
+    border-radius: 5px;width:200px;
+
+}
+.lesson-info{
+    margin: auto;
+    position: relative;
+    top: 10px;
+    left: 20px;
+}
+
+.lesson-info-textarea{
+    overflow-x:scroll;
+    width: 80%;
+    height: 200px;
+    margin-top: 20px;
+}
+
+.lesson-info-showarea{;
+    overflow-y:scroll;
+    width: 80%;
+    height:200px;
+    margin-top: 20px;
+}
+.ref-lab{
+    font-size: 150%;
+}
+.font-description{
+    color: #57636C;
+}
+
+.hr-dis{
+    border: 0.2em solid #4a4a4a;
+
+}
+.btn-download{
+    position: relative;
+    left: 5px;
+    width: 100px;
+}
+.download_text{
+    font-size:120%;
+    color:blue;
+}
+.ref-sec-lab{
+    font-size: 120%;
+}
+.div-num{
+    position: relative;
+    display: inline;
+
+}
+.stu-num{
+    width: 50px;
+}
+
+.confir-info{
+    margin-left: 28%;
+    width: 200px;
+}

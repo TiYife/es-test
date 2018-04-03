@@ -1,0 +1,7 @@
+.lesson-info{
+    margin: auto;
+    position: absolute;
+    top: 100px;
+    left: 50px;
+    width: inherit;
+}

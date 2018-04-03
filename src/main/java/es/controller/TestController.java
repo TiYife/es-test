@@ -1,5 +1,7 @@
 package es.controller;
 
+import es.Constant;
+import es.entity.DocEntity;
 import es.jpaRepository.XmlRepository;
 import es.service.SaveService;
 import es.service.SearchService;
@@ -7,8 +9,13 @@ import es.service.impl.WordSeparateServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
+import java.util.List;
 
 /**
  * Created by TYF on 2018/1/29.
@@ -77,4 +84,18 @@ public class TestController {
         request.setAttribute("re",res);
         return "test_page";
     }
+
+    @RequestMapping("search")
+    public String search(@RequestParam("attr") String attr,
+                         @RequestParam("content") String content, Model model){
+        List<DocEntity> docEntities=searchService.searchLaw(1,20,attr,content);
+        model.addAttribute("list",docEntities);
+        return "searchResult";
+    }
+
+    @RequestMapping("/")
+    public String toIndex(){
+        return "index";
+    }
+
 }

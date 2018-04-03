@@ -9,13 +9,13 @@
             <column name="id" sql-type="varchar(45)" length="45"/>
         </id>
         <property name="location">
-            <column name="location" sql-type="varchar(45)" length="45"/>
+            <column name="location" sql-type="varchar(200)" length="200"/>
         </property>
-        <property name="upload">
-            <column name="upload" sql-type="tinyint(4)"/>
+        <property name="up">
+            <column name="up" sql-type="tinyint(4)"/>
         </property>
-        <property name="delete">
-            <column name="delete" sql-type="tinyint(4)"/>
+        <property name="del">
+            <column name="del" sql-type="tinyint(4)"/>
         </property>
     </class>
 </hibernate-mapping>

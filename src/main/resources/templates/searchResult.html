@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"></meta>
+    <title>Title</title>
+</head>
+<body>
+<div style="width: 1000px;" >
+    <table style="border-width: 1px;border-style: dashed;">
+        <tr>
+            <td>docId</td>
+            <td>courtProvince</td>
+            <td>content</td>
+        </tr>
+        <tr th:each="case:${list}">
+            <td th:text="${case.docId}">ID</td>
+            <td th:text="${case.courtProvince}">省份</td>
+            <td th:text="${case.content}">内容</td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>

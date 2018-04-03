@@ -15,7 +15,7 @@ public class DocEntity implements Serializable{
     private String docId;
     private String caseName;
     private String courtName;
-    private int courtLevel;
+    private String courtLevel;
     private String courtProvince;
     private String courtCity;
     private String courtCountry;
@@ -31,15 +31,15 @@ public class DocEntity implements Serializable{
     private String judge;
     private String clerk;
     private String trialDate;
-    private int trialMonth;
-    private int trialYear;
+    private String trialMonth;
+    private String trialYear;
     private String courtLevelOne;
     private String courtLevelTwo;
     private String courtLevelThree;
     private String courtLevelFour;
     private String courtSuperior;
     private String content;
-    private int courtId;
+    private String courtId;
 
     public String getDocId() {
         return docId;
@@ -63,14 +63,6 @@ public class DocEntity implements Serializable{
 
     public void setCourtName(String courtName) {
         this.courtName = courtName;
-    }
-
-    public int getCourtLevel() {
-        return courtLevel;
-    }
-
-    public void setCourtLevel(int courtLevel) {
-        this.courtLevel = courtLevel;
     }
 
     public String getCourtProvince() {
@@ -193,22 +185,6 @@ public class DocEntity implements Serializable{
         this.trialDate = trialDate;
     }
 
-    public int getTrialMonth() {
-        return trialMonth;
-    }
-
-    public void setTrialMonth(int trialMonth) {
-        this.trialMonth = trialMonth;
-    }
-
-    public int getTrialYear() {
-        return trialYear;
-    }
-
-    public void setTrialYear(int trialYear) {
-        this.trialYear = trialYear;
-    }
-
     public String getCourtLevelOne() {
         return courtLevelOne;
     }
@@ -257,11 +233,35 @@ public class DocEntity implements Serializable{
         this.content = content;
     }
 
-    public int getCourtId() {
+    public String getCourtLevel() {
+        return courtLevel;
+    }
+
+    public void setCourtLevel(String courtLevel) {
+        this.courtLevel = courtLevel;
+    }
+
+    public String getTrialMonth() {
+        return trialMonth;
+    }
+
+    public void setTrialMonth(String trialMonth) {
+        this.trialMonth = trialMonth;
+    }
+
+    public String getTrialYear() {
+        return trialYear;
+    }
+
+    public void setTrialYear(String trialYear) {
+        this.trialYear = trialYear;
+    }
+
+    public String getCourtId() {
         return courtId;
     }
 
-    public void setCourtId(int courtId) {
+    public void setCourtId(String courtId) {
         this.courtId = courtId;
     }
 }

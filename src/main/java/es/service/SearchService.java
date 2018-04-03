@@ -9,5 +9,5 @@ import java.util.List;
  */
 public interface SearchService {
 
-    List<DocEntity> searchLaw(Integer pageNumber, Integer pageSize, String searchContent);
+    List<DocEntity> searchLaw(Integer pageNumber, Integer pageSize,String searchAttr, String searchContent);
 }
