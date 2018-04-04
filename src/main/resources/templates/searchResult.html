@@ -3,6 +3,16 @@
 <head>
     <meta charset="UTF-8"></meta>
     <title>Title</title>
+    <style>
+        pre {
+            white-space: pre-wrap;
+            white-space: -moz-pre-wrap;
+            white-space: -o-pre-wrap;
+            *word-wrap: break-word;
+            *white-space : normal ;
+        }
+
+    </style>
 </head>
 <body>
 <div style="width: 1000px;" >
@@ -15,7 +25,7 @@
         <tr th:each="case:${list}">
             <td th:text="${case.docId}">ID</td>
             <td th:text="${case.courtProvince}">省份</td>
-            <td th:text="${case.content}">内容</td>
+            <td><pre th:text="${case.content}"></pre></td>
         </tr>
     </table>
 </div>

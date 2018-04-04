@@ -8,6 +8,8 @@ import es.esRepository.DocRepository;
 import es.jpaRepository.XmlRepository;
 import es.service.SaveService;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.data.elasticsearch.core.query.IndexQuery;
@@ -22,6 +24,9 @@ import java.util.List;
  */
 @Service
 public class SaveServiceImpl implements SaveService {
+
+    /*日志*/
+    private static final Logger LOGGER = LoggerFactory.getLogger(SearchServiceImpl.class);
 
     @Autowired
     private DocRepository docRepository;
@@ -66,7 +71,7 @@ public class SaveServiceImpl implements SaveService {
                 if (counter % 500 == 0) {
                     elasticsearchTemplate.bulkIndex(queries);
                     queries.clear();
-                    System.out.println("bulkIndex counter : " + counter);
+                    LOGGER.info("分组索引: " + counter);
                 }
             }
             //不足批的索引
@@ -74,9 +79,9 @@ public class SaveServiceImpl implements SaveService {
                 elasticsearchTemplate.bulkIndex(queries);
             }
             elasticsearchTemplate.refresh(Constant.INDEX_NAME);
-            System.out.println("bulkIndex completed.");
+            LOGGER.info("索引完成");
         } catch (Exception e) {
-            System.out.println("IndexerService.bulkIndex e;" + e.getMessage());
+            LOGGER.info("索引异常： " + e.getMessage());
             return false;
         }
         return true;
@@ -111,8 +116,7 @@ public class SaveServiceImpl implements SaveService {
     private boolean listXml(File file , List<XmlEntity> list) throws IOException {
         if(!file.exists())return false;
         if(file.isDirectory()) {
-            System.out.print("读取文件夹:");
-            System.out.println(file.getAbsolutePath());
+            LOGGER.info("读取文件夹:"+file.getAbsolutePath());
             File[] fileList = file.listFiles();
             for (File sub:fileList
                     ) {
@@ -120,8 +124,7 @@ public class SaveServiceImpl implements SaveService {
             }
         }else{
             String location=file.getAbsolutePath();
-            System.out.print("读取文件:");
-            System.out.println(location);
+            LOGGER.info("读取文件:"+location);
             XmlEntity xmlEntity=new XmlEntity();
             xmlEntity.setId(getFileName(file.getName()));
             xmlEntity.setLocation(location);
