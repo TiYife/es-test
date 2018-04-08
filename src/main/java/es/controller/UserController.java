@@ -100,7 +100,7 @@ public class UserController {
                          @RequestParam("userPasswd") String userPasswd,
                          @RequestParam("code") String code)
     {
-        UserEntity user=userRepository.findByUserId(userId);
+        UserEntity user=userRepository.findById(userId);
         if(user == null)
             return "用户名或者密码错误";
         if(code =="1111")

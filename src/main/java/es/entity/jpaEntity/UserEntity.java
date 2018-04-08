@@ -2,10 +2,14 @@ package es.entity.jpaEntity;
 
 import javax.persistence.*;
 
+/**
+ * Created by TYF on 2018/4/8.
+ */
 @Entity
 @Table(name = "user", schema = "esWeb", catalog = "")
 public class UserEntity {
-    private Integer userId;
+    private int id;
+    private String userName;
     private String password;
     private String email;
     private String registerTime;
@@ -13,17 +17,27 @@ public class UserEntity {
     private int role;
 
     @Id
-    @Column(name = "userId")
-    public int getUserId() {
-        return userId;
+    @Column(name = "id", nullable = false)
+    public int getId() {
+        return id;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void setId(int id) {
+        this.id = id;
     }
 
     @Basic
-    @Column(name = "password")
+    @Column(name = "user_name", nullable = false, length = 255)
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    @Basic
+    @Column(name = "password", nullable = false, length = 255)
     public String getPassword() {
         return password;
     }
@@ -33,7 +47,7 @@ public class UserEntity {
     }
 
     @Basic
-    @Column(name = "email")
+    @Column(name = "email", nullable = true, length = 30)
     public String getEmail() {
         return email;
     }
@@ -43,7 +57,7 @@ public class UserEntity {
     }
 
     @Basic
-    @Column(name = "registerTime")
+    @Column(name = "register_time", nullable = true, length = 50)
     public String getRegisterTime() {
         return registerTime;
     }
@@ -53,7 +67,7 @@ public class UserEntity {
     }
 
     @Basic
-    @Column(name = "favoriteId")
+    @Column(name = "favorite_id", nullable = true)
     public Integer getFavoriteId() {
         return favoriteId;
     }
@@ -63,7 +77,7 @@ public class UserEntity {
     }
 
     @Basic
-    @Column(name = "role")
+    @Column(name = "role", nullable = false)
     public int getRole() {
         return role;
     }
@@ -79,8 +93,9 @@ public class UserEntity {
 
         UserEntity that = (UserEntity) o;
 
-        if (userId != that.userId) return false;
+        if (id != that.id) return false;
         if (role != that.role) return false;
+        if (userName != null ? !userName.equals(that.userName) : that.userName != null) return false;
         if (password != null ? !password.equals(that.password) : that.password != null) return false;
         if (email != null ? !email.equals(that.email) : that.email != null) return false;
         if (registerTime != null ? !registerTime.equals(that.registerTime) : that.registerTime != null) return false;
@@ -91,7 +106,8 @@ public class UserEntity {
 
     @Override
     public int hashCode() {
-        int result = userId;
+        int result = id;
+        result = 31 * result + (userName != null ? userName.hashCode() : 0);
         result = 31 * result + (password != null ? password.hashCode() : 0);
         result = 31 * result + (email != null ? email.hashCode() : 0);
         result = 31 * result + (registerTime != null ? registerTime.hashCode() : 0);
