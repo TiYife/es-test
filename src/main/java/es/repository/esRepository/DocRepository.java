@@ -1,6 +1,6 @@
-package es.esRepository;
+package es.repository.esRepository;
 
-import es.entity.DocEntity;
+import es.entity.esEntity.DocEntity;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 import org.springframework.stereotype.Repository;
 

@@ -2,10 +2,10 @@ package es.service.impl;
 
 import es.Constant;
 import es.Util.ConvertUtil;
-import es.entity.XmlEntity;
-import es.entity.DocEntity;
-import es.esRepository.DocRepository;
-import es.jpaRepository.XmlRepository;
+import es.entity.jpaEntity.XmlEntity;
+import es.entity.esEntity.DocEntity;
+import es.repository.esRepository.DocRepository;
+import es.repository.jpaRepository.XmlRepository;
 import es.service.SaveService;
 import org.json.JSONObject;
 import org.slf4j.Logger;

@@ -1,7 +1,7 @@
 package es.controller;
 
-import es.entity.UserEntity;
-import es.jpaRepository.UserRepository;
+import es.entity.jpaEntity.UserEntity;
+import es.repository.jpaRepository.UserRepository;
 import es.service.impl.WordSeparateServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

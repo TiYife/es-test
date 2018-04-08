@@ -1,7 +1,7 @@
 package es.service.impl;
 
-import es.entity.DocEntity;
-import es.esRepository.DocRepository;
+import es.entity.esEntity.DocEntity;
+import es.repository.esRepository.DocRepository;
 import es.service.SearchService;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.index.query.functionscore.FunctionScoreQueryBuilder;
@@ -47,7 +47,7 @@ public class SearchServiceImpl implements SearchService {
             pageNumber = defaultPageNumber;
         }
         // 构建搜索查询
-        SearchQuery searchQuery = getCitySearchQuery(pageNumber,pageSize,searchAttr,searchContent);
+        SearchQuery searchQuery = getSearchQuery(pageNumber,pageSize,searchAttr,searchContent);
         LOGGER.info(
                 "\nsearch: \n" +
                 "\tsearchAttr =" + searchAttr + "\n" +
@@ -70,7 +70,7 @@ public class SearchServiceImpl implements SearchService {
      * @param searchContent 搜索内容
      * @return
      */
-    private SearchQuery getCitySearchQuery(Integer pageNumber, Integer pageSize, String searchAttr, String searchContent) {
+    private SearchQuery getSearchQuery(Integer pageNumber, Integer pageSize, String searchAttr, String searchContent) {
         // 短语匹配到的搜索词，求和模式累加权重分
         // 权重分查询 https://www.elastic.co/guide/c ... .html
         //   - 短语匹配 https://www.elastic.co/guide/c ... .html

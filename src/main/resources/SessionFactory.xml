@@ -6,9 +6,9 @@
   <session-factory>
     <property name="connection.url">jdbc:mysql://10.251.254.236:3306/esWeb</property>
     <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
-      <mapping class="es.entity.FavoriteEntity"/>
-      <mapping class="es.entity.UserEntity"/>
-      <mapping class="es.entity.XmlEntity"/>
+      <mapping class="es.entity.jpaEntity.FavoriteEntity"/>
+      <mapping class="es.entity.jpaEntity.UserEntity"/>
+      <mapping class="es.entity.jpaEntity.XmlEntity"/>
       <!-- <property name="connection.username"/> -->
     <!-- <property name="connection.password"/> -->
 

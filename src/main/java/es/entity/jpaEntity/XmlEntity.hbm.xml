@@ -4,7 +4,7 @@
     "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
 
-    <class name="es.entity.XmlEntity" table="xml" schema="esWeb">
+    <class name="es.entity.jpaEntity.XmlEntity" table="xml" schema="esWeb">
         <id name="id">
             <column name="id" sql-type="varchar(45)" length="45"/>
         </id>

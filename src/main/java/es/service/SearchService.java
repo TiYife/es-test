@@ -1,6 +1,6 @@
 package es.service;
 
-import es.entity.DocEntity;
+import es.entity.esEntity.DocEntity;
 
 import java.util.List;
 

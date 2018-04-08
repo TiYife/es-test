@@ -1,8 +1,7 @@
 package es.Util;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
-import es.entity.DocEntity;
+import es.entity.esEntity.DocEntity;
 import org.dom4j.Attribute;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;

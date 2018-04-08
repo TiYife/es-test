@@ -1,4 +1,4 @@
-package es.entity;
+package es.entity.esEntity;
 
 import es.Constant;
 import org.springframework.data.annotation.Id;

@@ -1,11 +1,11 @@
 package es.controller;
 
-import es.entity.DocEntity;
-import es.jpaRepository.XmlRepository;
-import es.service.Primitive;
+import es.entity.esEntity.DocEntity;
+import es.repository.jpaRepository.XmlRepository;
+import es.entity.word.Primitive;
 import es.service.SaveService;
 import es.service.SearchService;
-import es.service.WordSimilarity;
+import es.entity.word.WordSimilarity;
 import es.service.impl.WordSeparateServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
