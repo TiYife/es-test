@@ -1,20 +1,19 @@
 package es.controller;
 
-import es.Constant;
 import es.entity.DocEntity;
 import es.jpaRepository.XmlRepository;
+import es.service.Primitive;
 import es.service.SaveService;
 import es.service.SearchService;
+import es.service.WordSimilarity;
 import es.service.impl.WordSeparateServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServletRequest;
-import java.io.File;
 import java.util.List;
 
 /**
@@ -75,16 +74,6 @@ public class TestController {
 //        return "false";
 //    }
 
-    @RequestMapping("/index")
-    public String index(HttpServletRequest request, String name){
-        request.setAttribute("text","hhh");
-        String res="";
-        if(name!=null)
-            res=wordSeparateService.getnn(name);
-        request.setAttribute("re",res);
-        return "test_page";
-    }
-
     @RequestMapping("search")
     public String search(@RequestParam("attr") String attr,
                          @RequestParam("content") String content, Model model){
@@ -92,10 +81,42 @@ public class TestController {
         model.addAttribute("list",docEntities);
         return "searchResult";
     }
+    @RequestMapping("ss")
+    @ResponseBody
+    public String search(@RequestParam("attr") String attr, Model model){
+        String primitive = "攻打";
+        String r="";
+        List<Integer> list = Primitive.getParents(attr);
+        for(Integer i : list){
+            r+= i.toString()+" | ";
+        }
+        test_loadGlossary();
+        test_disPrimitive();
+        test_simPrimitive();
+        test_simWord();
+        return r;
+    }
 
-    @RequestMapping("/")
-    public String toIndex(){
-        return "index";
+    public void test_loadGlossary(){
+        WordSimilarity.loadGlossary();
+    }
+    /**
+     * test the method {@link WordSimilarity#disPrimitive(String, String)}.
+     */
+    public void test_disPrimitive(){
+        int dis = WordSimilarity.disPrimitive("雇用", "争斗");
+        System.out.println("雇用 and 争斗 dis : "+ dis);
+    }
+
+    public void test_simPrimitive(){
+        double simP = WordSimilarity.simPrimitive("雇用", "争斗");
+        System.out.println("雇用 and 争斗 sim : "+ simP);
+    }
+    public void test_simWord(){
+        String word1 = "牛";
+        String word2 = "猪";
+        double sim = WordSimilarity.simWord(word2, word1);
+        System.out.println(sim);
     }
 
 }

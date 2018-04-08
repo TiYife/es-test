@@ -1,10 +1,205 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0025)http://law1.law-star.com/ -->
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!--<meta http-equiv="X-UA-Compatible" content="IE=edge">-->
+
+
+    <script src="assets/plugins/jquery-1.10.2.js"></script>
+    <script src="assets/plugins/jquery.cookie.js"></script>
+    <link href="assets/files/index/style.css" type="text/css" rel="stylesheet">
+    <title>法律之星-中国法律检索(法规查询)</title>
 </head>
+
+
 <body>
+<div class="sy_box01 clearfix">
+    <div class="dl_heradr clearfix">
+        <ul class="fr clearfix ">
+            <li id="denglu"><a href="javascript:void (0)" onclick="$('#dwbg01').show()">登录</a></li>
+            <li id="tuichu" style="display:none"><a href="javascript:void (0)" onclick="tuichu();">退出</a></li>
+            <li id="zhuce"><a href="javascript:void (0)" onclick="$('#dwbg02').show()">注册</a></li>
+
+        </ul>
+    </div>
+    <div id="sypd" style="padding-top: 100.5px; padding-bottom: 100.5px;">
+        <form action="http://law1.law-star.com/search" method="get" name="seaform" id="seaform" target="_self">
+            <div class="dl_logo"><img src="assets/images/index/logo-img_u3.png" width="391" height="125" alt=""></div>
+            <div class="serch clearfix">
+                <div class="serchbox">
+                    <input type="text" name="kw" id="kw" placeholder="输入关键词查询法规">
+                    <a href="javascript:void(0)" onclick="disp_alert()" class="serchbtn"></a>
+                </div>
+                <a href="http://law1.law-star.com/index" class="gjjsbtn">高级检索</a>
+
+
+                <input type="hidden" name="dbt" value="chl">
+
+                <input type="hidden" name="dbt" value="lar">
+
+
+            </div>
+        </form>
+    </div>
+</div>
+<div class="sy_box02">
+    <div class="w clearfix">
+        <div class="fl clearfix width820">
+
+            <a href="javascript:alert(&#39;请登陆后查看！&#39;)" id="mycoll" class="fl sylist01 margin_bottom66">
+                <i class="icon02"></i>
+                <h6 style="color: #224f93">我的收藏 · Collection</h6>
+                <h5 style="color: #454545">收藏个人常用法规，方便随时查看</h5>
+            </a>
+            <a href="http://law1.law-star.com/#" class="fr sylist01 margin_bottom66">
+                <i class="icon03"></i>
+                <h6 style="color: #999C99;">新法推荐 · New law</h6>
+                <h5 style="color: #999C99;">新颁法规及时推介，让您的知识体系不落伍</h5>
+            </a>
+        </div>
+    </div>
+</div>
+<div class="footer">
+    <span>京公网安备 11010802020434号</span>
+</div>
+
+<!--登录框-->
+<div class="dwbg" id="dwbg01" style="display: none;">
+    <div class="dlbox" style="width: 450px">
+        <div class="dlcontent por" style="padding: 40px 60px">
+            <a href="javascript:void (0)" class="dlclose" onclick="this.parentNode.parentNode.parentNode.style.display='none'"></a>
+            <h1>普通登录</h1>
+            <div class="username">
+                <label for="username">用户名</label>
+                <input type="text" name="userName" id="userName">
+            </div>
+            <div class="userpaw">
+                <label for="userpaw">密 码</label>
+                <input type="password" name="pass" id="pass">
+            </div>
+            <div class="clearfix">
+                <a class="fl dlbtn01" onclick="zc_action()">注 册</a>
+                <a class="fr dlbtn02" onclick="checkin()">登 录</a>
+            </div>
+            <div class="wjmm"><a href="http://law1.law-star.com/#" onclick="xgmm_action()">忘记密码</a></div>
+        </div>
+    </div>
+</div>
+
+<div class="dwbg" id="dwbg01" style="display: none;">
+    <div class="dlbox" style="width: 450px">
+        <div class="dlcontent por" style="padding: 40px 60px">
+            <a href="javascript:void (0)" class="dlclose" onclick="this.parentNode.parentNode.parentNode.style.display='none'"></a>
+            <h1>普通登录</h1>
+            <div class="username">
+                <label for="username">用户名</label>
+                <input type="text" name="userName" id="userName">
+            </div>
+            <div class="userpaw">
+                <label for="userpaw">密 码</label>
+                <input type="password" name="pass" id="pass">
+            </div>
+            <div class="clearfix">
+                <a class="fl dlbtn01" onclick="zc_action()">注 册</a>
+                <a class="fr dlbtn02" onclick="checkin()">登 录</a>
+            </div>
+            <div class="wjmm"><a href="http://law1.law-star.com/#" onclick="xgmm_action()">忘记密码</a></div>
+        </div>
+    </div>
+</div>
+
+
+<div class="dwbg" id="dwbg03">
+    <div class="dlbox">
+        <div class="dlcontent por">
+            <div class="logo02"></div>
+            <div class="clearfix">
+                <div class="clearfix dlpadding">
+                    <div class="fr dlright">
+                        <h1>法律之星<span> —— 重置密码</span></h1>
+
+
+                        <div class="zcinpbox yzsj">
+                            <label for="yzsj">验证手机：</label>
+                            <input type="text" name="tel" id="Ftel">
+                        </div>
+                        <div class="zcinpbox yzm clearfix">
+                            <label for="yzm">验证码：</label>
+                            <input type="text" id="FformCode" name="formCode">
+                            <img id="valid2" src="./法律之星-中国法律检索(法规查询)_files/ValidateColorServlet"
+                                 onclick="changecode2()" width="122" height="26" alt="">
+                        </div>
+                        <script type="text/javascript">
+                            function changecode2() {
+                                var time = new Date().getTime();
+                                document.getElementById("valid2").src = "/servlet/ValidateColorServlet?" + time;
+                            }
+                        </script>
+                        <div class="zcinpbox dxyz clearfix">
+                            <label for="dxyz">短信验证码：</label>
+                            <input type="text" name="dxcode" id="Fdxcode">
+                            <a href="http://law1.law-star.com/#" id="btn" onclick="reset()">免费获取验证码</a>
+                        </div>
+
+                        <div class="clearfix">
+                            <a class=" zcbtn" href="http://law1.law-star.com/#" id="subimg" onclick="verify()">提 交</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <a href="javascript:void (0)" class="dlclose"
+               onclick="this.parentNode.parentNode.parentNode.style.display=&#39;none&#39;"></a>
+        </div>
+    </div>
+</div>
+
+<div class="dwbg" id="dwbg04">
+    <div class="dlbox">
+        <div class="dlcontent por">
+            <div class="logo02"></div>
+            <div class="clearfix">
+                <div class="clearfix dlpadding">
+                    <div class="fl zcleft">
+                        <h1>法律之星<span> —— 微信二维码</span></h1>
+                        <div class="zcewm"><img src="assets/images/index/logo-img_u3.png" width="204" height="213"
+                                                alt=""></div>
+                        <h2>欢迎关注“法律之星”微信公众号,<br>随时随地查法规</h2>
+                    </div>
+                    <div class="dlline"></div>
+                    <div class="fr dlright">
+                        <h1>法律之星<span> —— 重置密码</span></h1>
+
+                        <div class="zcinpbox setpaw">
+                            <label for="Cpass1">新登录密码：</label>
+                            <input type="password" name="pass1" id="Cpass1">
+                        </div>
+                        <div class="zcinpbox resetpaw">
+                            <label for="Cpass2">确认新密码：</label>
+                            <input type="password" name="pass2" id="Cpass2">
+                        </div>
+
+                        <div class="clearfix">
+                            <a class=" zcbtn" href="http://law1.law-star.com/#" id="subimg" onclick="update()">提 交</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <a href="javascript:void (0)" class="dlclose"
+               onclick="this.parentNode.parentNode.parentNode.style.display=&#39;none&#39;"></a>
+        </div>
+    </div>
+</div>
+<!--联系我们-->
+<div class="lxwmtc">
+    <div class="clearfix lxwm_tit">
+        <h6>联系我们</h6>
+        <div class="close03"></div>
+    </div>
+    <div class="lxwm_tel">010-65155090</div>
+    <div class="lxmw_email">wangzhan@law-star.com</div>
+</div>
 
 </body>
 </html>

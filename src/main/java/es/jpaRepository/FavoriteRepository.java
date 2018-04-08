@@ -1,4 +1,7 @@
 package es.jpaRepository;
 
-public interface FavoriteRepository {
+import es.entity.FavoriteEntity;
+import org.springframework.data.repository.CrudRepository;
+
+public interface FavoriteRepository extends CrudRepository<FavoriteEntity,String> {
 }

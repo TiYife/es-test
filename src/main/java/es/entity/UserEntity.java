@@ -5,7 +5,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "user", schema = "esWeb", catalog = "")
 public class UserEntity {
-    private int userId;
+    private Integer userId;
     private String password;
     private String email;
     private String registerTime;
