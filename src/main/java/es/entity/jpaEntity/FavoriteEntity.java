@@ -1,7 +1,10 @@
-package es.entity;
+package es.entity.jpaEntity;
 
 import javax.persistence.*;
 
+/**
+ * Created by TYF on 2018/4/8.
+ */
 @Entity
 @Table(name = "favorite", schema = "esWeb", catalog = "")
 public class FavoriteEntity {
@@ -14,7 +17,7 @@ public class FavoriteEntity {
     private Integer userId;
 
     @Id
-    @Column(name = "id")
+    @Column(name = "id", nullable = false)
     public int getId() {
         return id;
     }
@@ -24,7 +27,7 @@ public class FavoriteEntity {
     }
 
     @Basic
-    @Column(name = "name")
+    @Column(name = "name", nullable = true, length = 255)
     public String getName() {
         return name;
     }
@@ -34,7 +37,7 @@ public class FavoriteEntity {
     }
 
     @Basic
-    @Column(name = "type")
+    @Column(name = "type", nullable = true)
     public Integer getType() {
         return type;
     }
@@ -44,7 +47,7 @@ public class FavoriteEntity {
     }
 
     @Basic
-    @Column(name = "belongTo")
+    @Column(name = "belong_to", nullable = true)
     public Integer getBelongTo() {
         return belongTo;
     }
@@ -54,7 +57,7 @@ public class FavoriteEntity {
     }
 
     @Basic
-    @Column(name = "recordId")
+    @Column(name = "record_id", nullable = true, length = 255)
     public String getRecordId() {
         return recordId;
     }
@@ -64,7 +67,7 @@ public class FavoriteEntity {
     }
 
     @Basic
-    @Column(name = "createTime")
+    @Column(name = "create_time", nullable = true, length = 100)
     public String getCreateTime() {
         return createTime;
     }
@@ -74,7 +77,7 @@ public class FavoriteEntity {
     }
 
     @Basic
-    @Column(name = "userId")
+    @Column(name = "user_id", nullable = true)
     public Integer getUserId() {
         return userId;
     }

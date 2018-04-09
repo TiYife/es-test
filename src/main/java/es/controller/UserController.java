@@ -1,7 +1,7 @@
 package es.controller;
 
-import es.entity.UserEntity;
-import es.jpaRepository.UserRepository;
+import es.entity.jpaEntity.UserEntity;
+import es.repository.jpaRepository.UserRepository;
 import es.service.impl.WordSeparateServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -100,7 +100,7 @@ public class UserController {
                          @RequestParam("userPasswd") String userPasswd,
                          @RequestParam("code") String code)
     {
-        UserEntity user=userRepository.findByUserId(userId);
+        UserEntity user=userRepository.findById(userId);
         if(user == null)
             return "用户名或者密码错误";
         if(code =="1111")

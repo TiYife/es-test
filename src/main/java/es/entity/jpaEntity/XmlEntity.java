@@ -1,4 +1,4 @@
-package es.entity;
+package es.entity.jpaEntity;
 
 import javax.persistence.*;
 

@@ -1,6 +1,6 @@
-package es.jpaRepository;
+package es.repository.jpaRepository;
 
-import es.entity.XmlEntity;
+import es.entity.jpaEntity.XmlEntity;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
