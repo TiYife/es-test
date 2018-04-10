@@ -1,4 +1,4 @@
-﻿﻿<!DOCTYPE html>
+﻿﻿﻿<!DOCTYPE html>
 <html>
   <head>
     <title>index</title>
@@ -49,7 +49,7 @@
 
         <!-- search-input (文本框) -->
         <div id="u5" class="ax_default text_field" data-label="search-input">
-          <input id="u5_input" type="text" value=""/>
+          <input id="u5_input" type="text" value=""  onkeydown="onEnterDown()"/>
         </div>
 
         <!-- search-type-list (下拉列表框) -->
@@ -62,7 +62,7 @@
 
         <!-- search-btn (提交按钮) -->
         <div id="u7" class="ax_default html_button" data-label="search-btn">
-          <input id="u7_input" type="submit" value="搜索"/>
+          <input id="u7_input" type="button" onclick="search_submit()" value="搜索"/>
         </div>
 
         <!-- advanced-search-btn (矩形) -->
@@ -317,4 +317,27 @@
       }
   </script>
   </body>
+
+  <script>
+      function onEnterDown(event) {
+          var e = event || window.event || arguments.callee.caller.arguments[0];
+          if (e) {
+              search_submit();
+          }
+          else if(e.keyCode==13){
+              search_submit();
+          }
+      }
+      //提交表单
+      function search_submit() {
+          var data = {
+              type: $("#u6_input").val(),
+              keyword: $("#u5_input").val(),
+          }
+          $.post("toSimpleSearch", data,function (result) {
+              window.open(result)
+          });
+      }
+  </script>
+
 </html>

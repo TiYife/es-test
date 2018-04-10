@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8"></meta>
     <title>Title</title>
 
     <script src="assets/resources/scripts/jquery-1.7.1.min.js"></script>
@@ -36,11 +36,13 @@
                         <div class="col-md-12">
                             <div class="btn-group form-inline">
                                 <div class="btn-group-vertical">
-
-                                    <select class="form-control " style="width: 100px"></select>
+                                    <select class="form-control " style="width: 100px">
+                                        <option th:selected="${attr}=='caseName'?'true':'false'">标题</option>
+                                        <option th:selected="${attr}=='caseName'?'false':'true'">关键字</option>
+                                    </select>
                                 </div>
-                                <input class="form-control" style="width: 400px" />
-                                <button class="form-control" style="width: 60px"> 搜索</button>
+                                <input class="form-control" style="width: 400px" th:value="${keyword}"/>
+                                <button class="form-control" style="width: 60px" > 搜索</button>
                                 <a style="margin-left: 20px">高级检索</a>
                             </div>
                         </div>
@@ -52,35 +54,35 @@
             <div class="col-lg-12">
                 <div class="panel panel-default">
                     <div class="panel-body">
-                        <table data-toggle="table" data-url="/VirtualMachine/getVms" data-show-refresh="true" data-show-toggle="true" data-show-columns="true" data-search="true" data-select-item-name="toolbar1" data-pagination="true" data-sort-name="vmName" data-sort-order="desc" data-show-export="true" id="temp-table">
+                        <table data-toggle="table" th:attr="data-url='/simpleSearch?attr='+${attr}+'&keyword='+${keyword}" data-url="/simpleSearch?type=" data-show-refresh="true" data-show-toggle="true" data-show-columns="true" data-search="true" data-select-item-name="toolbar1" data-pagination="true" data-sort-name="vmName" data-sort-order="desc" data-show-export="true" id="temp-table">
                             <thead>
                             <tr>
-                                <th data-field="1">案件名称</th>
-                                <th data-field="1">法院名称</th>
-                                <th data-field="1" data-visible="false">法院层级</th>
-                                <th data-field="1">法院省份</th>
-                                <th data-field="1" data-visible="false">法院地市</th>
-                                <th data-field="1" data-visible="false">法院区县</th>
-                                <th data-field="1" data-visible="false">法院区域</th>
-                                <th data-field="1" data-visible="false">法院试点</th>
-                                <th data-field="1" data-visible="false">法院类型</th>
-                                <th data-field="1">案件类型</th>
-                                <th data-field="1" data-visible="false">审判程序</th>
-                                <th data-field="1">文书类型</th>
-                                <th data-field="1" data-visible="false">案号</th>
-                                <th data-field="1" data-visible="false">案由</th>
-                                <th data-field="1" data-visible="false">当事人</th>
-                                <th data-field="1" data-visible="false">审判人员</th>
-                                <th data-field="1" data-visible="false">书记员</th>
-                                <th data-field="1" data-visible="false">裁判月份</th>
-                                <th data-field="1">裁判日期</th>
-                                <th data-field="1" data-visible="false">裁判年份</th>
-                                <th data-field="1" data-visible="false">一级法院</th>
-                                <th data-field="1" data-visible="false">二级法院</th>
-                                <th data-field="1" data-visible="false">三级法院</th>
-                                <th data-field="1" data-visible="false">四级法院</th>
-                                <th data-field="1" data-visible="false">上级法院名称</th>
-                                <th data-field="1" data-visible="false">判决内容</th>
+                                <th data-field="caseName">案件名称</th>
+                                <th data-field="caseName">法院名称</th>
+                                <th data-field="courtLevel" data-visible="false">法院层级</th>
+                                <th data-field="courtProvince">法院省份</th>
+                                <th data-field="courtCity" data-visible="false">法院地市</th>
+                                <th data-field="courtCountry" data-visible="false">法院区县</th>
+                                <th data-field="courtRegion" data-visible="false">法院区域</th>
+                                <th data-field="isExpUnit" data-visible="false">法院试点</th>
+                                <th data-field="courtType" data-visible="false">法院类型</th>
+                                <th data-field="caseType">案件类型</th>
+                                <th data-field="trialProcedure" data-visible="false">审判程序</th>
+                                <th data-field="docType">文书类型</th>
+                                <th data-field="caseNo" data-visible="false">案号</th>
+                                <th data-field="caseCause" data-visible="false">案由</th>
+                                <th data-field="client" data-visible="false">当事人</th>
+                                <th data-field="judge" data-visible="false">审判人员</th>
+                                <th data-field="clerk" data-visible="false">书记员</th>
+                                <th data-field="trialMonth" data-visible="false">裁判月份</th>
+                                <th data-field="trialDate">裁判日期</th>
+                                <th data-field="trialYear" data-visible="false">裁判年份</th>
+                                <th data-field="courtLevelOne" data-visible="false">一级法院</th>
+                                <th data-field="courtLevelTwo" data-visible="false">二级法院</th>
+                                <th data-field="courtLevelThree" data-visible="false">三级法院</th>
+                                <th data-field="courtLevelFour" data-visible="false">四级法院</th>
+                                <th data-field="courtSuperior" data-visible="false">上级法院名称</th>
+                                <th data-field="content" data-visible="false">判决内容</th>
                                 <th data-formatter="operateFormatter" data-events='operateEvents'>操作</th>
                             </tr>
                             </thead>
