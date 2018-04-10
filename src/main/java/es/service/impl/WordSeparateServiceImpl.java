@@ -8,6 +8,31 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class WordSeparateServiceImpl implements WordSeparateService {
+
+    public NLPTRService instance =(NLPTRService) Native.loadLibrary(System.getProperty("user.dir") + "\\source\\NLPIR", NLPTRService.class);
+
+    public int NLPTR_Init(){
+        int init_flag = instance.NLPIR_Init("", 1, "0");
+        String resultString = null;
+        if (0 == init_flag) {
+            resultString = instance.NLPIR_GetLastErrorMsg();
+            System.err.println("初始化失败！\n" + resultString);
+            return 0;
+        }
+        return 1;
+    }
+
+    public int NLPTR_Exit(){
+        try{
+            instance.NLPIR_Exit();
+        }catch (Exception e) {
+            System.out.println("错误信息：");
+            e.printStackTrace();
+            return 0;
+        }
+        return 1;
+    }
+
     public String getnn(String s)
     {
         //初始化
@@ -48,5 +73,21 @@ public class WordSeparateServiceImpl implements WordSeparateService {
             re=re+matcher.group(1)+" \n";
         }
         return re;
+    }
+
+    public String getKeyWord(String sInput)
+    {
+        try {
+            //resultString = instance.NLPIR_ParagraphProcess(sInput, 1);
+            //System.out.println("分词结果为：\n " + resultString);
+            String resultString =instance.NLPIR_GetKeyWords(sInput,50,true);
+
+            return resultString;
+
+        } catch (Exception e) {
+            System.out.println("错误信息：");
+            e.printStackTrace();
+            return "error";
+        }
     }
 }
