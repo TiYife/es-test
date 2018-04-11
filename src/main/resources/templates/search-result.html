@@ -42,7 +42,7 @@
                                         <option th:selected="${attr}=='caseName'?'false':'true'">关键字</option>
                                     </select>
                                 </div>
-                                <input class="form-control" style="width: 400px" th:value="${keyword}"/>
+                                <input id="search-input" class="form-control" style="width: 400px" th:value="${keyword}"/>
                                 <button class="form-control" style="width: 60px" > 搜索</button>
                                 <a style="margin-left: 20px">高级检索</a>
                             </div>
@@ -83,7 +83,7 @@
                                 <th data-field="courtLevelThree" data-visible="false">三级法院</th>
                                 <th data-field="courtLevelFour" data-visible="false">四级法院</th>
                                 <th data-field="courtSuperior" data-visible="false">上级法院名称</th>
-                                <th data-field="content" data-visible="false">判决内容</th>
+                                <th data-field="content" data-visible="false" data-formatter="contentFormatter">判决内容</th>
                                 <th data-formatter="operateFormatter" data-events='operateEvents'>操作</th>
                             </tr>
                             </thead>
@@ -101,6 +101,11 @@
                 '<button type="button" class="btn btn-info detail"> 详情</button> '+
                 '<button type="button" class="btn btn-info"> 收藏</button> '
             ].join('');
+
+        };
+
+        function contentFormatter(value, row, index) {
+            return value.replace($("#search-input").val(),'<span style="color: red">'+$("#search-input").val()+'</span>');
 
         };
 
