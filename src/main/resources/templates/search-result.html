@@ -4,13 +4,14 @@
     <meta charset="UTF-8"></meta>
     <title>Title</title>
 
-    <script src="assets/resources/scripts/jquery-1.7.1.min.js"></script>
+    <script src="assets/plugins/jquery-1.10.2.js"></script>
 
     <script src="assets/plugins/table/bootstrap.js"></script>
     <script src="assets/plugins/table/bootstrap-table.js"></script>
     <script src="assets/plugins/table/bootstrap-table-export.js"></script>
     <link href="assets/css/bootstrap-table.css" type="text/css" rel="stylesheet"/>
     <link href="assets/css/bootstrap.css" type="text/css" rel="stylesheet"/>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.12.1/locale/bootstrap-table-zh-CN.min.js"></script>
 </head>
 <body>
     <div class="container">
@@ -54,11 +55,11 @@
             <div class="col-lg-12">
                 <div class="panel panel-default">
                     <div class="panel-body">
-                        <table data-toggle="table" th:attr="data-url='/simpleSearch?attr='+${attr}+'&keyword='+${keyword}" data-url="/simpleSearch?type=" data-show-refresh="true" data-show-toggle="true" data-show-columns="true" data-search="true" data-select-item-name="toolbar1" data-pagination="true" data-sort-name="vmName" data-sort-order="desc" data-show-export="true" id="temp-table">
+                        <table data-toggle="table" th:attr="data-url='/simpleSearch?attr='+${attr}+'&keyword='+${keyword}" data-url="/simpleSearch?type=" data-show-refresh="true" data-show-toggle="true" data-show-columns="true" data-search="true" data-page-list="[10, 25, 50, 100, All]" data-pagination="true" data-sort-name="id" data-sort-order="desc" data-show-export="true" id="temp-table">
                             <thead>
                             <tr>
                                 <th data-field="caseName">案件名称</th>
-                                <th data-field="caseName">法院名称</th>
+                                <th data-field="courtName">法院名称</th>
                                 <th data-field="courtLevel" data-visible="false">法院层级</th>
                                 <th data-field="courtProvince">法院省份</th>
                                 <th data-field="courtCity" data-visible="false">法院地市</th>
@@ -94,5 +95,24 @@
 
     </div>
 
+    <script>
+        function operateFormatter(value, row, index) {
+            return [
+                '<button type="button" class="btn btn-info detail"> 详情</button> '+
+                '<button type="button" class="btn btn-info"> 收藏</button> '
+            ].join('');
+
+        };
+
+        window.operateEvents = {
+            'click .btn-info .detail': function (e, value, row, index) {
+
+                e
+                $(".login-ip-span").text(row["IPAddress"]);
+                $("#VMLoginInfo").modal('show');
+
+            }
+        };
+    </script>
 </body>
 </html>
