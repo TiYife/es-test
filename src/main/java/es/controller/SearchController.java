@@ -30,10 +30,6 @@ public class SearchController {
         String attr, content;
         if (type == "标题") attr = "caseName";
         else attr = "content";
-//        List<DocEntity> list = searchService.searchLaw(0,10,attr,keyword);
-//        model.addAttribute("attr",attr);
-//        model.addAttribute("content",keyword);
-//        return "searchResult";
         return "simpleSearchResult?attr=" + attr + "&keyword=" + URLEncoder.encode(keyword);
     }
 
@@ -54,5 +50,14 @@ public class SearchController {
         List<DocEntity> list = searchService.searchLaw(0,10,attr,keyword);
         Gson gson = new Gson();
         return gson.toJson(list);
+    }
+
+    @RequestMapping("/advancedSearchResult")
+    public String advancedSearchResult(@RequestParam("attr")String attr,
+                                     @RequestParam("keyword") String keyword,
+                                     Model model){
+        model.addAttribute("attr",attr);
+        model.addAttribute("keyword",keyword);
+        return "advanced-search";
     }
 }
