@@ -21,6 +21,7 @@ import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilde
 import org.springframework.data.elasticsearch.core.query.SearchQuery;
 import org.springframework.stereotype.Service;
 
+import javax.print.Doc;
 import java.util.List;
 
 
@@ -43,7 +44,9 @@ public class SearchServiceImpl implements SearchService {
     private String scoreModeSum = "sum"; // 权重分求和模式
     private Float minScore = 10.0F;      // 由于无相关性的分值默认为 1 ，设置权重分最小值为 10
 
-    public enum SearchType {or,and,no};
+    public enum SearchType {or, and, no}
+
+    ;
 
     @Autowired
     DocRepository lawRepository;
@@ -58,26 +61,39 @@ public class SearchServiceImpl implements SearchService {
             pageNumber = defaultPageNumber;
         }
         // 构建搜索查询
-        SearchQuery searchQuery = getSimpleSearchQuery(pageNumber,pageSize,searchAttr,searchKeyWord);
+        SearchQuery searchQuery = getSimpleSearchQuery(pageNumber, pageSize, searchAttr, searchKeyWord);
         LOGGER.info(
                 "\nsearch: \n" +
-                "\tsearchAttr =" + searchAttr + "\n" +
-                "\tsearchKeyWord =" + searchKeyWord + " \n " +
-                "DSL  = \n " + searchQuery.getQuery().toString());
+                        "\tsearchAttr =" + searchAttr + "\n" +
+                        "\tsearchKeyWord =" + searchKeyWord + " \n " +
+                        "DSL  = \n " + searchQuery.getQuery().toString());
         Page<DocEntity> lawPage = lawRepository.search(searchQuery);
         return lawPage.getContent();
     }
+
+    public List<DocEntity> multiSearch(Integer pageNumber, Integer pageSize, JSONArray json) throws JSONException {
+        if (pageSize == null || pageSize <= 0) {
+            pageSize = this.pageSize;
+        }
+        if (pageNumber == null || pageNumber < defaultPageNumber) {
+            pageNumber = defaultPageNumber;
+        }
+        SearchQuery searchQuery = getMultiSearchQuery(pageNumber,pageSize,json);
+        Page<DocEntity> lawPage = lawRepository.search(searchQuery);
+        return lawPage.getContent();
+    }
+
     /**
      * 根据搜索词构造搜索查询语句
-     *
+     * <p>
      * 代码流程：
-     *      - 权重分查询
-     *      - 短语匹配
-     *      - 设置权重分最小值
-     *      - 设置分页参数
+     * - 权重分查询
+     * - 短语匹配
+     * - 设置权重分最小值
+     * - 设置分页参数
      *
-     * @param pageNumber 当前页码
-     * @param pageSize 每页大小
+     * @param pageNumber    当前页码
+     * @param pageSize      每页大小
      * @param searchKeyWord 搜索内容
      * @return
      */
@@ -98,7 +114,7 @@ public class SearchServiceImpl implements SearchService {
                 .withQuery(functionScoreQueryBuilder).build();
     }
 
-    private SearchQuery getMultiSearchQuery(Integer pageNumber, Integer pageSize, JSONArray json) throws JSONException {
+    public SearchQuery getMultiSearchQuery(Integer pageNumber, Integer pageSize, JSONArray json) throws JSONException {
         FunctionScoreQueryBuilder functionScoreQueryBuilder = QueryBuilders.functionScoreQuery();
         if (json.length() < 0)
             return null;
@@ -106,8 +122,8 @@ public class SearchServiceImpl implements SearchService {
             JSONObject jsonObject = json.getJSONObject(i);
             String searchAttr = jsonObject.get("attr").toString();
             String searchKeyWord = jsonObject.get("keyword").toString();
-            SearchType searchType = (SearchType) jsonObject.get("type");
-            int weight = (int) jsonObject.get("weight");
+            SearchType searchType = SearchType.valueOf(jsonObject.get("type").toString());
+            int weight = jsonObject.getInt("weight");
             functionScoreQueryBuilder =
                     functionScoreQueryBuilder.add(getSubMultiSearchQuery(searchAttr, searchKeyWord, searchType),
                             ScoreFunctionBuilders.weightFactorFunction(100 * weight));
@@ -121,18 +137,31 @@ public class SearchServiceImpl implements SearchService {
 
     }
 
-    private BoolQueryBuilder getSubMultiSearchQuery(String searchAttr, String searchContent,SearchType searchType){
+    private BoolQueryBuilder getSubMultiSearchQuery(String searchAttr, String searchContent, SearchType searchType) {
         BoolQueryBuilder boolQueryBuilder;
-        if(searchType==or){
-            boolQueryBuilder=boolQuery().should(QueryBuilders.matchQuery(searchAttr, searchContent));
-        }
-        else if(searchType==and){
-            boolQueryBuilder=boolQuery().must(QueryBuilders.matchQuery(searchAttr, searchContent));
-        }
-        else {
-            boolQueryBuilder=boolQuery().mustNot(QueryBuilders.matchQuery(searchAttr, searchContent));
+        if (searchType == or) {
+            boolQueryBuilder = boolQuery().should(QueryBuilders.matchQuery(searchAttr, searchContent));
+        } else if (searchType == and) {
+            boolQueryBuilder = boolQuery().must(QueryBuilders.matchQuery(searchAttr, searchContent));
+        } else {
+            boolQueryBuilder = boolQuery().mustNot(QueryBuilders.matchQuery(searchAttr, searchContent));
         }
         return boolQueryBuilder;
     }
+
+//    public SearchQuery getSortQuery(JSONObject json) throws JSONException {
+//        FunctionScoreQueryBuilder functionScoreQueryBuilder = QueryBuilders.functionScoreQuery();
+//        for (String s:json.
+//             ) {
+//
+//        }
+//        String searchAttr = json.get("attr").toString();
+//        String searchKeyWord = json.get("keyword").toString();
+//        SearchType searchType = (SearchType) json.get("type");
+//        json.
+//
+//    }
+
+
 }
 
