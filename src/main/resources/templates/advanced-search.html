@@ -495,9 +495,10 @@
         $("#item-block").last().after($("#item-block").clone(true).attr("item-type","item").show());
     }
     function operateFormatter(value, row, index) {
-            return [
-                '<button type="button" class="btn btn-info"> 收藏</button> '
-            ].join('');
+        return [
+            '<button type="button" class="btn btn-info detail"> 详情</button> '+
+            '<button type="button" class="btn btn-info"> 收藏</button> '
+        ].join('');
 
     };
 

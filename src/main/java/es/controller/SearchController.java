@@ -76,7 +76,7 @@ public class SearchController {
             object1.put("weight","8");
             object2.put("attr","caseName");
             object2.put("keyword","交通");
-            object2.put("type","and");
+            object2.put("type","no");
             object2.put("weight","2");
             json.put(object1);
             json.put(object2);
