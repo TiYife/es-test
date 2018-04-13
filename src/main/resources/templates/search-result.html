@@ -110,9 +110,10 @@
         };
 
         window.operateEvents = {
-            'click .btn-info .detail': function (e, value, row, index) {
+            'click .detail': function (e, value, row, index) {
 
-                e
+                console.log(
+                $(this).parent().parent().after('<tr style="display:">'+row["content"]+'</tr>'));
                 $(".login-ip-span").text(row["IPAddress"]);
                 $("#VMLoginInfo").modal('show');
 
