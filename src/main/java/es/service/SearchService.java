@@ -1,6 +1,8 @@
 package es.service;
 
 import es.entity.esEntity.DocEntity;
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import java.util.List;
 
@@ -10,4 +12,6 @@ import java.util.List;
 public interface SearchService {
 
     List<DocEntity> searchLaw(Integer pageNumber, Integer pageSize,String searchAttr, String searchContent);
+
+    List<DocEntity> multiSearch(Integer pageNumber, Integer pageSize, JSONArray json) throws JSONException;
 }

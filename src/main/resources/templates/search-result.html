@@ -37,13 +37,13 @@
                         <div class="col-md-12">
                             <div class="btn-group form-inline">
                                 <div class="btn-group-vertical">
-                                    <select class="form-control " style="width: 100px">
-                                        <option th:selected="${attr}=='caseName'?'true':'false'">标题</option>
-                                        <option th:selected="${attr}=='caseName'?'false':'true'">关键字</option>
+                                    <select id ="type-select"class="form-control " style="width: 100px">
+                                        <option value="caseName" th:selected="${attr}=='caseName'?'true':'false'">标题</option>
+                                        <option value="content" th:selected="${attr}=='caseName'?'false':'true'">关键字</option>
                                     </select>
                                 </div>
-                                <input id="search-input" class="form-control" style="width: 400px" th:value="${keyword}"/>
-                                <button class="form-control" style="width: 60px" > 搜索</button>
+                                <input id="search-input" class="form-control" style="width: 400px" th:value="${keyword}" onkeydown="onEnterDown()"/>
+                                <button class="form-control" style="width: 60px" onclick="search_submit()"> 搜索</button>
                                 <a style="margin-left: 20px">高级检索</a>
                             </div>
                         </div>
@@ -55,10 +55,10 @@
             <div class="col-lg-12">
                 <div class="panel panel-default">
                     <div class="panel-body">
-                        <table data-toggle="table" th:attr="data-url='/simpleSearch?attr='+${attr}+'&keyword='+${keyword}" data-url="/simpleSearch?type=" data-show-refresh="true" data-show-toggle="true" data-show-columns="true" data-search="true" data-page-list="[10, 25, 50, 100, All]" data-pagination="true" data-sort-name="id" data-sort-order="desc" data-show-export="true" id="temp-table">
+                        <table data-toggle="table" th:attr="data-url='/simpleSearch?attr='+${attr}+'&keyword='+${keyword}" data-url="/simpleSearch?type=" data-show-refresh="true" data-show-toggle="true" data-show-columns="true" data-search="true" data-page-list="[10, 25, 50, 100, All]" data-pagination="true" data-sort-name="id" data-sort-order="desc" data-show-export="true" id="result-table">
                             <thead>
                             <tr>
-                                <th data-field="caseName">案件名称</th>
+                                <th data-field="caseName" data-formatter="contentFormatter">案件名称</th>
                                 <th data-field="courtName">法院名称</th>
                                 <th data-field="courtLevel" data-visible="false">法院层级</th>
                                 <th data-field="courtProvince">法院省份</th>
@@ -119,6 +119,19 @@
 
             }
         };
+    </script>
+
+    <script>
+        function onEnterDown(event) {
+            var e = event || window.event || arguments.callee.caller.arguments[0];
+            if (e&&e.keyCode==13){
+                search_submit();
+            }
+        }
+        //提交表单
+        function search_submit() {
+            $('#result-table').bootstrapTable('refresh', { url: '/simpleSearch?attr='+$("#type-select").val()+'&keyword='+ $("#search-input").val()});
+        }
     </script>
 </body>
 </html>
