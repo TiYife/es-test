@@ -3,18 +3,31 @@ package es;
 
 import com.sun.jna.Native;
 import es.entity.esEntity.DocEntity;
+import es.entity.word.WordSimilarity;
+import es.repository.esRepository.DocRepository;
 import es.service.NLPTRService;
 import es.service.SaveService;
 import es.service.SearchService;
 import es.service.impl.WordSeparateServiceImpl;
+import org.elasticsearch.index.query.QueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.index.query.functionscore.FunctionScoreQueryBuilder;
+import org.elasticsearch.index.query.functionscore.ScoreFunctionBuilders;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
+import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
+import org.springframework.data.elasticsearch.core.query.SearchQuery;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.File;
 import java.util.List;
+
+import static org.elasticsearch.index.query.QueryBuilders.boolQuery;
 
 /**
  * Created by 13051 on 2018/2/27.
