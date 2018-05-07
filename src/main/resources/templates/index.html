@@ -1,5 +1,5 @@
 ﻿﻿﻿<!DOCTYPE html>
-<html>
+<html  xmlns:th="http://www.thymeleaf.org">
   <head>
     <title>index</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
@@ -15,8 +15,8 @@
     <script src="assets/data/document.js"></script>
     <script src="assets/resources/scripts/prototypePost.js"></script>
     <script src="assets/files/index/data.js"></script>
-    <script src="assets/plugins/jquery.cookie.js"></script>
     <script src="assets/plugins/jquery-1.10.2.js"></script>
+      <script src="assets/plugins/jquery.cookie.js"></script>
     <script type="text/javascript">
       $axure.utils.getTransparentGifPath = function() { return 'resources/assets/images/transparent.gif'; };
       $axure.utils.getOtherPath = function() { return 'resources/Other.html'; };
@@ -183,7 +183,6 @@
 
                 <!-- Unnamed (图片) -->
                 <div id="u29" class="ax_default image">
-                  <img id="u29_img" class="img " src="assets/images/index/u29.png"/>
                 </div>
               </div>
 
@@ -297,6 +296,7 @@
         </div>
       </div>
     </div>
+    <script src="assets/js/pages/jsVerifyCode.js"></script>
   <script>
       function login() {
           var data={
@@ -307,9 +307,9 @@
           //TODO 验证码
           //TODO 直接判断用户名是否重名
           //TODO 验证密码复杂度
-          $("#login-btn-text").text("正在登录...")
-              .attr("disabled","disabled");
-          $.post("/login",data,function (rdata) {
+          $("#login-btn-text").text("正在登录...");
+          $("#u30").attr("disabled","disabled");
+          $.post("/uLogin",data,function (rdata) {
               $.cookie("userId",$("#u25_input").val());
               $.cookie("userPasswd",$("#u26_input").val());
               $("#u20").hide();
@@ -318,7 +318,20 @@
   </script>
   </body>
 
+  <script th:inline="javascript">
+      /*<![CDATA[*/
+
+      var verifycode = [[${verifyCode}]];
+
+      /*]]>*/
+  </script>
+
   <script>
+      var verifyCode = new GVerify({id:"u29",showCode:verifycode});
+  </script>
+
+  <script>
+
       function onEnterDown(event) {
           var e = event || window.event || arguments.callee.caller.arguments[0];
           if (e&&e.keyCode==13){

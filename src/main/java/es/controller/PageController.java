@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 /**
  * Created by TYF on 2018/5/7.
@@ -15,12 +16,12 @@ public class PageController {
     private WordSeparateServiceImpl wordSeparateService = new WordSeparateServiceImpl();
 
     @RequestMapping("/")
-    public String toIndex(){
+    public String toIndex(HttpServletRequest request ,HttpSession session){
         return "index";
     }
 
     @RequestMapping("/index")
-    public String toIndex2(){
+    public String toIndex2(HttpServletRequest request ,HttpSession session){
         return "index";
     }
 

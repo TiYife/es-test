@@ -1,15 +1,14 @@
 package es.controller;
 
+import es.Util.VerifyCodeUtil;
 import es.entity.jpaEntity.UserEntity;
 import es.repository.jpaRepository.UserRepository;
-import es.service.impl.WordSeparateServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 /**
@@ -29,12 +28,13 @@ public class UserController {
                          @RequestParam("code") String code,
                          HttpSession session)
     {
-        UserEntity user=userRepository.findById(userId);
-        if(user == null)
-            return "用户名或者密码错误";
-        if(code =="1111")
+        String verifyCode = session.getAttribute("verifyCode").toString();
+        if(code.toLowerCase().equals(verifyCode.toLowerCase()))
         {
-            if(userPasswd==user.getPassword())
+            UserEntity user=userRepository.findById(userId);
+            if(user == null)
+                return "用户名或者密码错误";
+            if(userPasswd.equals(user.getPassword()))
             {
                 session.setAttribute("user", user);
                 return "success";
@@ -48,6 +48,15 @@ public class UserController {
         {
             return "验证码错误";
         }
+    }
+
+    @RequestMapping("/getVerifyCode")
+    @ResponseBody
+    public  String getVerifyCode(HttpSession session)
+    {
+        String code= VerifyCodeUtil.generateCode();
+        session.setAttribute("verifyCode", code);
+        return code;
     }
 
 
