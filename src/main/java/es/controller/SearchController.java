@@ -52,4 +52,12 @@ public class SearchController {
         Gson gson = new Gson();
         return gson.toJson(list);
     }
+
+    @RequestMapping("/similar-search-result")
+    @ResponseBody
+    public String similarSearchResult(@RequestParam("describe") String describe){
+        List<DocEntity> list = searchService.similarSearch(0,10,describe);
+        Gson gson = new Gson();
+        return gson.toJson(list);
+    }
 }
