@@ -1,20 +1,40 @@
 package es;
 
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.sun.jna.Native;
 import es.entity.esEntity.DocEntity;
+import es.repository.esRepository.DocRepository;
 import es.service.NLPTRService;
 import es.service.SaveService;
 import es.service.SearchService;
 import es.service.impl.WordSeparateServiceImpl;
+import org.elasticsearch.index.query.QueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.index.query.functionscore.FunctionScoreQueryBuilder;
+import org.elasticsearch.index.query.functionscore.ScoreFunctionBuilders;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
+import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
+import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
+import org.springframework.data.elasticsearch.core.query.SearchQuery;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import javax.print.Doc;
 import java.io.File;
+import java.lang.reflect.Type;
+import java.util.HashMap;
 import java.util.List;
+
+import static org.elasticsearch.index.query.QueryBuilders.boolQuery;
+import static org.elasticsearch.index.query.QueryBuilders.matchAllQuery;
 
 /**
  * Created by 13051 on 2018/2/27.
@@ -27,6 +47,10 @@ public class TEST {
     SaveService saveService;
     @Autowired
     SearchService searchService;
+    @Autowired
+    DocRepository docRepository;
+    @Autowired
+    private ElasticsearchTemplate elasticsearchTemplate;
 
 
     private WordSeparateServiceImpl wordSeparateService = new WordSeparateServiceImpl();
@@ -51,6 +75,24 @@ public class TEST {
     @Test
     public void testSearch(){
         List<DocEntity> docEntities=searchService.searchLaw(1,10,"content","被告人");
+    }
+
+    @Test
+    public void testSimilarSearch(){
+        List<DocEntity> docEntities = searchService.similarSearch(0,10,"宋皓以“其与黄某某是合作关系，借款与担保是两人之间约定的特殊合作方式，其参与了公司的日常经营管理活动；原判认定事实不清，适用法律错误”为由，向贵州省高级人民法院申诉，该院于2011年12月16日作出（2011）黔高调刑监字第25号通知驳回申诉。");
+        assert docEntities.size()>0;
+    }
+
+    @Test
+    public void testSimilar2Search(){
+        QueryBuilder queryBuilder = QueryBuilders.moreLikeThisQuery("content").like("宋皓以“其与黄某某是合作关系，借款与担保是两人之间约定的特殊合作方式，其参与了公司的日常经营管理活动；原判认定事实不清，适用法律错误”为由，向贵州省高级人民法院申诉，该院于2011年12月16日作出（2011）黔高调刑监字第25号通知驳回申诉。");
+        FunctionScoreQueryBuilder functionScoreQueryBuilder = QueryBuilders.functionScoreQuery()
+                .add(boolQuery().should(queryBuilder),
+                        ScoreFunctionBuilders.weightFactorFunction(1000))
+                .scoreMode("sum").setMinScore(10.0F);
+        Pageable pageable = new PageRequest(0, 10);
+        SearchQuery searchQuery = new NativeSearchQueryBuilder().withQuery(queryBuilder).build();
+        List<DocEntity> list = docRepository.search(searchQuery).getContent();
     }
 
     @Test
@@ -90,6 +132,70 @@ public class TEST {
             System.out.println("错误信息：");
             e.printStackTrace();
         }
+    }
+
+    @Test
+    public void testJson(){
+        String json="{[\n" +
+                "        {\n" +
+                "            \"id\": 0,\n" +
+                "            \"name\": \"Item 0\",\n" +
+                "            \"price\": \"$0\"\n" +
+                "        },\n" +
+                "        {\n" +
+                "            \"id\": 1,\n" +
+                "            \"name\": \"Item 1\",\n" +
+                "            \"price\": \"$1\"\n" +
+                "        },\n" +
+                "        {\n" +
+                "            \"id\": 2,\n" +
+                "            \"name\": \"Item 2\",\n" +
+                "            \"price\": \"$2\"\n" +
+                "        },\n" +
+                "        {\n" +
+                "            \"id\": 3,\n" +
+                "            \"name\": \"Item 3\",\n" +
+                "            \"price\": \"$3\"\n" +
+                "        },\n" +
+                "        {\n" +
+                "            \"id\": 4,\n" +
+                "            \"name\": \"Item 4\",\n" +
+                "            \"price\": \"$4\"\n" +
+                "        },\n" +
+                "        {\n" +
+                "            \"id\": 5,\n" +
+                "            \"name\": \"Item 5\",\n" +
+                "            \"price\": \"$5\"\n" +
+                "        },\n" +
+                "        {\n" +
+                "            \"id\": 6,\n" +
+                "            \"name\": \"Item 6\",\n" +
+                "            \"price\": \"$6\"\n" +
+                "        },\n" +
+                "        {\n" +
+                "            \"id\": 7,\n" +
+                "            \"name\": \"Item 7\",\n" +
+                "            \"price\": \"$7\"\n" +
+                "        },\n" +
+                "        {\n" +
+                "            \"id\": 8,\n" +
+                "            \"name\": \"Item 8\",\n" +
+                "            \"price\": \"$8\"\n" +
+                "        },\n" +
+                "        {\n" +
+                "            \"id\": 9,\n" +
+                "            \"name\": \"Item 9\",\n" +
+                "            \"price\": \"$9\"\n" +
+                "        },\n" +
+                "        {\n" +
+                "            \"id\": 10,\n" +
+                "            \"name\": \"Item 10\",\n" +
+                "            \"price\": \"$10\"\n" +
+                "        }\n" +
+                "    ]\n" +
+                "}";
+        Type listType = new TypeToken<List<HashMap<String,String>>>() {}.getType();
+        List<String> list = new Gson().fromJson(json, listType);
     }
 }
 
