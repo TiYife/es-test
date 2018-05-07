@@ -3,6 +3,7 @@ package es;
 
 import com.sun.jna.Native;
 import es.entity.esEntity.DocEntity;
+import es.entity.word.WordSimilarity;
 import es.service.NLPTRService;
 import es.service.SaveService;
 import es.service.SearchService;
@@ -79,19 +80,19 @@ public class TEST {
                 "徐惠等五人上诉称：因六安元和置业集团有限公司不履行合同及协议约定的义务，导致双方产生纠纷。原审驳回徐惠等五人起诉的法律依据不明确。请求二审法院撤销原审裁定。\n" +
                 "六安元和置业集团有限公司清算组未向本院提交书面答辩状。";
         try {
-            //resultString = instance.NLPIR_ParagraphProcess(sInput, 1);
-            resultString = instance.NLPIR_GetKeyWords(sInput,50,true);
-            System.out.println("关键词提取为为：\n" );
+            //double i1= instance.NLPIR_FileProcess("E:\\桌面存放\\测试\\12.txt","E:\\桌面存放\\测试\\12.txt"+".stxt",1);
+            String ss=wordSeparateService.readToString("E:\\桌面存放\\测试\\12.txt");
+            String ii=instance.NLPIR_ParagraphProcess(ss,1);
+            String sss=wordSeparateService.stringToRead(ii,"E:\\桌面存放\\测试\\1212.txt");
+            //int i1=instance.NLPIR_ImportUserDict("E:\\毕业设计\\es-test\\dic\\民事案件案由词典.txt");
+            //int i2=instance.NLPIR_SaveTheUsrDic();
+            //String s=instance.NLPIR_ParagraphProcess("姓名权纠纷是一个案由",1);
+            //String iii=ii.replaceAll("\r\n","\n");
+            //String[] lines = ii.split("\r");
 
-            String[] strs = resultString.split("#");
-            for(int i=0;i<strs.length;i++)
-            {
-                if(!isStay(i)) continue;
-                String[] words = strs[i].split("/");
-                System.out.println(words[0]+isStays(i)+"\t\t\t\t"+getType(words[1])+"\t\t\t\t\t\t"+words[3]);
-            }
-            System.out.println();
-            System.out.println();
+            //wordSeparateService.fileProcessAndSave("E:\\桌面存放\\测试\\12.txt","E:\\桌面存放\\测试","E:\\桌面存放\\测试\\12.txt");
+            //String[] fileLines=fileString.split("\r\n");
+
 
             instance.NLPIR_Exit();
 
@@ -100,6 +101,22 @@ public class TEST {
             e.printStackTrace();
         }
     }
+
+    @Test
+    public void testJava()
+    {
+        //wordSeparateService.NLPTR_Init();
+        //wordSeparateService.mutiFileProcessAndSave("E:\\桌面存放\\测试","E:\\桌面存放\\测试");
+        //wordSeparateService.NLPTR_Exit();
+        //String s=System.getProperty("user.dir");
+        WordSimilarity.loadGlossary();
+        int dis = WordSimilarity.disPrimitive("雇用", "争斗");
+        double simP = WordSimilarity.simPrimitive("雇用", "争斗");
+        double sim = WordSimilarity.simWord("牛", "猪");
+    }
+
+
+
     public String getType(String s)
     {
         switch (s)
