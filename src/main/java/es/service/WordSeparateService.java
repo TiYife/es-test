@@ -7,4 +7,6 @@ public interface WordSeparateService {
     public String getKeyWord(String s);
     public int NLPTR_Init();
     public int NLPTR_Exit();
+
+    public String readToString(String fileName);
 }
