@@ -4,6 +4,7 @@ import es.entity.esEntity.DocEntity;
 import es.repository.esRepository.DocRepository;
 import es.service.SearchService;
 import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.index.query.functionscore.FunctionScoreQueryBuilder;
 import org.elasticsearch.index.query.functionscore.ScoreFunctionBuilders;
@@ -21,7 +22,6 @@ import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilde
 import org.springframework.data.elasticsearch.core.query.SearchQuery;
 import org.springframework.stereotype.Service;
 
-import javax.print.Doc;
 import java.util.List;
 
 
@@ -49,7 +49,7 @@ public class SearchServiceImpl implements SearchService {
     ;
 
     @Autowired
-    DocRepository lawRepository;
+    DocRepository docRepository;
 
     @Override
     public List<DocEntity> searchLaw(Integer pageNumber, Integer pageSize, String searchAttr, String searchKeyWord) {
@@ -67,10 +67,11 @@ public class SearchServiceImpl implements SearchService {
                         "\tsearchAttr =" + searchAttr + "\n" +
                         "\tsearchKeyWord =" + searchKeyWord + " \n " +
                         "DSL  = \n " + searchQuery.getQuery().toString());
-        Page<DocEntity> lawPage = lawRepository.search(searchQuery);
+        Page<DocEntity> lawPage = docRepository.search(searchQuery);
         return lawPage.getContent();
     }
 
+    @Override
     public List<DocEntity> multiSearch(Integer pageNumber, Integer pageSize, JSONArray json) throws JSONException {
         if (pageSize == null || pageSize <= 0) {
             pageSize = this.pageSize;
@@ -79,7 +80,22 @@ public class SearchServiceImpl implements SearchService {
             pageNumber = defaultPageNumber;
         }
         SearchQuery searchQuery = getMultiSearchQuery(pageNumber,pageSize,json);
-        Page<DocEntity> lawPage = lawRepository.search(searchQuery);
+        Page<DocEntity> lawPage = docRepository.search(searchQuery);
+        return lawPage.getContent();
+    }
+
+    @Override
+    public List<DocEntity> similarSearch(Integer pageNumber, Integer pageSize, String searchContent){
+        // 校验分页参数
+        if (pageSize == null || pageSize <= 0) {
+            pageSize = this.pageSize;
+        }
+        if (pageNumber == null || pageNumber < defaultPageNumber) {
+            pageNumber = defaultPageNumber;
+        }
+        // 构建搜索查询
+        SearchQuery searchQuery = getSimilarSearchQuery(pageNumber, pageSize,searchContent);
+        Page<DocEntity> lawPage = docRepository.search(searchQuery);
         return lawPage.getContent();
     }
 
@@ -114,7 +130,7 @@ public class SearchServiceImpl implements SearchService {
                 .withQuery(functionScoreQueryBuilder).build();
     }
 
-    public SearchQuery getMultiSearchQuery(Integer pageNumber, Integer pageSize, JSONArray json) throws JSONException {
+    private SearchQuery getMultiSearchQuery(Integer pageNumber, Integer pageSize, JSONArray json) throws JSONException {
         FunctionScoreQueryBuilder functionScoreQueryBuilder = QueryBuilders.functionScoreQuery();
         if (json.length() < 0)
             return null;
@@ -149,19 +165,12 @@ public class SearchServiceImpl implements SearchService {
         return boolQueryBuilder;
     }
 
-//    public SearchQuery getSortQuery(JSONObject json) throws JSONException {
-//        FunctionScoreQueryBuilder functionScoreQueryBuilder = QueryBuilders.functionScoreQuery();
-//        for (String s:json.
-//             ) {
-//
-//        }
-//        String searchAttr = json.get("attr").toString();
-//        String searchKeyWord = json.get("keyword").toString();
-//        SearchType searchType = (SearchType) json.get("type");
-//        json.
-//
-//    }
-
-
+    private SearchQuery getSimilarSearchQuery(Integer pageNumber, Integer pageSize, String searchContent){
+        QueryBuilder queryBuilder = QueryBuilders.moreLikeThisQuery().like(searchContent);
+        Pageable pageable = new PageRequest(pageNumber, pageSize);
+        return new NativeSearchQueryBuilder()
+                .withPageable(pageable)
+                .withQuery(queryBuilder).build();
+    }
 }
 

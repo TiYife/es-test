@@ -3,7 +3,6 @@ package es;
 
 import com.sun.jna.Native;
 import es.entity.esEntity.DocEntity;
-import es.entity.word.WordSimilarity;
 import es.service.NLPTRService;
 import es.service.SaveService;
 import es.service.SearchService;
@@ -28,6 +27,10 @@ public class TEST {
     SaveService saveService;
     @Autowired
     SearchService searchService;
+    @Autowired
+    DocRepository docRepository;
+    @Autowired
+    private ElasticsearchTemplate elasticsearchTemplate;
 
 
     private WordSeparateServiceImpl wordSeparateService = new WordSeparateServiceImpl();
@@ -52,6 +55,24 @@ public class TEST {
     @Test
     public void testSearch(){
         List<DocEntity> docEntities=searchService.searchLaw(1,10,"content","被告人");
+    }
+
+    @Test
+    public void testSimilarSearch(){
+        List<DocEntity> docEntities = searchService.similarSearch(0,10,"宋皓以“其与黄某某是合作关系，借款与担保是两人之间约定的特殊合作方式，其参与了公司的日常经营管理活动；原判认定事实不清，适用法律错误”为由，向贵州省高级人民法院申诉，该院于2011年12月16日作出（2011）黔高调刑监字第25号通知驳回申诉。");
+        assert docEntities.size()>0;
+    }
+
+    @Test
+    public void testSimilar2Search(){
+        QueryBuilder queryBuilder = QueryBuilders.moreLikeThisQuery("content").like("宋皓以“其与黄某某是合作关系，借款与担保是两人之间约定的特殊合作方式，其参与了公司的日常经营管理活动；原判认定事实不清，适用法律错误”为由，向贵州省高级人民法院申诉，该院于2011年12月16日作出（2011）黔高调刑监字第25号通知驳回申诉。");
+        FunctionScoreQueryBuilder functionScoreQueryBuilder = QueryBuilders.functionScoreQuery()
+                .add(boolQuery().should(queryBuilder),
+                        ScoreFunctionBuilders.weightFactorFunction(1000))
+                .scoreMode("sum").setMinScore(10.0F);
+        Pageable pageable = new PageRequest(0, 10);
+        SearchQuery searchQuery = new NativeSearchQueryBuilder().withQuery(queryBuilder).build();
+        List<DocEntity> list = docRepository.search(searchQuery).getContent();
     }
 
     @Test

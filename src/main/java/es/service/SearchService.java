@@ -14,4 +14,6 @@ public interface SearchService {
     List<DocEntity> searchLaw(Integer pageNumber, Integer pageSize,String searchAttr, String searchContent);
 
     List<DocEntity> multiSearch(Integer pageNumber, Integer pageSize, JSONArray json) throws JSONException;
+
+    List<DocEntity> similarSearch(Integer pageNumber, Integer pageSize, String searchContent);
 }
