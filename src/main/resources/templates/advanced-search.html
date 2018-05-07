@@ -177,7 +177,6 @@
               </div>
               <div class="col-lg-12" style="text-align: left">
                 <button class="btn btn-primary" onclick="addItem()">添加检索项</button>
-                <button class="btn btn-primary">删除检索项</button>
               </div>
               <div class="col-lg-12" style="text-align: left;margin-top: 10px">
                 <div class="input-group">
@@ -208,8 +207,8 @@
                     <option value="courtLevelFour" >四级法院</option>
                     <option value="courtSuperior" >上级法院名称</option>
                   </select>
-                  <input class="form-control" id="first-input"  style="width:535px;margin-left: 5px"/>
-                  <select class="form-control" id="first-weight" style="width:65px">
+                  <input class="form-control" id="first-input"  style="width:500px;margin-left: 5px"/>
+                  <select class="form-control" id="first-weight" style="width:100px">
                     <option value="1">权重=1</option>
                     <option value="2">权重=2</option>
                     <option value="3">权重=3</option>
@@ -231,13 +230,12 @@
 
               <div class="col-lg-12" id="item-block" style="text-align: left;margin-top: 10px;display: none">
                 <div class="input-group">
-                  <select class="form-control" style="width:58px">
+                  <select class="form-control" input-type="type" style="width:58px">
                     <option value="and">并含</option>
                     <option value="or">或者</option>
                     <option value="not">不含</option>
                   </select>
-                  <select class="form-control" style="width:100px;margin-left: 12px">
-                    <select class="form-control" style="width:100px;margin-left: 70px">
+                  <select class="form-control" input-type="attr" style="width:100px;margin-left: 12px">
                       <option value="caseName">案件名称</option>
                       <option value="courtName">法院名称</option>
                       <option value="courtLevel" >法院层级</option>
@@ -264,14 +262,15 @@
                       <option value="courtLevelFour" >四级法院</option>
                       <option value="courtSuperior" >上级法院名称</option>
                   </select>
-                  <input class="form-control" style="width:535px;margin-left: 5px"/>
-                  <select class="form-control" style="width:65px">
+                  <input class="form-control" input-type="keyword" style="width:500px;margin-left: 5px"/>
+                  <select class="form-control" input-type="weight" style="width:100px">
                     <option value="1">权重=1</option>
                     <option value="2">权重=2</option>
                     <option value="3">权重=3</option>
                     <option value="4">权重=4</option>
                     <option value="5">权重=5</option>
                   </select>
+                    <span onclick="$(this).parent().parent().remove()" style="background: #ff3e2f;height: 26px;width: 26px;cursor: pointer; line-height: 26px;border-radius: 13px;margin: 4px 0px 0px 20px;color: white;display: inline-block;text-align: center;font-size: x-large;font-weight: bold;text-decoration: none">-</span>
                   <!--<select class="form-control" style="width:65px;margin-left: 5px">-->
                     <!--<option>并含</option>-->
                     <!--<option>或者</option>-->
@@ -282,7 +281,6 @@
                     <!--<option>模糊</option>-->
                     <!--<option>精确</option>-->
                   <!--</select>-->
-                  </select>
                 </div>
             </div>
 
@@ -516,6 +514,15 @@
           j.keyword = $("#first-input").val();
           j.weight = $("#first-weight").val();
           json.push(j);
+          $("[item-type=item]").each(function () {
+              var item={
+                  type:$(this).find("[input-type=type]").val(),
+                  attr:$(this).find("[input-type=attr]").val(),
+                  keyword:$(this).find("[input-type=keyword]").val(),
+                  weight:$(this).find("[input-type=weight]").val(),
+              };
+              json.push(item);
+          })
           var json_str = JSON.stringify(json);
           $('#result-table').bootstrapTable('refresh', { url: '/multi-search-result',query:{json:json_str}});
       }
