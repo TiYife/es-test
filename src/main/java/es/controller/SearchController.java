@@ -24,18 +24,7 @@ public class SearchController {
     @Autowired
     SearchService searchService;
 
-    @RequestMapping("/toSimpleSearch")
-    @ResponseBody
-    public String toSimplySearch(@RequestParam("type")String type,
-                               @RequestParam("keyword") String keyword,
-                               Model model){
-        String attr, content;
-        if (type == "标题") attr = "caseName";
-        else attr = "content";
-        return "simpleSearchResult?attr=" + attr + "&keyword=" + URLEncoder.encode(keyword);
-    }
-
-    @RequestMapping("/simpleSearchResult")
+    @RequestMapping("/simple-search")
     public String simpleSearchResult(@RequestParam("attr")String attr,
                                      @RequestParam("keyword") String keyword,
                                      Model model){
@@ -45,7 +34,7 @@ public class SearchController {
     }
 
 
-    @RequestMapping("/simpleSearch")
+    @RequestMapping("/simple-search-result")
     @ResponseBody
     public String simpleSearch(@RequestParam("attr")String attr,
                                @RequestParam("keyword") String keyword){
@@ -54,16 +43,7 @@ public class SearchController {
         return gson.toJson(list);
     }
 
-    @RequestMapping("/advancedSearchResult")
-    public String advancedSearchResult(@RequestParam("attr")String attr,
-                                     @RequestParam("keyword") String keyword,
-                                     Model model){
-        model.addAttribute("attr",attr);
-        model.addAttribute("keyword",keyword);
-        return "advanced-search";
-    }
-
-    @RequestMapping("/multiSearchResult")
+    @RequestMapping("/multi-search-result")
     @ResponseBody
     public String multiSearchResult(){
         JSONArray json=new JSONArray();
