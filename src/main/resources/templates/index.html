@@ -55,8 +55,8 @@
         <!-- search-type-list (下拉列表框) -->
         <div id="u6" class="ax_default droplist" data-label="search-type-list">
           <select id="u6_input">
-            <option value="题目">题目</option>
-            <option value="关键字">关键字</option>
+            <option value="caseName">题目</option>
+            <option value="content">关键字</option>
           </select>
         </div>
 
@@ -340,20 +340,9 @@
       }
       //提交表单
       function search_submit() {
-          var type = $("#u6_input").val();
+          var attr = $("#u6_input").val();
           var keyword = $("#u5_input").val();
-          var attr;
-          if(type == '标题') attr='caseName';
-          else attr='content' ;
           location.href = "simple-search?attr=" + attr + "&keyword=" + keyword;
-//          var data = {
-//              type: $("#u6_input").val(),
-//              keyword: $("#u5_input").val(),
-//          }
-//          $.post("toSimpleSearch", data,function (result) {
-//              window.open(result)
-//          }
-//          );
       }
   </script>
 
