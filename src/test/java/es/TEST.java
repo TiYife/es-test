@@ -105,7 +105,7 @@ public class TEST {
 
     }
     @Test
-    public void getnn()
+    public void getKeyWords()
     {
         //初始化
         NLPTRService instance = (NLPTRService) Native.loadLibrary(System.getProperty("user.dir") + "\\source\\NLPIR", NLPTRService.class);
@@ -116,15 +116,24 @@ public class TEST {
             System.err.println("初始化失败！\n" + resultString);
         }
 
-        String sInput = "哎~那个金刚圈尺寸太差，前重后轻，左宽右窄，他戴上去很不舒服，整晚失眠会连累我嘛，他虽然是只猴子，但你也不能这样对他啊，官府知道会说我虐待动物的，说起那个金刚圈，啊~去年我在陈家村认识了一个铁匠，他手工精美，价钱又公道，童叟无欺，干脆我介绍你再定做一个吧！";
-        //sInput = s;
+        String sInput = "上诉人徐惠、黄农兵、黄琪、黄小岚、武贤勇因与被上诉人六安元和置业集团有限公司房屋买卖合同纠纷一案，不服安徽省六安市中级人民法院于2014年4月21日作出的（2013）六民一初字第00002号驳回起诉的民事裁定，向本院提起上诉。本院受理后，依法组成合议庭审理了本案。\n" +
+                "原审裁定认为，徐惠等五人与六安元和置业集团有限公司在履行案涉《元和山庄商品房预售合同》、《商品房买卖合同》及《补充协议》过程中，并未产生争议，徐惠等五人的本次起诉，不符合民事诉讼法规定的起诉条件。据此，案经原审法院审判委员会讨论决定，依照《中华人民共和国民事诉讼法》第一百一十九条之规定，裁定：驳回徐惠、黄农兵、黄琪、黄小岚、武贤勇的起诉。\n" +
+                "徐惠等五人上诉称：因六安元和置业集团有限公司不履行合同及协议约定的义务，导致双方产生纠纷。原审驳回徐惠等五人起诉的法律依据不明确。请求二审法院撤销原审裁定。\n" +
+                "六安元和置业集团有限公司清算组未向本院提交书面答辩状。";
         try {
             //resultString = instance.NLPIR_ParagraphProcess(sInput, 1);
-            //System.out.println("分词结果为：\n " + resultString);
+            resultString = instance.NLPIR_GetKeyWords(sInput,50,true);
+            System.out.println("关键词提取为为：\n" );
 
-            String res="不觉明历";
-            instance.NLPIR_AddUserWord(res);
-            instance.NLPIR_SaveTheUsrDic();
+            String[] strs = resultString.split("#");
+            for(int i=0;i<strs.length;i++)
+            {
+                if(!isStay(i)) continue;
+                String[] words = strs[i].split("/");
+                System.out.println(words[0]+isStays(i)+"\t\t\t\t"+getType(words[1])+"\t\t\t\t\t\t"+words[3]);
+            }
+            System.out.println();
+            System.out.println();
 
             instance.NLPIR_Exit();
 
@@ -133,69 +142,45 @@ public class TEST {
             e.printStackTrace();
         }
     }
+    public String getType(String s)
+    {
+        switch (s)
+        {
+            case "n":return "名词";
+            case "ns":return "地名";
+            case "v":return "动词";
+            default:return "名词";
+        }
+    }
 
-    @Test
-    public void testJson(){
-        String json="{[\n" +
-                "        {\n" +
-                "            \"id\": 0,\n" +
-                "            \"name\": \"Item 0\",\n" +
-                "            \"price\": \"$0\"\n" +
-                "        },\n" +
-                "        {\n" +
-                "            \"id\": 1,\n" +
-                "            \"name\": \"Item 1\",\n" +
-                "            \"price\": \"$1\"\n" +
-                "        },\n" +
-                "        {\n" +
-                "            \"id\": 2,\n" +
-                "            \"name\": \"Item 2\",\n" +
-                "            \"price\": \"$2\"\n" +
-                "        },\n" +
-                "        {\n" +
-                "            \"id\": 3,\n" +
-                "            \"name\": \"Item 3\",\n" +
-                "            \"price\": \"$3\"\n" +
-                "        },\n" +
-                "        {\n" +
-                "            \"id\": 4,\n" +
-                "            \"name\": \"Item 4\",\n" +
-                "            \"price\": \"$4\"\n" +
-                "        },\n" +
-                "        {\n" +
-                "            \"id\": 5,\n" +
-                "            \"name\": \"Item 5\",\n" +
-                "            \"price\": \"$5\"\n" +
-                "        },\n" +
-                "        {\n" +
-                "            \"id\": 6,\n" +
-                "            \"name\": \"Item 6\",\n" +
-                "            \"price\": \"$6\"\n" +
-                "        },\n" +
-                "        {\n" +
-                "            \"id\": 7,\n" +
-                "            \"name\": \"Item 7\",\n" +
-                "            \"price\": \"$7\"\n" +
-                "        },\n" +
-                "        {\n" +
-                "            \"id\": 8,\n" +
-                "            \"name\": \"Item 8\",\n" +
-                "            \"price\": \"$8\"\n" +
-                "        },\n" +
-                "        {\n" +
-                "            \"id\": 9,\n" +
-                "            \"name\": \"Item 9\",\n" +
-                "            \"price\": \"$9\"\n" +
-                "        },\n" +
-                "        {\n" +
-                "            \"id\": 10,\n" +
-                "            \"name\": \"Item 10\",\n" +
-                "            \"price\": \"$10\"\n" +
-                "        }\n" +
-                "    ]\n" +
-                "}";
-        Type listType = new TypeToken<List<HashMap<String,String>>>() {}.getType();
-        List<String> list = new Gson().fromJson(json, listType);
+    public boolean isStay(int i)
+    {
+        switch (i)
+        {
+            case 0:
+            case 3:
+            case 4:
+            case 5:
+            case 6:
+            case 8:
+            case 12:
+            case 13:
+            case 18:
+                return false;
+            default:return true;
+        }
+    }
+
+    public String isStays(int i)
+    {
+        switch (i)
+        {
+            case 1: return " ";
+            case 2:return "";
+            case 3:return " ";
+            case 17:return "  ";
+            default:return "   ";
+        }
     }
 }
 
