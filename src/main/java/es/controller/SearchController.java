@@ -2,6 +2,7 @@ package es.controller;
 
 import com.google.gson.Gson;
 import es.entity.esEntity.DocEntity;
+import es.repository.esRepository.DocRepository;
 import es.service.SearchService;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -24,6 +25,8 @@ public class SearchController {
 
     @Autowired
     SearchService searchService;
+    @Autowired
+    DocRepository docRepository;
 
     @RequestMapping("/simple-search")
     public String simpleSearchResult(@RequestParam("attr")String attr,
@@ -59,5 +62,12 @@ public class SearchController {
         List<DocEntity> list = searchService.similarSearch(0,10,describe);
         Gson gson = new Gson();
         return gson.toJson(list);
+    }
+
+    @RequestMapping("/recommendation")
+    public String recommendation(@RequestParam("docId")String docId){
+        DocEntity docEntity = docRepository.findOne(docId);
+        List<DocEntity> list = searchService.similarSearch(0,10,docEntity.getContent());
+        return new Gson().toJson(list);
     }
 }
