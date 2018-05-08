@@ -5,9 +5,12 @@ package es;
  */
 public class Constant {
     public static final String INDEX_NAME="es_web";
-    public static long ID = 0;
-    public static final String FILE_LOCATION="C:\\Users\\13051\\Desktop\\毕设\\data\\";
     public static final String ENCODING="GBK";
+
+    public static final String FILE_LOCATION="C:\\Users\\13051\\Desktop\\毕设\\data\\";
+    public static String originalDocLocation=FILE_LOCATION;
+    public static String xmlLocation=FILE_LOCATION;
+    public static String newDocLocation=FILE_LOCATION;
 
     public enum WordType {PREFIX,
         PREP,
