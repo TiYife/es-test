@@ -228,7 +228,7 @@
                 </div>
               </div>
 
-              <div class="col-lg-12" id="item-block" style="text-align: left;margin-top: 10px;display: none">
+              <div class="col-lg-12" id="item-block" item-type style="text-align: left;margin-top: 10px;display: none">
                 <div class="input-group">
                   <select class="form-control" input-type="type" style="width:58px">
                     <option value="and">并含</option>
@@ -478,7 +478,7 @@
   <script>
     function addItem() {
         //$("#item-block").clone(true).after($("#item-block").last()).show();
-        $("#item-block").last().after($("#item-block").clone(true).attr("item-type","item").show());
+        $("[item-type]").last().after($("#item-block").clone(true).attr("item-type","item").show());
     }
     function operateFormatter(value, row, index) {
         return [

@@ -44,7 +44,7 @@ public class SearchServiceImpl implements SearchService {
     private String scoreModeSum = "sum"; // 权重分求和模式
     private Float minScore = 10.0F;      // 由于无相关性的分值默认为 1 ，设置权重分最小值为 10
 
-    public enum SearchType {or, and, no}
+    public enum SearchType {or, and, not}
 
     ;
 
