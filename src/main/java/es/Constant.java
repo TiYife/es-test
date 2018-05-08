@@ -8,9 +8,9 @@ public class Constant {
     public static final String ENCODING="GBK";
 
     public static final String FILE_LOCATION="C:\\Users\\13051\\Desktop\\毕设\\data\\";
-    public static String originalDocLocation=FILE_LOCATION;
-    public static String xmlLocation=FILE_LOCATION;
-    public static String newDocLocation=FILE_LOCATION;
+    public static String originalDocLocation=FILE_LOCATION+"txt\\";
+    public static String xmlLocation=FILE_LOCATION+"xml\\";
+    public static String newDocLocation=FILE_LOCATION+"new\\";
 
     public enum WordType {PREFIX,
         PREP,

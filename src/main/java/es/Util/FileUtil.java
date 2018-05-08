@@ -103,6 +103,7 @@ public class FileUtil {
                 }
             }
         }
+        dir.delete();
     }
 
     public static void fileMappingMove(String fileAddress, String fileAddressHead, String saveAddress)
@@ -113,7 +114,7 @@ public class FileUtil {
             if(fileAddress.indexOf(fileAddressHead)==0)
             {
                 saveFileAddress= fileAddress.replace('\\','/').replaceAll(fileAddressHead.replace('\\','/'),saveAddress.replace('\\','/')).replace('/','\\');
-                String lastDir = fileAddress.substring(0, fileAddress.lastIndexOf("\\") + 1);
+                String lastDir = saveFileAddress.substring(0, saveFileAddress.lastIndexOf("\\") + 1);
                 File preFile = new File(lastDir);
                 if (!preFile.exists())
                     preFile.mkdirs();

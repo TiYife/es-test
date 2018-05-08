@@ -2,6 +2,7 @@ package es;
 
 
 import com.sun.jna.Native;
+import es.Util.FileUtil;
 import es.entity.esEntity.DocEntity;
 import es.entity.word.WordSimilarity;
 import es.repository.esRepository.DocRepository;
@@ -61,8 +62,7 @@ public class TEST {
 
     @Test
     public void testSaveDocs(){
-        File file = new File(Constant.FILE_LOCATION+"20140107\\");
-        saveService.saveDocs(file);
+       // saveService.saveDocs(Constant.FILE_LOCATION+"20140107\\");
     }
 
     @Test
@@ -190,6 +190,11 @@ public class TEST {
             case 17:return "  ";
             default:return "   ";
         }
+    }
+
+    @Test
+    public void testFileMove(){
+        FileUtil.dirMappingMove(Constant.originalDocLocation+"20140107",Constant.originalDocLocation,Constant.xmlLocation);
     }
 }
 
