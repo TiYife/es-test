@@ -254,7 +254,7 @@
               <div id="u40" class="ax_default button">
                 <div id="u40_div" class=""></div>
                 <div id="u40_text" class="text ">
-                  <p><span>注&nbsp;&nbsp; 册</span></p>
+                  <p><span id="register-btn-text">注&nbsp;&nbsp; 册</span></p>
                 </div>
               </div>
 
@@ -304,15 +304,47 @@
               userPasswd:$("#u26_input").val(),
               code:$("#u28_input").val()
           };
-          //TODO 验证码
           //TODO 直接判断用户名是否重名
           //TODO 验证密码复杂度
           $("#login-btn-text").text("正在登录...");
           $("#u30").attr("disabled","disabled");
           $.post("/uLogin",data,function (rdata) {
-              $.cookie("userId",$("#u25_input").val());
-              $.cookie("userPasswd",$("#u26_input").val());
-              $("#u20").hide();
+              if(rdata=="success")
+              {
+                  $.cookie("userId",$("#u25_input").val());
+                  $.cookie("userPasswd",$("#u26_input").val());
+                  $("#u20").hide();
+                  alert("注册成功");
+              }
+              else {
+                  alert(rdata);
+              }
+          });
+      }
+      function register() {
+          var data={
+              userId:parseInt( $("#u38_input").val()),
+              userPasswd:$("#u39_input").val(),
+              userPasswdConfirm:$("#u42_input").val(),
+              userEmail:$("#u43_input").val(),
+              code:$("#u45_input").val()
+          };
+          //TODO 验证码区分和登录的
+          //TODO 直接判断用户名是否重名
+          //TODO 验证密码复杂度
+          //TODO 验证确认密码
+          //TODO 验证邮箱格式
+          $("#register-btn-text").text("正在注册...");
+          $("#u40").attr("disabled","disabled");
+          $.post("/uRegister",data,function (rdata) {
+              if(rdata=="success")
+              {
+                  $("#u33").hide();
+                  alert("注册成功");
+              }
+              else {
+                  alert(rdata);
+              }
           });
       }
   </script>

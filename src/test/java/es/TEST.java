@@ -4,7 +4,6 @@ package es;
 import com.sun.jna.Native;
 import es.Util.FileUtil;
 import es.entity.esEntity.DocEntity;
-import es.entity.word.WordSimilarity;
 import es.repository.esRepository.DocRepository;
 import es.service.NLPTRService;
 import es.service.SaveService;
@@ -115,11 +114,13 @@ public class TEST {
                 "六安元和置业集团有限公司清算组未向本院提交书面答辩状。";
         try {
             //double i1= instance.NLPIR_FileProcess("E:\\桌面存放\\测试\\12.txt","E:\\桌面存放\\测试\\12.txt"+".stxt",1);
-            String ss=wordSeparateService.readToString("E:\\桌面存放\\测试\\12.txt");
-            String ii=instance.NLPIR_ParagraphProcess(ss,1);
-            String sss=wordSeparateService.stringToRead(ii,"E:\\桌面存放\\测试\\1212.txt");
-            //int i1=instance.NLPIR_ImportUserDict("E:\\毕业设计\\es-test\\dic\\民事案件案由词典.txt");
-            //int i2=instance.NLPIR_SaveTheUsrDic();
+            //String ss=wordSeparateService.readToString("E:\\桌面存放\\测试\\12.txt");
+            //String ii=instance.NLPIR_ParagraphProcess(ss,1);
+            //String sss=wordSeparateService.stringToRead(ii,"E:\\桌面存放\\测试\\1212.txt");
+            //int i2=instance.NLPIR_DelUsrWord("法定代表人 dlr");
+            int i2=instance.NLPIR_AddUserWord("人民陪审员 spr");
+            //int i1=instance.NLPIR_ImportUserDict("E:\\毕业设计\\es-test\\dic\\标志词词典.txt");
+            int i3=instance.NLPIR_SaveTheUsrDic();
             //String s=instance.NLPIR_ParagraphProcess("姓名权纠纷是一个案由",1);
             //String iii=ii.replaceAll("\r\n","\n");
             //String[] lines = ii.split("\r");
@@ -143,10 +144,16 @@ public class TEST {
         //wordSeparateService.mutiFileProcessAndSave("E:\\桌面存放\\测试","E:\\桌面存放\\测试");
         //wordSeparateService.NLPTR_Exit();
         //String s=System.getProperty("user.dir");
-        WordSimilarity.loadGlossary();
+        /*WordSimilarity.loadGlossary();
         int dis = WordSimilarity.disPrimitive("雇用", "争斗");
         double simP = WordSimilarity.simPrimitive("雇用", "争斗");
         double sim = WordSimilarity.simWord("牛", "猪");
+        //*/
+        String fileAddress="E:\\桌面存放\\测试\\12.txt";
+        /*String fileString=wordSeparateService.readToString(fileAddress);
+        String fileStringPre = wordSeparateService.filePreProcess(fileString);
+        wordSeparateService.stringToRead(fileStringPre,"E:\\桌面存放\\测试\\13pre1.txt");*/
+        wordSeparateService.fileProcessAndSave(fileAddress,"E:\\桌面存放\\测试","E:\\桌面存放\\测试2");
     }
 
 

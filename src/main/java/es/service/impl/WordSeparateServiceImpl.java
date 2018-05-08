@@ -116,18 +116,203 @@ public class WordSeparateServiceImpl implements WordSeparateService {
         }
     }
 
+    public String filePreProcess(String fileString)
+    {
+        return fileString.replaceAll("(\r\n)+\t*","\r\n").replaceAll(" ","").replaceAll("([^　])　(?!　)","$1");
+    }
+
     public void fileProcessAndSave(String fileAddress,String fileAddressHead, String saveAddress)
     {
         try {
             if(NLPTR_Init()!=1) throw new Exception( "分词程序初始化失败");
-            String fileString=readToString(fileAddress);
+            String fileString=filePreProcess(readToString(fileAddress));
             if(fileString==""||fileString==null) throw new Exception( "文件读取失败");
             String[] fileLines=fileString.split("\r\n");
             String[] fileLinesAfterProcess=instance.NLPIR_ParagraphProcess(fileString,1).split("\r");
 
             wordSepaEnity wordSepaEnity1=new wordSepaEnity();
-            wordSepaEnity1.caseName=fileLines[0].trim();
+            int fileError=0;
+            int processStep=1;
+            String dsrresult="";
+            String docContent="";
+            String sprresult="";
+            String errorDetail="";
+            for(int i=0;i<fileLines.length;i++)
+            {
+                String content=fileLines[i].trim();
+                if(content.equals(""))
+                    continue;
+                switch (processStep)
+                {
+                    case 1:
+                        if(content.endsWith("书"))
+                            wordSepaEnity1.caseName=content;
+                        else
+                        {
+                            fileError=1;
+                            errorDetail+="\n"+String.valueOf(i+1)+"\t无法获取案例名称";
+                            //TODO 加日志
+                        }
+                        processStep=2;
+                        break;
+                    case 2:
+                        if(content.endsWith("法院"))
+                            wordSepaEnity1.courtName=content;
+                        else
+                        {
+                            fileError=1;
+                            errorDetail+="\n"+String.valueOf(i+1)+"\t无法获取法院名称";
+                            //TODO 加日志
+                        }
+                        processStep=3;
+                        break;
+                    case 3:
+                        if(content.endsWith("书"))
+                            wordSepaEnity1.docType=content;
+                        else
+                        {
+                            fileError=1;
+                            errorDetail+="\n"+String.valueOf(i+1)+"\t无法获取文书类型";
+                            //TODO 加日志
+                        }
+                        processStep=4;
+                        break;
+                    case 4:
+                        if(content.endsWith("号"))
+                            wordSepaEnity1.caseNo=content;
+                        else
+                        {
+                            fileError=1;
+                            errorDetail+="\n"+String.valueOf(i+1)+"\t无法获取案号";
+                            //TODO 加日志
+                        }
+                        processStep=5;
+                        break;
+                    case 5:
+                        String pattern = "^(.{1,6}?)/(dsr|dlr)(.+?)：?(((.+?)/nr(.+?)，(.+?))|(.+?))。(.+)$";//TODO 缺/ds
+                        if(Pattern.matches(pattern, fileLinesAfterProcess[i])) {
+                            if (fileLinesAfterProcess[i].contains("/dsr")) {
+                                if (fileLinesAfterProcess[i].contains("/nr"))
+                                    dsrresult += getWordByType(fileLinesAfterProcess[i], "nr");
+                                else {
+                                    Pattern pattern2 = Pattern.compile("^(?:.+?)/dsr(?:.+?)：(.+?)。(?:.+)$");
+                                    Matcher matcher = pattern2.matcher(fileLinesAfterProcess[i]);
+                                    while (matcher.find()) {
+                                        dsrresult += matcher.group(1).replaceAll("/[a-z]+? ","") + ";";
+                                    }
+                                }
+
+                            }
+                            wordSepaEnity1.client = dsrresult;
+                            processStep=5;
+                        }
+                        else
+                        {
+                            if(dsrresult.equals(""))
+                            {
+                                fileError=1;
+                                errorDetail+="\n"+String.valueOf(i+1)+"\t无法获取当事人";
+                                //TODO 加日志
+                            }
+                            else
+                            {
+                                processStep=6;
+                                i--;
+                            }
+                        }
+                        break;
+                    case 6:
+                        String pattern3 = "^(.+?)/spr[\\s\\t]*?(.+?)/nr(.+?)$";//TODO 缺/spr
+                        if(!Pattern.matches(pattern3, fileLinesAfterProcess[i]))//TODO 可以多加一个判决结果
+                        {
+                            docContent+=content;
+                            wordSepaEnity1.content=docContent;
+                            processStep=6;
+                        }
+                        else
+                        {
+                            if(docContent.equals(""))
+                            {
+                                fileError=1;
+                                errorDetail+="\n"+String.valueOf(i+1)+"\t无法获取判决内容";
+                                //TODO 加日志
+                            }
+                            else
+                            {
+                                processStep=7;
+                                i--;
+                            }
+                        }
+                        break;
+                    case 7:
+                        String pattern4 = "^(.+?)/spr[\\s\\t]*?(.+?)/nr(.+?)$";//TODO 缺/spr
+                        if(Pattern.matches(pattern4, fileLinesAfterProcess[i]))
+                        {
+                            sprresult += getWordByType(fileLinesAfterProcess[i],"nr") ;
+                            wordSepaEnity1.judge = sprresult;
+                            processStep=7;
+                        }
+                        else
+                        {
+                            if(docContent.equals(""))
+                            {
+                                fileError=1;
+                                errorDetail+="\n"+String.valueOf(i+1)+"\t无法获取审判人员";
+                                //TODO 加日志
+                            }
+                            else
+                            {
+                                processStep=8;
+                                i--;
+                            }
+                        }
+                        break;
+                    case 8:
+                        String pattern5 = "^(.+?)/t (.+?)/t (.+?)/t $";
+                        if(Pattern.matches(pattern5, fileLinesAfterProcess[i]))
+                        {
+                            Pattern pattern6 = Pattern.compile("^(.+?)/t (.+?)/t (.+?)/t $");
+                            Matcher matcher = pattern6.matcher(fileLinesAfterProcess[i]);
+                            while (matcher.find()) {
+                                wordSepaEnity1.trialYear=matcher.group(1);//TODO 日期转数字
+                                wordSepaEnity1.trialMonth=matcher.group(2);
+                                wordSepaEnity1.trialDate=content;
+                            }
+                            processStep=9;
+                        }
+                        else
+                        {
+                            fileError=1;
+                            errorDetail+="\n"+String.valueOf(i+1)+"\t无法获取审判日期";
+                            //TODO 加日志
+                        }
+                        break;
+                    case 9:
+                        String pattern7 = "^(.+?)/sjy[\\s\\t]*?(.+?)/nr(.+?)$";//TODO 缺/sjr
+                        if(Pattern.matches(pattern7, fileLinesAfterProcess[i]))
+                        {
+                            wordSepaEnity1.clerk = getWordByType(fileLinesAfterProcess[i],"nr");
+                            processStep=10;
+                        }
+                        else
+                        {
+                            fileError=1;
+                            errorDetail+="\n"+String.valueOf(i+1)+"\t无法获取书记员";
+                            //TODO 加日志
+                        }
+                        break;
+
+                    default:
+                        fileError=1;
+                        errorDetail+="\n"+String.valueOf(i+1)+"未知错误";
+                        //TODO 加日志
+                        break;
+
+                }
+            }
             //TODO 继续添加其他属性
+            
+            stringToRead(errorDetail,fileAddress+".error.txt");
 
             String saveFileAddress="";
             if(fileAddress.indexOf(fileAddressHead)==0)
@@ -174,7 +359,7 @@ public class WordSeparateServiceImpl implements WordSeparateService {
 
     public String getWordByType(String sourceString,String type)
     {
-        Pattern pattern = Pattern.compile("/[a-z]+ ([^ ]+?)/"+type);
+        Pattern pattern = Pattern.compile("/[a-z]+(?: |　)+?([^ ]+?)/"+type);
         Matcher matcher = pattern.matcher(sourceString);
         String re="";
         while (matcher.find())
