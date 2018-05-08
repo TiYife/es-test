@@ -1,6 +1,7 @@
 package es.service.impl;
 
 import com.sun.jna.Native;
+import es.Constant;
 import es.entity.wordSepa.wordSepaEnity;
 import es.service.NLPTRService;
 import es.service.WordSeparateService;
@@ -219,7 +220,7 @@ public class WordSeparateServiceImpl implements WordSeparateService {
     }
 
     public String readToString(String fileName) {
-        String encoding = "GBK";
+        String encoding = Constant.ENCODING;
         File file = new File(fileName);
         Long filelength = file.length();
         byte[] filecontent = new byte[filelength.intValue()];
