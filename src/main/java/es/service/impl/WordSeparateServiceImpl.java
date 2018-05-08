@@ -1,21 +1,24 @@
 package es.service.impl;
 
 import com.sun.jna.Native;
+import es.Constant;
 import es.entity.wordSepa.wordSepaEnity;
 import es.service.NLPTRService;
 import es.service.WordSeparateService;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
+import org.springframework.stereotype.Service;
 
 import java.io.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@Service
 public class WordSeparateServiceImpl implements WordSeparateService {
 
     public NLPTRService instance =(NLPTRService) Native.loadLibrary(System.getProperty("user.dir") + "\\source\\NLPIR", NLPTRService.class);
 
-    private String FILE_PATH="E:\\测试";
+    private String FILE_PATH=Constant.xmlLocation;
 
     public int NLPTR_Init(){
         int init_flag = instance.NLPIR_Init("", 1, "0");
@@ -327,14 +330,14 @@ public class WordSeparateServiceImpl implements WordSeparateService {
         }
     }
 
-    public String mutiFileProcessAndSave(String fileDirectoryPath,String fileDirectoryPathHead) {//TODO 还得从目录中获取信息
+    public String multiFileProcessAndSave(String fileDirectoryPath,String fileDirectoryPathHead) {//TODO 还得从目录中获取信息
         File dir = new File(fileDirectoryPath);
         File[] files = dir.listFiles(); // 该文件目录下文件全部放入数组
         if (files != null) {
             for (int i = 0; i < files.length; i++) {
                 String fileName = files[i].getName();
                 if (files[i].isDirectory()) { // 判断是文件还是文件夹
-                    mutiFileProcessAndSave(files[i].getAbsolutePath(),fileDirectoryPathHead); // 获取文件绝对路径
+                    multiFileProcessAndSave(files[i].getAbsolutePath(),fileDirectoryPathHead); // 获取文件绝对路径
                 } else if (fileName.endsWith("txt")) { //TODO 判断是不是要处理的文件名格式
                     String strFileName = files[i].getAbsolutePath();
                     fileProcessAndSave(strFileName,fileDirectoryPathHead,FILE_PATH);
@@ -404,7 +407,7 @@ public class WordSeparateServiceImpl implements WordSeparateService {
     }
 
     public String readToString(String fileName) {
-        String encoding = "GBK";
+        String encoding = Constant.ENCODING;
         File file = new File(fileName);
         Long filelength = file.length();
         byte[] filecontent = new byte[filelength.intValue()];

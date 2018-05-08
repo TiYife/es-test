@@ -9,4 +9,8 @@ public interface WordSeparateService {
     public int NLPTR_Exit();
 
     public String readToString(String fileName);
+
+    void fileProcessAndSave(String fileAddress,String fileAddressHead, String saveAddress);
+    String multiFileProcessAndSave(String fileDirectoryPath,String fileDirectoryPathHead);
+
 }
