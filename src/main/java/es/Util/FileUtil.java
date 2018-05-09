@@ -35,16 +35,27 @@ public class FileUtil {
     }
 
    //获取文件名
-    public static String getFileName(String filename) {
-        if ((filename != null) && (filename.length() > 0)) {
-            int dot = filename.lastIndexOf('.');
-            int slash =filename.charAt('/');
-            if ((dot >-1) && (dot < (filename.length()))
-                    &&(slash >-1) && (slash < (filename.length()))) {
-                return filename.substring(slash, dot);
+    public static String getFileName(String fileName) {
+        if ((fileName != null) && (fileName.length() > 0)) {
+            int dot = fileName.lastIndexOf('.');
+            int slash =fileName.lastIndexOf('\\');
+            if ((dot >-1) && (dot < (fileName.length()))
+                    &&(slash >-1) && (slash < (fileName.length()))) {
+                return fileName.substring(slash+1, dot);
             }
         }
-        return filename;
+        return fileName;
+    }
+
+    //去除文件后缀
+    public static String rmFileExtension(String fileName){
+        if ((fileName != null) && (fileName.length() > 0)) {
+            int dot = fileName.lastIndexOf('.');
+            if ((dot >-1) && (dot < (fileName.length()))) {
+                return fileName.substring(0, dot);
+            }
+        }
+        return fileName;
     }
 
     //删除文件夹

@@ -53,9 +53,10 @@ public class SaveServiceImpl implements SaveService {
         return null;
     }
 
+    @Override
     public String saveNewDocs(){
         try {
-            wordSeparateService.multiFileProcessAndSave(newDocLocation,xmlLocation);
+            wordSeparateService.multiFileProcessAndSave(newDocLocation,newDocLocation,xmlLocation);
             FileUtil.dirMappingMove(newDocLocation,newDocLocation,originalDocLocation);
             saveDocs(xmlLocation);
             FileUtil.delAllFile(xmlLocation);

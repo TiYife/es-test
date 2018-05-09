@@ -203,5 +203,15 @@ public class TEST {
     public void testFileMove(){
         FileUtil.dirMappingMove(Constant.originalDocLocation+"20140107",Constant.originalDocLocation,Constant.xmlLocation);
     }
+
+    @Test
+    public void testRmFileExtension(){
+        String s = FileUtil.rmFileExtension("（2013）皖民四终字第00220号_ee7846c9-c0b3-49da-8b68-b49ab6119091判决书.txt");
+    }
+
+    @Test
+    public void testGetFileName(){
+        String s = FileUtil.getFileName("C:\\Users\\13051\\Desktop\\毕设\\data\\txt\\（2013）皖民四终字第00220号_ee7846c9-c0b3-49da-8b68-b49ab6119091判决书.txt");
+    }
 }
 
