@@ -1,12 +1,18 @@
 package es.Util;
 
+import es.entity.jpaEntity.OriDocEntity;
+import es.entity.jpaEntity.UserEntity;
 import es.service.impl.SearchServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
+import javax.validation.constraints.NotNull;
+import java.io.*;
+import java.util.*;
+
+import static es.Constant.dataFormat;
+import static es.Constant.suffixList;
 
 /**
  * Created by TYF on 2018/5/8.
@@ -47,8 +53,19 @@ public class FileUtil {
         return fileName;
     }
 
+    //获取文件后缀
+    public static String getSuffix(String fileName){
+        if ((fileName != null) && (fileName.length() > 0)) {
+            int dot = fileName.lastIndexOf('.');
+            if ((dot >-1) && (dot < (fileName.length()))) {
+                return fileName.substring(dot+1);
+            }
+        }
+        return fileName;
+    }
+
     //去除文件后缀
-    public static String rmFileExtension(String fileName){
+    public static String rmSuffix(String fileName){
         if ((fileName != null) && (fileName.length() > 0)) {
             int dot = fileName.lastIndexOf('.');
             if ((dot >-1) && (dot < (fileName.length()))) {
@@ -139,5 +156,63 @@ public class FileUtil {
     }
 
 
+    public  static OriDocEntity uploadFile(@NotNull MultipartFile multipartFile, String saveLocation, int userId)
+            throws IOException {
+        String filename = multipartFile.getOriginalFilename();
+        if (!Objects.equals(filename, "")) {
+            UUID uuid = UUID.randomUUID();
+//            TODO IMPORTANT: 获取文件名后缀带点  example:   suffix='.docx'
+            String suffix = filename.substring(filename.lastIndexOf("."));
+            String fileName = uuid.toString().replaceAll("-", "");
+            String fileTotalName = fileName + suffix;
+            File isFile = new File(saveLocation + fileTotalName);
+            try {
+                multipartFile.transferTo(isFile);
+            } catch (IOException e) {
+                e.printStackTrace();
+                return null;
+            }
+
+            OriDocEntity entity = new OriDocEntity();
+            entity.setId(fileName);
+            entity.setLocation(saveLocation + fileTotalName);
+            entity.setUpTime(dataFormat.format(new Date()));
+            entity.setUploader(userId);
+
+            return entity;
+
+        }
+        return null;
+    }
+
+    public static List<OriDocEntity> uploadFile(@NotNull List<MultipartFile> files, String saveLocation, int userId) throws IOException {
+
+        List<OriDocEntity> list = new ArrayList<>();
+
+        //文件格式要求
+        String[] suffixArr = suffixList;
+        List<String> suffixList = Arrays.asList(suffixArr);
+
+        //判断存储的文件夹是否存在
+        File file = new File(saveLocation);
+        if (!file.exists()) {
+            file.mkdirs();
+        }
+
+        //遍历文件夹
+        for (MultipartFile mf : files) {
+            if (!mf.isEmpty()) {
+                String originalFilename = mf.getOriginalFilename();
+                String suffix = getSuffix(originalFilename);
+                //格式限制，非wav格式的不上传
+                if (!suffixList.contains(suffix)) {
+                    continue;
+                }
+                list.add(uploadFile(mf, saveLocation, userId));
+            }
+        }
+        return list;
+
+    }
 
 }

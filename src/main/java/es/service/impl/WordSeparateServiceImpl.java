@@ -322,7 +322,7 @@ public class WordSeparateServiceImpl implements WordSeparateService {
             }
             else
                 throw new Exception( "存储地址错误");
-            wordSepaEnityToXMLAndSave(wordSepaEnity1, FileUtil.rmFileExtension(saveFileAddress)+".xml");
+            wordSepaEnityToXMLAndSave(wordSepaEnity1, FileUtil.rmSuffix(saveFileAddress)+".xml");
 
         } catch (Exception e) {
             // TODO Auto-generated catch block

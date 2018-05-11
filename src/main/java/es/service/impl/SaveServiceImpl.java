@@ -5,12 +5,11 @@ import es.Util.ConvertUtil;
 import es.Util.FileUtil;
 import es.entity.esEntity.DocEntity;
 import es.entity.jpaEntity.OriDocEntity;
+import es.entity.jpaEntity.UserEntity;
 import es.repository.esRepository.DocRepository;
 import es.repository.jpaRepository.OriDocRepository;
-import es.repository.jpaRepository.XmlRepository;
 import es.service.SaveService;
 import es.service.WordSeparateService;
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.data.elasticsearch.core.query.IndexQuery;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -33,8 +33,6 @@ public class SaveServiceImpl implements SaveService {
     private static final Logger LOGGER = LoggerFactory.getLogger(SearchServiceImpl.class);
 
     @Autowired
-    private DocRepository docRepository;
-    @Autowired
     private OriDocRepository oriDocRepository;
     @Autowired
     private ElasticsearchTemplate elasticsearchTemplate;
@@ -45,60 +43,89 @@ public class SaveServiceImpl implements SaveService {
     private String xmlLocation=Constant.xmlLocation;
     private String newDocLocation=Constant.newDocLocation;
 
-    public String uploadDoc(){
-        return null;
-    }
-
-    public String uploadDocs(){
-        return null;
-    }
 
     @Override
-    public String saveNewDocs(){
+    public boolean uploadDoc(MultipartFile multipartFile, UserEntity userEntity){
         try {
-            wordSeparateService.multiFileProcessAndSave(newDocLocation,newDocLocation,xmlLocation);
-            FileUtil.dirMappingMove(newDocLocation,newDocLocation,originalDocLocation);
-            saveDocs(xmlLocation);
-            FileUtil.delAllFile(xmlLocation);
-        } catch (Exception e) {
+            OriDocEntity entity = FileUtil.uploadFile(multipartFile,newDocLocation,userEntity.getId());
+            oriDocRepository.save(entity);
+        } catch (IOException e) {
             e.printStackTrace();
-            return e.getMessage();
-        }
-        return "success";
-    }
-
-
-
-
-
-    @Override
-    public boolean saveDoc(File file){
-        try {
-            DocEntity docEntity = ConvertUtil.xmlToEntity(file);
-            docRepository.save(docEntity);
-        } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.info(e.getMessage());
             return false;
         }
         return true;
     }
 
     @Override
-    public void saveDocs(String fileLocation) throws IOException, JSONException {
+    public boolean uploadDoc(List<MultipartFile> multipartFileList,UserEntity userEntity){
+        try {
+            List<OriDocEntity> entities = FileUtil.uploadFile(multipartFileList,newDocLocation,userEntity.getId());
+            oriDocRepository.save(entities);
+        } catch (IOException e) {
+            e.printStackTrace();
+            LOGGER.info(e.getMessage());
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public boolean saveDoc(MultipartFile multipartFile, UserEntity userEntity){
+        if(uploadDoc(multipartFile,userEntity)){
+            if(saveDoc())
+                return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean saveDoc(){
+        File file = new File(newDocLocation);
+        if(!file.exists()){
+            LOGGER.info("没有新文本");
+            return false;
+        }
+        try {
+            wordSeparateService.multiFileProcessAndSave(newDocLocation,newDocLocation,xmlLocation);
+            FileUtil.dirMappingMove(newDocLocation,newDocLocation,originalDocLocation);
+            saveXml(xmlLocation);
+            FileUtil.delAllFile(xmlLocation);
+        } catch (Exception e) {
+            e.printStackTrace();
+            LOGGER.info(e.getMessage());
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public boolean saveDoc(List<MultipartFile> multipartFileList,UserEntity userEntity){
+       if(uploadDoc(multipartFileList,userEntity)){
+           if(saveDoc())
+               return true;
+       }
+       return false;
+    }
+
+    private void saveXml(String fileLocation) throws IOException{
         File file = new File(fileLocation);
         List<String> list = new ArrayList<>() ;
         FileUtil.listFile(file,list);//生成文件下文件位置的目录
 
-        saveDocs(list);
-
+        indexXml(list);
+        OriDocEntity oriDocEntity;
         //将上传过的文档上传属性改为1
         for (String docName: list
              ) {
-            oriDocRepository.findOne(FileUtil.getFileName(docName)).setSave(true);
+            oriDocEntity=oriDocRepository.findOne(FileUtil.getFileName(docName));
+            if(oriDocEntity==null)
+                LOGGER.info(FileUtil.getFileName(docName)+"无上传记录");
+            oriDocEntity.setSave(true);
         }
     }
 
-    private void saveDocs(List<String> list) throws JSONException {
+    private void indexXml(List<String> list){
         if (!elasticsearchTemplate.indexExists(Constant.INDEX_NAME)) {
             elasticsearchTemplate.createIndex(Constant.INDEX_NAME);
         }
@@ -110,7 +137,7 @@ public class SaveServiceImpl implements SaveService {
             File fileToUp = new File(fileLoc);
             JSONObject json = ConvertUtil.xmlToJson(fileToUp);
             IndexQuery indexQuery = new IndexQuery();
-            indexQuery.setId(json.get("docId").toString());
+            indexQuery.setId(FileUtil.getFileName(fileLoc));
             indexQuery.setSource(String.valueOf(json));
             indexQuery.setIndexName(Constant.INDEX_NAME);
             indexQuery.setType("law");
