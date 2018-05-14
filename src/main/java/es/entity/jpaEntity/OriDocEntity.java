@@ -47,7 +47,7 @@ public class OriDocEntity {
     }
 
     @Basic
-    @Column(name = "save_time", nullable = false, length = 45)
+    @Column(name = "save_time", length = 45)
     public String getSaveTime() {
         return saveTime;
     }

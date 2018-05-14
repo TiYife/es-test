@@ -42,7 +42,7 @@ public class Constant {
         ADJ,
         PRON,
         AUX,
-        NUM;
+        NUM
     }
 
 }

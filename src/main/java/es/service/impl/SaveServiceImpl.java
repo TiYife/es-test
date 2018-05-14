@@ -21,7 +21,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+
+import static es.Constant.dataFormat;
 
 /**
  * Created by TYF on 2018/2/26.
@@ -121,7 +124,10 @@ public class SaveServiceImpl implements SaveService {
             oriDocEntity=oriDocRepository.findOne(FileUtil.getFileName(docName));
             if(oriDocEntity==null)
                 LOGGER.info(FileUtil.getFileName(docName)+"无上传记录");
-            oriDocEntity.setSave(true);
+            else {
+                oriDocEntity.setSave(true);
+                oriDocEntity.setSaveTime(dataFormat.format(new Date()));
+            }
         }
     }
 

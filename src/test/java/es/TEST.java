@@ -56,11 +56,11 @@ public class TEST {
 
     }
 
-    @Test
-    public void testSave(){
-        File file = new File(Constant.FILE_LOCATION+"20140107\\安徽\\安徽省安庆市中级人民法院\\行政案件\\bbf10813-8274-48e7-b6af-56dc1b4a29c5.xml");
-        saveService.saveDoc(file);
-    }
+//    @Test
+//    public void testSave(){
+//        File file = new File(Constant.FILE_LOCATION+"20140107\\安徽\\安徽省安庆市中级人民法院\\行政案件\\bbf10813-8274-48e7-b6af-56dc1b4a29c5.xml");
+//        saveService.saveDoc(file);
+//    }
 
     @Test
     public void testSearch(){
@@ -212,14 +212,19 @@ public class TEST {
         String s = FileUtil.getFileName("C:\\Users\\13051\\Desktop\\毕设\\data\\txt\\（2013）皖民四终字第00220号_ee7846c9-c0b3-49da-8b68-b49ab6119091判决书.txt");
     }
 
-    @Test
-    public void testSaveNewDocs(){
-      String s = saveService.saveNewDocs();
-    }
+//    @Test
+//    public void testSaveNewDocs(){
+//      String s = saveService.saveNewDocs();
+//    }
+//
+//    @Test
+//    public void testSaveDocs() throws IOException, JSONException {
+//        saveService.saveDocs(xmlLocation);
+//    }
 
     @Test
-    public void testSaveDocs() throws IOException, JSONException {
-        saveService.saveDocs(xmlLocation);
+    public void testDelete(){
+        FileUtil.delAllFile(xmlLocation);
     }
 }
 
