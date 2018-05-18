@@ -2,6 +2,7 @@ package es;
 
 
 import com.sun.jna.Native;
+import es.Util.FileUtil;
 import es.entity.esEntity.DocEntity;
 import es.repository.esRepository.DocRepository;
 import es.service.NLPTRService;
@@ -12,6 +13,7 @@ import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.index.query.functionscore.FunctionScoreQueryBuilder;
 import org.elasticsearch.index.query.functionscore.ScoreFunctionBuilders;
+import org.json.JSONException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,8 +26,10 @@ import org.springframework.data.elasticsearch.core.query.SearchQuery;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
+import static es.Constant.xmlLocation;
 import static org.elasticsearch.index.query.QueryBuilders.boolQuery;
 
 /**
@@ -52,17 +56,11 @@ public class TEST {
 
     }
 
-    @Test
-    public void testSave(){
-        File file = new File(Constant.FILE_LOCATION+"20140107\\安徽\\安徽省安庆市中级人民法院\\行政案件\\bbf10813-8274-48e7-b6af-56dc1b4a29c5.xml");
-        saveService.saveDoc(file);
-    }
-
-    @Test
-    public void testSaveDocs(){
-        File file = new File(Constant.FILE_LOCATION+"20140107\\");
-        //saveService.saveDocs(file);
-    }
+//    @Test
+//    public void testSave(){
+//        File file = new File(Constant.FILE_LOCATION+"20140107\\安徽\\安徽省安庆市中级人民法院\\行政案件\\bbf10813-8274-48e7-b6af-56dc1b4a29c5.xml");
+//        saveService.saveDoc(file);
+//    }
 
     @Test
     public void testSearch(){
@@ -197,6 +195,36 @@ public class TEST {
             case 17:return "  ";
             default:return "   ";
         }
+    }
+
+    @Test
+    public void testFileMove(){
+        FileUtil.dirMappingMove(Constant.originalDocLocation+"20140107",Constant.originalDocLocation, xmlLocation);
+    }
+
+    @Test
+    public void testRmFileExtension(){
+        String s = FileUtil.rmSuffix("（2013）皖民四终字第00220号_ee7846c9-c0b3-49da-8b68-b49ab6119091判决书.txt");
+    }
+
+    @Test
+    public void testGetFileName(){
+        String s = FileUtil.getFileName("C:\\Users\\13051\\Desktop\\毕设\\data\\txt\\（2013）皖民四终字第00220号_ee7846c9-c0b3-49da-8b68-b49ab6119091判决书.txt");
+    }
+
+//    @Test
+//    public void testSaveNewDocs(){
+//      String s = saveService.saveNewDocs();
+//    }
+//
+//    @Test
+//    public void testSaveDocs() throws IOException, JSONException {
+//        saveService.saveDocs(xmlLocation);
+//    }
+
+    @Test
+    public void testDelete(){
+        FileUtil.delAllFile(xmlLocation);
     }
 }
 

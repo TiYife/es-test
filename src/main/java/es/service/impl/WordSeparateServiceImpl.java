@@ -2,21 +2,16 @@ package es.service.impl;
 
 import com.sun.jna.Native;
 import es.Constant;
-import es.entity.esEntity.DocEntity;
 import es.entity.wordSepa.wordSepaEnity;
 import es.service.NLPTRService;
-import es.service.SearchService;
 import es.service.WordSeparateService;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
-import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import static es.Constant.HFWord_PATH;
 
 @Service
 public class WordSeparateServiceImpl implements WordSeparateService {
@@ -352,7 +347,7 @@ public class WordSeparateServiceImpl implements WordSeparateService {
             //TODO 继续添加其他属性
             if(ayResult.equals(""))
                 errorDetail+="\n无法获取案由";
-            
+
             stringToRead(errorDetail,fileAddress+".error.txt");
 
             String saveFileAddress="";
@@ -362,7 +357,7 @@ public class WordSeparateServiceImpl implements WordSeparateService {
             }
             else
                 throw new Exception( "存储地址错误");
-            wordSepaEnityToXMLAndSave(wordSepaEnity1,saveFileAddress+".xml");
+            wordSepaEnityToXMLAndSave(wordSepaEnity1, FileUtil.rmSuffix(saveFileAddress)+".xml");
 
         } catch (Exception e) {
             // TODO Auto-generated catch block
@@ -371,17 +366,18 @@ public class WordSeparateServiceImpl implements WordSeparateService {
         }
     }
 
-    public String multiFileProcessAndSave(String fileDirectoryPath,String fileDirectoryPathHead) {//TODO 还得从目录中获取信息
+    @Override
+    public String multiFileProcessAndSave(String fileDirectoryPath,String fileDirectoryPathHead,String fileDirectorySavePath) {//TODO 还得从目录中获取信息
         File dir = new File(fileDirectoryPath);
         File[] files = dir.listFiles(); // 该文件目录下文件全部放入数组
         if (files != null) {
             for (int i = 0; i < files.length; i++) {
                 String fileName = files[i].getName();
                 if (files[i].isDirectory()) { // 判断是文件还是文件夹
-                    multiFileProcessAndSave(files[i].getAbsolutePath(),fileDirectoryPathHead); // 获取文件绝对路径
+                    multiFileProcessAndSave(files[i].getAbsolutePath(),fileDirectoryPathHead,fileDirectorySavePath); // 获取文件绝对路径
                 } else if (fileName.endsWith("txt")) { //TODO 判断是不是要处理的文件名格式
                     String strFileName = files[i].getAbsolutePath();
-                    fileProcessAndSave(strFileName,fileDirectoryPathHead,FILE_PATH);
+                    fileProcessAndSave(strFileName,fileDirectoryPathHead,fileDirectorySavePath);
                 } else {
                     continue;
                 }
