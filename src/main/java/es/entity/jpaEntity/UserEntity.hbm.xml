@@ -5,26 +5,12 @@
 <hibernate-mapping>
 
     <class name="es.entity.jpaEntity.UserEntity" table="user" schema="esWeb">
-        <id name="id">
-            <column name="id" sql-type="int(11)"/>
-        </id>
-        <property name="userName">
-            <column name="user_name" sql-type="varchar(255)"/>
-        </property>
-        <property name="password">
-            <column name="password" sql-type="varchar(255)"/>
-        </property>
-        <property name="email">
-            <column name="email" sql-type="varchar(30)" length="30" not-null="true"/>
-        </property>
-        <property name="registerTime">
-            <column name="register_time" sql-type="varchar(50)" length="50" not-null="true"/>
-        </property>
-        <property name="favoriteId">
-            <column name="favorite_id" sql-type="int(11)" not-null="true"/>
-        </property>
-        <property name="role">
-            <column name="role" sql-type="int(11)"/>
-        </property>
+        <id name="id" column="id"/>
+        <property name="userName" column="user_name"/>
+        <property name="password" column="password"/>
+        <property name="email" column="email"/>
+        <property name="registerTime" column="register_time"/>
+        <property name="favoriteId" column="favorite_id"/>
+        <property name="role" column="role"/>
     </class>
 </hibernate-mapping>

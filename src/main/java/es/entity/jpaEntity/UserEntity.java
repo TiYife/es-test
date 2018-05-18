@@ -2,9 +2,6 @@ package es.entity.jpaEntity;
 
 import javax.persistence.*;
 
-/**
- * Created by TYF on 2018/4/8.
- */
 @Entity
 @Table(name = "user", schema = "esWeb", catalog = "")
 public class UserEntity {
@@ -17,7 +14,7 @@ public class UserEntity {
     private int role;
 
     @Id
-    @Column(name = "id", nullable = false)
+    @Column(name = "id")
     public int getId() {
         return id;
     }
@@ -27,7 +24,7 @@ public class UserEntity {
     }
 
     @Basic
-    @Column(name = "user_name", nullable = false, length = 255)
+    @Column(name = "user_name")
     public String getUserName() {
         return userName;
     }
@@ -37,7 +34,7 @@ public class UserEntity {
     }
 
     @Basic
-    @Column(name = "password", nullable = false, length = 255)
+    @Column(name = "password")
     public String getPassword() {
         return password;
     }
@@ -47,7 +44,7 @@ public class UserEntity {
     }
 
     @Basic
-    @Column(name = "email", nullable = true, length = 30)
+    @Column(name = "email")
     public String getEmail() {
         return email;
     }
@@ -57,7 +54,7 @@ public class UserEntity {
     }
 
     @Basic
-    @Column(name = "register_time", nullable = true, length = 50)
+    @Column(name = "register_time")
     public String getRegisterTime() {
         return registerTime;
     }
@@ -67,7 +64,7 @@ public class UserEntity {
     }
 
     @Basic
-    @Column(name = "favorite_id", nullable = true)
+    @Column(name = "favorite_id")
     public Integer getFavoriteId() {
         return favoriteId;
     }
@@ -77,7 +74,7 @@ public class UserEntity {
     }
 
     @Basic
-    @Column(name = "role", nullable = false)
+    @Column(name = "role")
     public int getRole() {
         return role;
     }

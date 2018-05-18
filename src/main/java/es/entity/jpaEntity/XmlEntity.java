@@ -2,19 +2,16 @@ package es.entity.jpaEntity;
 
 import javax.persistence.*;
 
-/**
- * Created by TYF on 2018/4/1.
- */
 @Entity
 @Table(name = "xml", schema = "esWeb", catalog = "")
 public class XmlEntity {
     private String id;
     private String location;
-    private boolean up;
-    private boolean del;
+    private byte up;
+    private byte del;
 
     @Id
-    @Column(name = "id", nullable = false, length = 45)
+    @Column(name = "id")
     public String getId() {
         return id;
     }
@@ -24,7 +21,7 @@ public class XmlEntity {
     }
 
     @Basic
-    @Column(name = "location", nullable = false, length = 200)
+    @Column(name = "location")
     public String getLocation() {
         return location;
     }
@@ -34,22 +31,22 @@ public class XmlEntity {
     }
 
     @Basic
-    @Column(name = "up", nullable = false)
-    public boolean isUp() {
+    @Column(name = "up")
+    public byte getUp() {
         return up;
     }
 
-    public void setUp(boolean up) {
+    public void setUp(byte up) {
         this.up = up;
     }
 
     @Basic
-    @Column(name = "del", nullable = false)
-    public boolean isDel() {
+    @Column(name = "del")
+    public byte getDel() {
         return del;
     }
 
-    public void setDel(boolean del) {
+    public void setDel(byte del) {
         this.del = del;
     }
 
@@ -72,8 +69,8 @@ public class XmlEntity {
     public int hashCode() {
         int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (location != null ? location.hashCode() : 0);
-        result = 31 * result + (up ? 1 : 0);
-        result = 31 * result + (del ? 1 : 0);
+        result = 31 * result + (int) up;
+        result = 31 * result + (int) del;
         return result;
     }
 }

@@ -5,17 +5,9 @@
 <hibernate-mapping>
 
     <class name="es.entity.jpaEntity.XmlEntity" table="xml" schema="esWeb">
-        <id name="id">
-            <column name="id" sql-type="varchar(45)" length="45"/>
-        </id>
-        <property name="location">
-            <column name="location" sql-type="varchar(200)" length="200"/>
-        </property>
-        <property name="up">
-            <column name="up" sql-type="tinyint(4)"/>
-        </property>
-        <property name="del">
-            <column name="del" sql-type="tinyint(4)"/>
-        </property>
+        <id name="id" column="id"/>
+        <property name="location" column="location"/>
+        <property name="up" column="up"/>
+        <property name="del" column="del"/>
     </class>
 </hibernate-mapping>

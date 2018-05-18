@@ -2,9 +2,6 @@ package es.entity.jpaEntity;
 
 import javax.persistence.*;
 
-/**
- * Created by TYF on 2018/5/8.
- */
 @Entity
 @Table(name = "ori_doc", schema = "esWeb", catalog = "")
 public class OriDocEntity {
@@ -12,12 +9,12 @@ public class OriDocEntity {
     private String location;
     private String upTime;
     private String saveTime;
-    private Boolean isSave;
-    private Boolean isDel;
+    private Byte isSave;
+    private Byte isDel;
     private Integer uploader;
 
     @Id
-    @Column(name = "id", nullable = false, length = 100)
+    @Column(name = "id")
     public String getId() {
         return id;
     }
@@ -27,7 +24,7 @@ public class OriDocEntity {
     }
 
     @Basic
-    @Column(name = "location", nullable = false, length = 200)
+    @Column(name = "location")
     public String getLocation() {
         return location;
     }
@@ -37,7 +34,7 @@ public class OriDocEntity {
     }
 
     @Basic
-    @Column(name = "up_time", nullable = false, length = 45)
+    @Column(name = "up_time")
     public String getUpTime() {
         return upTime;
     }
@@ -47,7 +44,7 @@ public class OriDocEntity {
     }
 
     @Basic
-    @Column(name = "save_time", nullable = false, length = 45)
+    @Column(name = "save_time")
     public String getSaveTime() {
         return saveTime;
     }
@@ -57,27 +54,27 @@ public class OriDocEntity {
     }
 
     @Basic
-    @Column(name = "is_save", nullable = true)
-    public Boolean getSave() {
+    @Column(name = "is_save")
+    public Byte getIsSave() {
         return isSave;
     }
 
-    public void setSave(Boolean save) {
-        isSave = save;
+    public void setIsSave(Byte isSave) {
+        this.isSave = isSave;
     }
 
     @Basic
-    @Column(name = "is_del", nullable = true)
-    public Boolean getDel() {
+    @Column(name = "is_del")
+    public Byte getIsDel() {
         return isDel;
     }
 
-    public void setDel(Boolean del) {
-        isDel = del;
+    public void setIsDel(Byte isDel) {
+        this.isDel = isDel;
     }
 
     @Basic
-    @Column(name = "uploader", nullable = true)
+    @Column(name = "uploader")
     public Integer getUploader() {
         return uploader;
     }
@@ -91,15 +88,15 @@ public class OriDocEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        OriDocEntity entity = (OriDocEntity) o;
+        OriDocEntity that = (OriDocEntity) o;
 
-        if (id != null ? !id.equals(entity.id) : entity.id != null) return false;
-        if (location != null ? !location.equals(entity.location) : entity.location != null) return false;
-        if (upTime != null ? !upTime.equals(entity.upTime) : entity.upTime != null) return false;
-        if (saveTime != null ? !saveTime.equals(entity.saveTime) : entity.saveTime != null) return false;
-        if (isSave != null ? !isSave.equals(entity.isSave) : entity.isSave != null) return false;
-        if (isDel != null ? !isDel.equals(entity.isDel) : entity.isDel != null) return false;
-        if (uploader != null ? !uploader.equals(entity.uploader) : entity.uploader != null) return false;
+        if (id != null ? !id.equals(that.id) : that.id != null) return false;
+        if (location != null ? !location.equals(that.location) : that.location != null) return false;
+        if (upTime != null ? !upTime.equals(that.upTime) : that.upTime != null) return false;
+        if (saveTime != null ? !saveTime.equals(that.saveTime) : that.saveTime != null) return false;
+        if (isSave != null ? !isSave.equals(that.isSave) : that.isSave != null) return false;
+        if (isDel != null ? !isDel.equals(that.isDel) : that.isDel != null) return false;
+        if (uploader != null ? !uploader.equals(that.uploader) : that.uploader != null) return false;
 
         return true;
     }

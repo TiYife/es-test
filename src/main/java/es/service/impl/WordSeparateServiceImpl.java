@@ -2,16 +2,21 @@ package es.service.impl;
 
 import com.sun.jna.Native;
 import es.Constant;
+import es.entity.esEntity.DocEntity;
 import es.entity.wordSepa.wordSepaEnity;
 import es.service.NLPTRService;
+import es.service.SearchService;
 import es.service.WordSeparateService;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static es.Constant.HFWord_PATH;
 
 @Service
 public class WordSeparateServiceImpl implements WordSeparateService {
@@ -132,10 +137,11 @@ public class WordSeparateServiceImpl implements WordSeparateService {
 
             wordSepaEnity wordSepaEnity1=new wordSepaEnity();
             int fileError=0;
-            int processStep=1;
-            String dsrresult="";
+            int processStep=0;
+            String dsrresult="";//当事人
             String docContent="";
-            String sprresult="";
+            String sprresult="";//审判人
+            String ayResult ="";//案由
             String errorDetail="";
             for(int i=0;i<fileLines.length;i++)
             {
@@ -144,9 +150,29 @@ public class WordSeparateServiceImpl implements WordSeparateService {
                     continue;
                 switch (processStep)
                 {
+                    case 0:
+                        Pattern pattern2 = Pattern.compile("^.{10,}_([0-9a-z]{8}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{12})(.[3,6]?)\\.txt$");
+                        Matcher matcher = pattern2.matcher(fileAddress);
+                        while (matcher.find()) {
+                            String docId=matcher.group(1);
+                            if(!docId.equals(""))
+                                wordSepaEnity1.docId=docId;
+                            else
+                                errorDetail+="\n"+String.valueOf(i+1)+"\t无法获取docId";
+                            String docType=matcher.group(2);
+                            if(docType!=""&&docType.endsWith("书"))
+                                wordSepaEnity1.docType=docType;
+                            else
+                                errorDetail+="\n"+String.valueOf(i+1)+"\t无法获取docType";
+                        }
+                        processStep=1;
+                        break;
                     case 1:
-                        if(content.endsWith("书"))
-                            wordSepaEnity1.caseName=content;
+                        if(content.endsWith("书")) {
+                            wordSepaEnity1.caseName = content;
+                            if (fileLinesAfterProcess[i].contains("/ay"))
+                                ayResult+=getWordByType(fileLinesAfterProcess[i],"ay");
+                        }
                         else
                         {
                             fileError=1;
@@ -156,8 +182,18 @@ public class WordSeparateServiceImpl implements WordSeparateService {
                         processStep=2;
                         break;
                     case 2:
-                        if(content.endsWith("法院"))
-                            wordSepaEnity1.courtName=content;
+                        if(content.endsWith("法院")) {
+                            wordSepaEnity1.courtName = content;
+                            if(fileLinesAfterProcess[i].contains("/ns"))
+                            {
+                                wordSepaEnity1.courtCountry=getWordByType(fileLinesAfterProcess[i],"ns");
+                                wordSepaEnity1.courtProvince=wordSepaEnity1.courtCountry.split(";")[0];
+                            }
+                            else
+                            {
+                                errorDetail+="\n"+String.valueOf(i+1)+"\t无法获取案例地区信息";
+                            }
+                        }
                         else
                         {
                             fileError=1;
@@ -195,10 +231,10 @@ public class WordSeparateServiceImpl implements WordSeparateService {
                                 if (fileLinesAfterProcess[i].contains("/nr"))
                                     dsrresult += getWordByType(fileLinesAfterProcess[i], "nr");
                                 else {
-                                    Pattern pattern2 = Pattern.compile("^(?:.+?)/dsr(?:.+?)：(.+?)。(?:.+)$");
-                                    Matcher matcher = pattern2.matcher(fileLinesAfterProcess[i]);
-                                    while (matcher.find()) {
-                                        dsrresult += matcher.group(1).replaceAll("/[a-z]+? ","") + ";";
+                                    Pattern pattern3 = Pattern.compile("^(?:.+?)/dsr(?:.+?)：(.+?)。(?:.+)$");
+                                    Matcher matcher1 = pattern3.matcher(fileLinesAfterProcess[i]);
+                                    while (matcher1.find()) {
+                                        dsrresult += matcher1.group(1).replaceAll("/[a-z]+? ","") + ";";
                                     }
                                 }
 
@@ -227,6 +263,9 @@ public class WordSeparateServiceImpl implements WordSeparateService {
                         {
                             docContent+=content;
                             wordSepaEnity1.content=docContent;
+
+                            if (fileLinesAfterProcess[i].contains("/dsr"))//获取案由
+                                ayResult+=getWordByType(fileLinesAfterProcess[i],"ay");
                             processStep=6;
                         }
                         else
@@ -272,10 +311,10 @@ public class WordSeparateServiceImpl implements WordSeparateService {
                         if(Pattern.matches(pattern5, fileLinesAfterProcess[i]))
                         {
                             Pattern pattern6 = Pattern.compile("^(.+?)/t (.+?)/t (.+?)/t $");
-                            Matcher matcher = pattern6.matcher(fileLinesAfterProcess[i]);
-                            while (matcher.find()) {
-                                wordSepaEnity1.trialYear=matcher.group(1);//TODO 日期转数字
-                                wordSepaEnity1.trialMonth=matcher.group(2);
+                            Matcher matcher3 = pattern6.matcher(fileLinesAfterProcess[i]);
+                            while (matcher3.find()) {
+                                wordSepaEnity1.trialYear=matcher3.group(1);//TODO 日期转数字
+                                wordSepaEnity1.trialMonth=matcher3.group(2);
                                 wordSepaEnity1.trialDate=content;
                             }
                             processStep=9;
@@ -311,6 +350,8 @@ public class WordSeparateServiceImpl implements WordSeparateService {
                 }
             }
             //TODO 继续添加其他属性
+            if(ayResult.equals(""))
+                errorDetail+="\n无法获取案由";
             
             stringToRead(errorDetail,fileAddress+".error.txt");
 
@@ -441,6 +482,61 @@ public class WordSeparateServiceImpl implements WordSeparateService {
             sb.append(sourceString);
             out.write(sb.toString().getBytes("gbk"));
             out.close();
+            return "success";
+        }catch (Exception e)
+        {
+            return e.getMessage();
+        }
+    }
+
+    public String getHFWordFormFiles(String caseType)//获取高频词组 参数代表案件类型 all所有类型
+    {
+        try {
+            SearchService searchService = new SearchServiceImpl();
+            //List<DocEntity> list;
+            List<DocEntity> list=searchService.searchLaw(0,10,"","");
+            if (caseType == "all") {
+                //list = searchService.
+            } else {
+
+            }
+            int size=list.size();
+            int a = 20,b=100,d=30;
+            double  c = 0.5;
+            if (NLPTR_Init() != 1) throw new Exception("分词程序初始化失败");
+            Map<String, Integer> Word = new HashMap<String, Integer>();
+
+            int k=0;
+            for(DocEntity doc :list)
+            {
+                k++;
+                String docAfterProcess = instance.NLPIR_ParagraphProcess(doc.getContent(),0);
+                String[] wlist=docAfterProcess.split(" ");
+                for(String s:wlist)
+                {
+                    if(s.equals("")) continue;
+                    if(Word.containsKey(s))
+                        Word.put(s,Word.get(s)+1);
+                    else
+                        Word.put(s,1);
+                    for(int i=0;i<s.length();i++)
+                        if(wlist[i].equals(s))
+                            wlist[i]="";
+                }
+                for (String w : Word.keySet()) {
+                    //map.keySet()返回的是所有key的值
+                    int f=Word.get(w);
+                    if(k>a&&k<b&&(double)f/(double)size<c) Word.remove(w);
+                    if(k>b&&f<d) Word.remove(w);
+                }
+            }
+            String result="";
+            String sp="";
+            for (String w : Word.keySet()) {
+                result+=sp+w;
+                sp="\n";
+            }
+            stringToRead(result,HFWord_PATH);
             return "success";
         }catch (Exception e)
         {

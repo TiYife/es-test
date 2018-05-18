@@ -2,9 +2,6 @@ package es.entity.jpaEntity;
 
 import javax.persistence.*;
 
-/**
- * Created by TYF on 2018/4/8.
- */
 @Entity
 @Table(name = "favorite", schema = "esWeb", catalog = "")
 public class FavoriteEntity {
@@ -17,7 +14,7 @@ public class FavoriteEntity {
     private Integer userId;
 
     @Id
-    @Column(name = "id", nullable = false)
+    @Column(name = "id")
     public int getId() {
         return id;
     }
@@ -27,7 +24,7 @@ public class FavoriteEntity {
     }
 
     @Basic
-    @Column(name = "name", nullable = true, length = 255)
+    @Column(name = "name")
     public String getName() {
         return name;
     }
@@ -37,7 +34,7 @@ public class FavoriteEntity {
     }
 
     @Basic
-    @Column(name = "type", nullable = true)
+    @Column(name = "type")
     public Integer getType() {
         return type;
     }
@@ -47,7 +44,7 @@ public class FavoriteEntity {
     }
 
     @Basic
-    @Column(name = "belong_to", nullable = true)
+    @Column(name = "belong_to")
     public Integer getBelongTo() {
         return belongTo;
     }
@@ -57,7 +54,7 @@ public class FavoriteEntity {
     }
 
     @Basic
-    @Column(name = "record_id", nullable = true, length = 255)
+    @Column(name = "record_id")
     public String getRecordId() {
         return recordId;
     }
@@ -67,7 +64,7 @@ public class FavoriteEntity {
     }
 
     @Basic
-    @Column(name = "create_time", nullable = true, length = 100)
+    @Column(name = "create_time")
     public String getCreateTime() {
         return createTime;
     }
@@ -77,7 +74,7 @@ public class FavoriteEntity {
     }
 
     @Basic
-    @Column(name = "user_id", nullable = true)
+    @Column(name = "user_id")
     public Integer getUserId() {
         return userId;
     }

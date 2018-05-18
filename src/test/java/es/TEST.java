@@ -61,7 +61,7 @@ public class TEST {
     @Test
     public void testSaveDocs(){
         File file = new File(Constant.FILE_LOCATION+"20140107\\");
-        saveService.saveDocs(file);
+        //saveService.saveDocs(file);
     }
 
     @Test

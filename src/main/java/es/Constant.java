@@ -12,6 +12,8 @@ public class Constant {
     public static String xmlLocation=FILE_LOCATION;
     public static String newDocLocation=FILE_LOCATION;
 
+    public static final String HFWord_PATH="E:\\桌面存放\\测试\\全局高频词组.txt";
+
     public enum WordType {PREFIX,
         PREP,
         ECHO,
