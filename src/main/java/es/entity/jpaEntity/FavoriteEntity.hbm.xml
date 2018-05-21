@@ -8,23 +8,17 @@
         <id name="id">
             <column name="id" sql-type="int(11)"/>
         </id>
-        <property name="name">
-            <column name="name" sql-type="varchar(255)" not-null="true"/>
-        </property>
-        <property name="type">
-            <column name="type" sql-type="int(10)" not-null="true"/>
-        </property>
-        <property name="belongTo">
-            <column name="belong_to" sql-type="int(11)" not-null="true"/>
-        </property>
-        <property name="recordId">
-            <column name="record_id" sql-type="varchar(255)" not-null="true"/>
-        </property>
-        <property name="createTime">
-            <column name="create_time" sql-type="varchar(100)" length="100" not-null="true"/>
-        </property>
         <property name="userId">
             <column name="user_id" sql-type="int(11)" not-null="true"/>
+        </property>
+        <property name="docId">
+            <column name="doc_id" sql-type="varchar(255)" not-null="true"/>
+        </property>
+        <property name="docName">
+            <column name="doc_name" sql-type="varchar(255)" not-null="true"/>
+        </property>
+        <property name="favorTime">
+            <column name="favor_time" sql-type="varchar(100)" length="100" not-null="true"/>
         </property>
     </class>
 </hibernate-mapping>
