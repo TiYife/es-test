@@ -15,7 +15,7 @@ public class Constant {
 
     //时间格式
     public static SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    public static SimpleDateFormat dataFormat = new SimpleDateFormat("yyyyMMdd");
+    public static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
 
     //文件位置相关
     public static final String FILE_LOCATION="C:\\Users\\13051\\Desktop\\毕设\\data\\";

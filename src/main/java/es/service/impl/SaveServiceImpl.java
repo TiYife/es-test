@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.data.elasticsearch.core.query.IndexQuery;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -42,7 +43,7 @@ public class SaveServiceImpl implements SaveService {
 
     private String originalDocLocation=Constant.originalDocLocation;
     private String xmlLocation=Constant.xmlLocation;
-    private String newDocLocation=Constant.newDocLocation;
+    private String newDocLocation=Constant.newDocLocation+Constant.dateFormat.format(new Date())+"\\";
 
 
     @Override
@@ -108,6 +109,18 @@ public class SaveServiceImpl implements SaveService {
        }
        return false;
     }
+
+    @Scheduled(cron = "0 30 0 * * ? ")
+    //@Scheduled(cron = "0/2 * * * * ? ")
+    public void autoSave(){
+        saveDoc();
+        String newDirName = Constant.newDocLocation+Constant.dateFormat.format(new Date())+"\\";
+        File file = new File(newDirName);
+        file.mkdir();
+        newDocLocation=newDirName;
+    }
+
+
 
     private void saveXml(String fileLocation) throws IOException{
         File file = new File(fileLocation);

@@ -156,6 +156,11 @@ public class FileUtil {
 
 
     public  static OriDocEntity uploadFile(@NotNull MultipartFile multipartFile, String saveLocation, int userId){
+        File file = new File(saveLocation);
+        if (!file.exists()) {
+            file.mkdirs();
+        }
+
         String filename = multipartFile.getOriginalFilename();
         if (!Objects.equals(filename, "")) {
             UUID uuid = UUID.randomUUID();
