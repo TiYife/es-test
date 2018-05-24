@@ -161,13 +161,13 @@ public class FileUtil {
             file.mkdirs();
         }
 
-        String filename = multipartFile.getOriginalFilename();
-        if (!Objects.equals(filename, "")) {
+        String oldName = multipartFile.getOriginalFilename();
+        if (!Objects.equals(oldName, "")) {
             UUID uuid = UUID.randomUUID();
 //            TODO IMPORTANT: 获取文件名后缀带点  example:   suffix='.docx'
-            String suffix = filename.substring(filename.lastIndexOf("."));
-            String fileName = uuid.toString().replaceAll("-", "");
-            String fileTotalName = fileName + suffix;
+            String suffix = oldName.substring(oldName.lastIndexOf("."));
+            String newName = uuid.toString().replaceAll("-", "");
+            String fileTotalName = newName + suffix;
             File isFile = new File(saveLocation + fileTotalName);
             try {
                 multipartFile.transferTo(isFile);
@@ -177,7 +177,8 @@ public class FileUtil {
             }
 
             OriDocEntity entity = new OriDocEntity();
-            entity.setId(fileName);
+            entity.setId(newName);
+            entity.setName(oldName);
             entity.setLocation(saveLocation + fileTotalName);
             entity.setUpTime(timeFormat.format(new Date()));
             entity.setUploader(userId);

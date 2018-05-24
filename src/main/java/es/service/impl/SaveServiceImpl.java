@@ -111,7 +111,7 @@ public class SaveServiceImpl implements SaveService {
     }
 
     @Scheduled(cron = "0 30 0 * * ? ")
-    //@Scheduled(cron = "0/2 * * * * ? ")
+    //@Scheduled(cron = "0 0/2 * * * ? ")
     public void autoSave(){
         saveDoc();
         String newDirName = Constant.newDocLocation+Constant.dateFormat.format(new Date())+"\\";
@@ -120,6 +120,21 @@ public class SaveServiceImpl implements SaveService {
         newDocLocation=newDirName;
     }
 
+    @Override
+    public List<OriDocEntity> listDocs(){
+        return oriDocRepository.findAll();
+    }
+    @Override
+    public void deleteDoc(String docId){
+        oriDocRepository.delete(docId);
+    }
+    @Override
+    public void delete(List<String> docIds){
+        for (String id:docIds
+             ) {
+            oriDocRepository.delete(id);
+        }
+    }
 
 
     private void saveXml(String fileLocation) throws IOException{

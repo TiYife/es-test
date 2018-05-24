@@ -18,14 +18,14 @@
 <div style="width: 1000px;" >
     <table style="border-width: 1px;border-style: dashed;">
         <tr>
-            <td>docId</td>
-            <td>courtProvince</td>
-            <td>content</td>
+            <td>name</td>
+            <td>up-time</td>
+            <td>操作</td>
         </tr>
-        <tr th:each="case:${list}">
-            <td th:text="${case.docId}">ID</td>
-            <td th:text="${case.courtProvince}">省份</td>
-            <td><pre th:text="${case.content}"></pre></td>
+        <tr th:each="doc:${list}">
+            <td th:text="${doc.name}">ID</td>
+            <td th:text="${doc.upTime}">省份</td>
+            <td>还没有</td>
         </tr>
     </table>
 </div>
