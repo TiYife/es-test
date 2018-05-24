@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 /**
@@ -28,10 +29,11 @@ public class SaveController {
 
     @RequestMapping("/upload")
     @ResponseBody
-    public String upload(@RequestParam("files")List<MultipartFile> files){
-        UserEntity userEntity =new UserEntity();
-        userEntity.setId(1);
-        if(saveService.saveDoc(files,userEntity))
+    public String upload(@RequestParam("files")List<MultipartFile> files, HttpSession session){
+        UserEntity userEntity = (UserEntity)session.getAttribute("user");
+        if(userEntity.equals(null))
+            return "redirect:login";
+        if(saveService.uploadDoc(files,userEntity))
             return "success";
         else
             return "fail";

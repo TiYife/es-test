@@ -3,10 +3,8 @@ package es.service.impl;
 import es.Constant;
 import es.Util.ConvertUtil;
 import es.Util.FileUtil;
-import es.entity.esEntity.DocEntity;
 import es.entity.jpaEntity.OriDocEntity;
 import es.entity.jpaEntity.UserEntity;
-import es.repository.esRepository.DocRepository;
 import es.repository.jpaRepository.OriDocRepository;
 import es.service.SaveService;
 import es.service.WordSeparateService;
@@ -24,7 +22,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static es.Constant.dataFormat;
+import static es.Constant.timeFormat;
 
 /**
  * Created by TYF on 2018/2/26.
@@ -52,7 +50,7 @@ public class SaveServiceImpl implements SaveService {
         try {
             OriDocEntity entity = FileUtil.uploadFile(multipartFile,newDocLocation,userEntity.getId());
             oriDocRepository.save(entity);
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             LOGGER.info(e.getMessage());
             return false;
@@ -65,7 +63,7 @@ public class SaveServiceImpl implements SaveService {
         try {
             List<OriDocEntity> entities = FileUtil.uploadFile(multipartFileList,newDocLocation,userEntity.getId());
             oriDocRepository.save(entities);
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             LOGGER.info(e.getMessage());
             return false;
@@ -126,7 +124,7 @@ public class SaveServiceImpl implements SaveService {
                 LOGGER.info(FileUtil.getFileName(docName)+"无上传记录");
             else {
                 oriDocEntity.setSave(true);
-                oriDocEntity.setSaveTime(dataFormat.format(new Date()));
+                oriDocEntity.setSaveTime(timeFormat.format(new Date()));
             }
         }
     }

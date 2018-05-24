@@ -1,6 +1,5 @@
 package es.service.impl;
 
-import es.Constant;
 import es.entity.esEntity.DocEntity;
 import es.entity.jpaEntity.FavoriteEntity;
 import es.repository.esRepository.DocRepository;
@@ -29,7 +28,7 @@ import java.util.Date;
 import java.util.List;
 
 
-import static es.Constant.dataFormat;
+import static es.Constant.timeFormat;
 import static es.service.impl.SearchServiceImpl.SearchType.and;
 import static es.service.impl.SearchServiceImpl.SearchType.or;
 import static org.elasticsearch.index.query.QueryBuilders.boolQuery;
@@ -111,7 +110,7 @@ public class SearchServiceImpl implements SearchService {
         favoriteEntity.setUserId(userId);
         favoriteEntity.setDocId(docEntity.getDocId());
         favoriteEntity.setDocName(docEntity.getCaseName());
-        favoriteEntity.setFavorTime(dataFormat.format(new Date()));
+        favoriteEntity.setFavorTime(timeFormat.format(new Date()));
         favoriteRepository.save(favoriteEntity);
     }
 

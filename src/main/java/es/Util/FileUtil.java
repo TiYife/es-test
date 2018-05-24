@@ -1,7 +1,6 @@
 package es.Util;
 
 import es.entity.jpaEntity.OriDocEntity;
-import es.entity.jpaEntity.UserEntity;
 import es.service.impl.SearchServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,7 +10,7 @@ import javax.validation.constraints.NotNull;
 import java.io.*;
 import java.util.*;
 
-import static es.Constant.dataFormat;
+import static es.Constant.timeFormat;
 import static es.Constant.suffixList;
 
 /**
@@ -156,8 +155,7 @@ public class FileUtil {
     }
 
 
-    public  static OriDocEntity uploadFile(@NotNull MultipartFile multipartFile, String saveLocation, int userId)
-            throws IOException {
+    public  static OriDocEntity uploadFile(@NotNull MultipartFile multipartFile, String saveLocation, int userId){
         String filename = multipartFile.getOriginalFilename();
         if (!Objects.equals(filename, "")) {
             UUID uuid = UUID.randomUUID();
@@ -176,7 +174,7 @@ public class FileUtil {
             OriDocEntity entity = new OriDocEntity();
             entity.setId(fileName);
             entity.setLocation(saveLocation + fileTotalName);
-            entity.setUpTime(dataFormat.format(new Date()));
+            entity.setUpTime(timeFormat.format(new Date()));
             entity.setUploader(userId);
 
             return entity;
@@ -185,7 +183,7 @@ public class FileUtil {
         return null;
     }
 
-    public static List<OriDocEntity> uploadFile(@NotNull List<MultipartFile> files, String saveLocation, int userId) throws IOException {
+    public static List<OriDocEntity> uploadFile(@NotNull List<MultipartFile> files, String saveLocation, int userId) {
 
         List<OriDocEntity> list = new ArrayList<>();
 
