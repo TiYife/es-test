@@ -99,7 +99,8 @@
         function operateFormatter(value, row, index) {
             return [
                 '<button type="button" class="btn btn-info detail"> 详情</button> '+
-                '<button type="button" class="btn btn-info"> 收藏</button> '
+                '<button type="button" class="btn btn-info recommend"> 推荐</button> ' +
+                '<button type="button" class="btn btn-info collect"> 收藏</button> '
             ].join('');
 
         };
@@ -111,12 +112,20 @@
 
         window.operateEvents = {
             'click .detail': function (e, value, row, index) {
+                var html = [];
+                html.push('<div  class="row">');
+                html.push('<div class="col-md-12">');
+                html.push(''+row["content"]+'')
+                html.push('</div>');
+                html.push('</div>');
+                var coln = $('#result-table').bootstrapTable('getVisibleColumns').length;
+                $('#result-table').find('tr[data-index='+index+']').after('<tr class="detail-view" detail-index="'+index+'"><td colspan="'+coln+'">'+html.join('')+'</td></tr>');
+            }
+        };
 
-                console.log(
-                $(this).parent().parent().after('<tr style="display:">'+row["content"]+'</tr>'));
-                $(".login-ip-span").text(row["IPAddress"]);
-                $("#VMLoginInfo").modal('show');
-
+        window.operateEvents = {
+            'click .recommend': function (e, value, row, index) {
+                location.href = "recommend?docId=" + row["docId"];
             }
         };
     </script>
