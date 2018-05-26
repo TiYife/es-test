@@ -2,16 +2,24 @@ package es.service.impl;
 
 import com.sun.jna.Native;
 import es.Constant;
+import es.Util.FileUtil;
+import es.entity.esEntity.DocEntity;
 import es.entity.wordSepa.wordSepaEnity;
 import es.service.NLPTRService;
+import es.service.SearchService;
 import es.service.WordSeparateService;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static es.Constant.HFWord_PATH;
 
 @Service
 public class WordSeparateServiceImpl implements WordSeparateService {
@@ -146,7 +154,7 @@ public class WordSeparateServiceImpl implements WordSeparateService {
                 switch (processStep)
                 {
                     case 0:
-                        Pattern pattern2 = Pattern.compile("^.{10,}_([0-9a-z]{8}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{12})(.[3,6]?)\\.txt$");
+                        Pattern pattern2 = Pattern.compile("^.{10,}_([0-9a-z]{8}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{12})(.{3,6}?)\\.txt$");
                         Matcher matcher = pattern2.matcher(fileAddress);
                         while (matcher.find()) {
                             String docId=matcher.group(1);
@@ -161,9 +169,10 @@ public class WordSeparateServiceImpl implements WordSeparateService {
                                 errorDetail+="\n"+String.valueOf(i+1)+"\t无法获取docType";
                         }
                         processStep=1;
+                        i--;
                         break;
                     case 1:
-                        if(content.endsWith("书")) {
+                        if(Pattern.matches("^.+书([0-9]+号)?$", fileLines[i])){
                             wordSepaEnity1.caseName = content;
                             if (fileLinesAfterProcess[i].contains("/ay"))
                                 ayResult+=getWordByType(fileLinesAfterProcess[i],"ay");
@@ -348,7 +357,7 @@ public class WordSeparateServiceImpl implements WordSeparateService {
             if(ayResult.equals(""))
                 errorDetail+="\n无法获取案由";
 
-            stringToRead(errorDetail,fileAddress+".error.txt");
+            stringToRead(errorDetail,fileAddress+".error.etxt");
 
             String saveFileAddress="";
             if(fileAddress.indexOf(fileAddressHead)==0)
@@ -375,7 +384,7 @@ public class WordSeparateServiceImpl implements WordSeparateService {
                 String fileName = files[i].getName();
                 if (files[i].isDirectory()) { // 判断是文件还是文件夹
                     multiFileProcessAndSave(files[i].getAbsolutePath(),fileDirectoryPathHead,fileDirectorySavePath); // 获取文件绝对路径
-                } else if (fileName.endsWith("txt")) { //TODO 判断是不是要处理的文件名格式
+                } else if (fileName.endsWith(".txt")) { //TODO 判断是不是要处理的文件名格式
                     String strFileName = files[i].getAbsolutePath();
                     fileProcessAndSave(strFileName,fileDirectoryPathHead,fileDirectorySavePath);
                 } else {
@@ -396,12 +405,14 @@ public class WordSeparateServiceImpl implements WordSeparateService {
 
     public String getWordByType(String sourceString,String type)
     {
-        Pattern pattern = Pattern.compile("/[a-z]+(?: |　)+?([^ ]+?)/"+type);
+        Pattern pattern = Pattern.compile("(?:/[a-z]+(?: |　)+?|^)([^ ]+?)/"+type);
         Matcher matcher = pattern.matcher(sourceString);
         String re="";
+        String dot=";";
         while (matcher.find())
         {
-            re=re+matcher.group(1)+";";
+            re+=dot+matcher.group(1);
+            dot=";";
         }
         return re;
     }

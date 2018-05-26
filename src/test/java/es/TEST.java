@@ -13,7 +13,6 @@ import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.index.query.functionscore.FunctionScoreQueryBuilder;
 import org.elasticsearch.index.query.functionscore.ScoreFunctionBuilders;
-import org.json.JSONException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +24,6 @@ import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilde
 import org.springframework.data.elasticsearch.core.query.SearchQuery;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 import static es.Constant.xmlLocation;
@@ -138,8 +135,8 @@ public class TEST {
     @Test
     public void testJava()
     {
-        //wordSeparateService.NLPTR_Init();
-        //wordSeparateService.mutiFileProcessAndSave("E:\\桌面存放\\测试","E:\\桌面存放\\测试");
+        wordSeparateService.NLPTR_Init();
+        wordSeparateService.multiFileProcessAndSave("E:\\桌面存放\\测试\\20150104","E:\\桌面存放\\测试\\20150104","E:\\桌面存放\\测试2");
         //wordSeparateService.NLPTR_Exit();
         //String s=System.getProperty("user.dir");
         /*WordSimilarity.loadGlossary();
@@ -147,11 +144,11 @@ public class TEST {
         double simP = WordSimilarity.simPrimitive("雇用", "争斗");
         double sim = WordSimilarity.simWord("牛", "猪");
         //*/
-        String fileAddress="E:\\桌面存放\\测试\\12.txt";
+        //String fileAddress="E:\\桌面存放\\测试\\12.txt";
         /*String fileString=wordSeparateService.readToString(fileAddress);
         String fileStringPre = wordSeparateService.filePreProcess(fileString);
         wordSeparateService.stringToRead(fileStringPre,"E:\\桌面存放\\测试\\13pre1.txt");*/
-        wordSeparateService.fileProcessAndSave(fileAddress,"E:\\桌面存放\\测试","E:\\桌面存放\\测试2");
+        //wordSeparateService.fileProcessAndSave(fileAddress,"E:\\桌面存放\\测试","E:\\桌面存放\\测试2");
     }
 
 
