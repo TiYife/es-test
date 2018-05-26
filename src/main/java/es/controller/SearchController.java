@@ -65,13 +65,26 @@ public class SearchController {
     }
 
     @RequestMapping("/favor")
-    public String favorite(@RequestParam("docId")String docId){
+    public String favor(@RequestParam("docId")String docId){
         int userId = 123;//todo
         searchService.favorDoc(userId,docId);
         return "success";
     }
 
-    @RequestMapping("recommend")
+    @RequestMapping("/favorite")
+    public String favorite(Model model){
+        int userId = 123;//todo
+        model.addAttribute("userId",userId);
+        return "favorites";
+    }
+
+    @RequestMapping("favorite-list")
+    @ResponseBody
+    public String favoriteList(@RequestParam("userId")int userId){
+        return new Gson().toJson(searchService.listFavorDocs(userId));
+    }
+
+    @RequestMapping("/recommend")
     public String recommend(@RequestParam("docId")String docId,Model model){
         model.addAttribute("docId",docId);
         return "recommendation";
