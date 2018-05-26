@@ -129,13 +129,18 @@ public class SaveServiceImpl implements SaveService {
     }
     @Override
     public void deleteDoc(String docId){
+        File file = new File(oriDocRepository.findOne(docId).getLocation());
+        if(file.exists()) file.delete();
         oriDocRepository.delete(docId);
         docRepository.delete(docId);
     }
     @Override
     public void delete(List<String> docIds){
+        File file;
         for (String id:docIds
              ) {
+            file = new File(oriDocRepository.findOne(id).getLocation());
+            if(file.exists()) file.delete();
             oriDocRepository.delete(id);
             docRepository.delete(id);
         }
