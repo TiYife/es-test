@@ -3,7 +3,6 @@ package es.service.impl;
 import es.Constant;
 import es.Util.ConvertUtil;
 import es.Util.FileUtil;
-import es.entity.esEntity.DocEntity;
 import es.entity.jpaEntity.OriDocEntity;
 import es.entity.jpaEntity.UserEntity;
 import es.repository.esRepository.DocRepository;
@@ -16,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.data.elasticsearch.core.query.IndexQuery;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static es.Constant.dataFormat;
+import static es.Constant.timeFormat;
 
 /**
  * Created by TYF on 2018/2/26.
@@ -38,13 +38,15 @@ public class SaveServiceImpl implements SaveService {
     @Autowired
     private OriDocRepository oriDocRepository;
     @Autowired
+    private DocRepository docRepository;
+    @Autowired
     private ElasticsearchTemplate elasticsearchTemplate;
     @Autowired
     private WordSeparateService wordSeparateService;
 
     private String originalDocLocation=Constant.originalDocLocation;
     private String xmlLocation=Constant.xmlLocation;
-    private String newDocLocation=Constant.newDocLocation;
+    private String newDocLocation=Constant.newDocLocation+Constant.dateFormat.format(new Date())+"\\";
 
 
     @Override
@@ -52,7 +54,7 @@ public class SaveServiceImpl implements SaveService {
         try {
             OriDocEntity entity = FileUtil.uploadFile(multipartFile,newDocLocation,userEntity.getId());
             oriDocRepository.save(entity);
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             LOGGER.info(e.getMessage());
             return false;
@@ -65,7 +67,7 @@ public class SaveServiceImpl implements SaveService {
         try {
             List<OriDocEntity> entities = FileUtil.uploadFile(multipartFileList,newDocLocation,userEntity.getId());
             oriDocRepository.save(entities);
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             LOGGER.info(e.getMessage());
             return false;
@@ -111,6 +113,35 @@ public class SaveServiceImpl implements SaveService {
        return false;
     }
 
+    @Scheduled(cron = "0 30 0 * * ? ")
+    //@Scheduled(cron = "0 0/2 * * * ? ")
+    public void autoSave(){
+        saveDoc();
+        String newDirName = Constant.newDocLocation+Constant.dateFormat.format(new Date())+"\\";
+        File file = new File(newDirName);
+        file.mkdir();
+        newDocLocation=newDirName;
+    }
+
+    @Override
+    public List<OriDocEntity> listDocs(){
+        return oriDocRepository.findAll();
+    }
+    @Override
+    public void deleteDoc(String docId){
+        oriDocRepository.delete(docId);
+        docRepository.delete(docId);
+    }
+    @Override
+    public void delete(List<String> docIds){
+        for (String id:docIds
+             ) {
+            oriDocRepository.delete(id);
+            docRepository.delete(id);
+        }
+    }
+
+
     private void saveXml(String fileLocation) throws IOException{
         File file = new File(fileLocation);
         List<String> list = new ArrayList<>() ;
@@ -126,7 +157,7 @@ public class SaveServiceImpl implements SaveService {
                 LOGGER.info(FileUtil.getFileName(docName)+"无上传记录");
             else {
                 oriDocEntity.setSave(true);
-                oriDocEntity.setSaveTime(dataFormat.format(new Date()));
+                oriDocEntity.setSaveTime(timeFormat.format(new Date()));
             }
         }
     }

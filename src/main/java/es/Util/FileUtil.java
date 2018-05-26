@@ -1,7 +1,6 @@
 package es.Util;
 
 import es.entity.jpaEntity.OriDocEntity;
-import es.entity.jpaEntity.UserEntity;
 import es.service.impl.SearchServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,7 +10,7 @@ import javax.validation.constraints.NotNull;
 import java.io.*;
 import java.util.*;
 
-import static es.Constant.dataFormat;
+import static es.Constant.timeFormat;
 import static es.Constant.suffixList;
 
 /**
@@ -156,15 +155,19 @@ public class FileUtil {
     }
 
 
-    public  static OriDocEntity uploadFile(@NotNull MultipartFile multipartFile, String saveLocation, int userId)
-            throws IOException {
-        String filename = multipartFile.getOriginalFilename();
-        if (!Objects.equals(filename, "")) {
+    public  static OriDocEntity uploadFile(@NotNull MultipartFile multipartFile, String saveLocation, int userId){
+        File file = new File(saveLocation);
+        if (!file.exists()) {
+            file.mkdirs();
+        }
+
+        String oldName = multipartFile.getOriginalFilename();
+        if (!Objects.equals(oldName, "")) {
             UUID uuid = UUID.randomUUID();
 //            TODO IMPORTANT: 获取文件名后缀带点  example:   suffix='.docx'
-            String suffix = filename.substring(filename.lastIndexOf("."));
-            String fileName = uuid.toString().replaceAll("-", "");
-            String fileTotalName = fileName + suffix;
+            String suffix = oldName.substring(oldName.lastIndexOf("."));
+            String newName = uuid.toString().replaceAll("-", "");
+            String fileTotalName = newName + suffix;
             File isFile = new File(saveLocation + fileTotalName);
             try {
                 multipartFile.transferTo(isFile);
@@ -174,9 +177,10 @@ public class FileUtil {
             }
 
             OriDocEntity entity = new OriDocEntity();
-            entity.setId(fileName);
+            entity.setId(newName);
+            entity.setName(oldName);
             entity.setLocation(saveLocation + fileTotalName);
-            entity.setUpTime(dataFormat.format(new Date()));
+            entity.setUpTime(timeFormat.format(new Date()));
             entity.setUploader(userId);
 
             return entity;
@@ -185,7 +189,7 @@ public class FileUtil {
         return null;
     }
 
-    public static List<OriDocEntity> uploadFile(@NotNull List<MultipartFile> files, String saveLocation, int userId) throws IOException {
+    public static List<OriDocEntity> uploadFile(@NotNull List<MultipartFile> files, String saveLocation, int userId) {
 
         List<OriDocEntity> list = new ArrayList<>();
 

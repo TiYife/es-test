@@ -3,18 +3,20 @@ package es.entity.jpaEntity;
 import javax.persistence.*;
 
 /**
- * Created by TYF on 2018/5/8.
+ * Created by TYF on 2018/5/24.
  */
 @Entity
 @Table(name = "ori_doc", schema = "esWeb", catalog = "")
 public class OriDocEntity {
     private String id;
+    private String name;
     private String location;
     private String upTime;
     private String saveTime;
     private Boolean isSave;
     private Boolean isDel;
     private Integer uploader;
+    private String oriDoccol;
 
     @Id
     @Column(name = "id", nullable = false, length = 100)
@@ -24,6 +26,16 @@ public class OriDocEntity {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    @Basic
+    @Column(name = "name", nullable = false, length = 100)
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Basic
@@ -47,7 +59,7 @@ public class OriDocEntity {
     }
 
     @Basic
-    @Column(name = "save_time", length = 45)
+    @Column(name = "save_time", nullable = true, length = 45)
     public String getSaveTime() {
         return saveTime;
     }
@@ -86,6 +98,16 @@ public class OriDocEntity {
         this.uploader = uploader;
     }
 
+    @Basic
+    @Column(name = "ori_doccol", nullable = true, length = 45)
+    public String getOriDoccol() {
+        return oriDoccol;
+    }
+
+    public void setOriDoccol(String oriDoccol) {
+        this.oriDoccol = oriDoccol;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -94,12 +116,14 @@ public class OriDocEntity {
         OriDocEntity entity = (OriDocEntity) o;
 
         if (id != null ? !id.equals(entity.id) : entity.id != null) return false;
+        if (name != null ? !name.equals(entity.name) : entity.name != null) return false;
         if (location != null ? !location.equals(entity.location) : entity.location != null) return false;
         if (upTime != null ? !upTime.equals(entity.upTime) : entity.upTime != null) return false;
         if (saveTime != null ? !saveTime.equals(entity.saveTime) : entity.saveTime != null) return false;
         if (isSave != null ? !isSave.equals(entity.isSave) : entity.isSave != null) return false;
         if (isDel != null ? !isDel.equals(entity.isDel) : entity.isDel != null) return false;
         if (uploader != null ? !uploader.equals(entity.uploader) : entity.uploader != null) return false;
+        if (oriDoccol != null ? !oriDoccol.equals(entity.oriDoccol) : entity.oriDoccol != null) return false;
 
         return true;
     }
@@ -107,12 +131,14 @@ public class OriDocEntity {
     @Override
     public int hashCode() {
         int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (location != null ? location.hashCode() : 0);
         result = 31 * result + (upTime != null ? upTime.hashCode() : 0);
         result = 31 * result + (saveTime != null ? saveTime.hashCode() : 0);
         result = 31 * result + (isSave != null ? isSave.hashCode() : 0);
         result = 31 * result + (isDel != null ? isDel.hashCode() : 0);
         result = 31 * result + (uploader != null ? uploader.hashCode() : 0);
+        result = 31 * result + (oriDoccol != null ? oriDoccol.hashCode() : 0);
         return result;
     }
 }

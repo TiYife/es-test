@@ -1,7 +1,9 @@
 package es.service.impl;
 
 import es.entity.esEntity.DocEntity;
+import es.entity.jpaEntity.FavoriteEntity;
 import es.repository.esRepository.DocRepository;
+import es.repository.jpaRepository.FavoriteRepository;
 import es.service.SearchService;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
@@ -22,9 +24,11 @@ import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilde
 import org.springframework.data.elasticsearch.core.query.SearchQuery;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 
+import static es.Constant.timeFormat;
 import static es.service.impl.SearchServiceImpl.SearchType.and;
 import static es.service.impl.SearchServiceImpl.SearchType.or;
 import static org.elasticsearch.index.query.QueryBuilders.boolQuery;
@@ -44,12 +48,12 @@ public class SearchServiceImpl implements SearchService {
     private String scoreModeSum = "sum"; // 权重分求和模式
     private Float minScore = 10.0F;      // 由于无相关性的分值默认为 1 ，设置权重分最小值为 10
 
-    public enum SearchType {or, and, not}
-
-    ;
+    public enum SearchType {or, and, not}    ;
 
     @Autowired
     DocRepository docRepository;
+    @Autowired
+    FavoriteRepository favoriteRepository;
 
     @Override
     public List<DocEntity> searchLaw(Integer pageNumber, Integer pageSize, String searchAttr, String searchKeyWord) {
@@ -97,6 +101,22 @@ public class SearchServiceImpl implements SearchService {
         SearchQuery searchQuery = getSimilarSearchQuery(pageNumber, pageSize,searchContent);
         Page<DocEntity> lawPage = docRepository.search(searchQuery);
         return lawPage.getContent();
+    }
+
+    @Override
+    public void favorDoc(int userId, String docId){
+        DocEntity docEntity = docRepository.findOne(docId);
+        FavoriteEntity favoriteEntity = new FavoriteEntity();
+        favoriteEntity.setUserId(userId);
+        favoriteEntity.setDocId(docEntity.getDocId());
+        favoriteEntity.setDocName(docEntity.getCaseName());
+        favoriteEntity.setFavorTime(timeFormat.format(new Date()));
+        favoriteRepository.save(favoriteEntity);
+    }
+
+    @Override
+    public List<FavoriteEntity> listFavorDocs(int userId){
+        return favoriteRepository.findByUserId(userId);
     }
 
     /**

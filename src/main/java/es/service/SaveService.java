@@ -1,11 +1,9 @@
 package es.service;
 
+import es.entity.jpaEntity.OriDocEntity;
 import es.entity.jpaEntity.UserEntity;
-import org.json.JSONException;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 /**
@@ -22,4 +20,10 @@ public interface SaveService {
     boolean saveDoc();
 
     boolean saveDoc(List<MultipartFile> multipartFileList, UserEntity userEntity);
+
+    List<OriDocEntity> listDocs();
+
+    void deleteDoc(String docId);
+
+    void delete(List<String> docIds);
 }

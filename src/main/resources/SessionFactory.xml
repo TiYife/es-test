@@ -12,8 +12,6 @@
       <mapping class="es.entity.jpaEntity.OriDocEntity"/>
       <mapping resource="es/entity/jpaEntity/FavoriteEntity.hbm.xml"/>
       <mapping class="es.entity.jpaEntity.FavoriteEntity"/>
-      <mapping resource="es/entity/jpaEntity/XmlEntity.hbm.xml"/>
-      <mapping class="es.entity.jpaEntity.XmlEntity"/>
       <!-- <property name="connection.username"/> -->
     <!-- <property name="connection.password"/> -->
 

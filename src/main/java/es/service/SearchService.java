@@ -1,6 +1,7 @@
 package es.service;
 
 import es.entity.esEntity.DocEntity;
+import es.entity.jpaEntity.FavoriteEntity;
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -16,4 +17,8 @@ public interface SearchService {
     List<DocEntity> multiSearch(Integer pageNumber, Integer pageSize, JSONArray json) throws JSONException;
 
     List<DocEntity> similarSearch(Integer pageNumber, Integer pageSize, String searchContent);
+
+    void favorDoc(int userId, String docId);
+
+    List<FavoriteEntity> listFavorDocs(int userId);
 }

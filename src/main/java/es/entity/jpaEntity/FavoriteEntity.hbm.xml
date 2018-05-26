@@ -5,12 +5,20 @@
 <hibernate-mapping>
 
     <class name="es.entity.jpaEntity.FavoriteEntity" table="favorite" schema="esWeb">
-        <id name="id" column="id"/>
-        <property name="name" column="name"/>
-        <property name="type" column="type"/>
-        <property name="belongTo" column="belong_to"/>
-        <property name="recordId" column="record_id"/>
-        <property name="createTime" column="create_time"/>
-        <property name="userId" column="user_id"/>
+        <id name="id">
+            <column name="id" sql-type="int(11)"/>
+        </id>
+        <property name="userId">
+            <column name="user_id" sql-type="int(11)" not-null="true"/>
+        </property>
+        <property name="docId">
+            <column name="doc_id" sql-type="varchar(255)" not-null="true"/>
+        </property>
+        <property name="docName">
+            <column name="doc_name" sql-type="varchar(255)" not-null="true"/>
+        </property>
+        <property name="favorTime">
+            <column name="favor_time" sql-type="varchar(100)" length="100" not-null="true"/>
+        </property>
     </class>
 </hibernate-mapping>
