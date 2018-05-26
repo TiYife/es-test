@@ -5,6 +5,7 @@ import es.Util.ConvertUtil;
 import es.Util.FileUtil;
 import es.entity.jpaEntity.OriDocEntity;
 import es.entity.jpaEntity.UserEntity;
+import es.repository.esRepository.DocRepository;
 import es.repository.jpaRepository.OriDocRepository;
 import es.service.SaveService;
 import es.service.WordSeparateService;
@@ -36,6 +37,8 @@ public class SaveServiceImpl implements SaveService {
 
     @Autowired
     private OriDocRepository oriDocRepository;
+    @Autowired
+    private DocRepository docRepository;
     @Autowired
     private ElasticsearchTemplate elasticsearchTemplate;
     @Autowired
@@ -127,12 +130,14 @@ public class SaveServiceImpl implements SaveService {
     @Override
     public void deleteDoc(String docId){
         oriDocRepository.delete(docId);
+        docRepository.delete(docId);
     }
     @Override
     public void delete(List<String> docIds){
         for (String id:docIds
              ) {
             oriDocRepository.delete(id);
+            docRepository.delete(id);
         }
     }
 

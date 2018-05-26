@@ -3,31 +3,104 @@
 <head>
     <meta charset="UTF-8"></meta>
     <title>Title</title>
-    <style>
-        pre {
-            white-space: pre-wrap;
-            white-space: -moz-pre-wrap;
-            white-space: -o-pre-wrap;
-            *word-wrap: break-word;
-            *white-space : normal ;
-        }
 
-    </style>
+    <script src="assets/plugins/jquery-1.10.2.js"></script>
+
+    <script src="assets/plugins/table/bootstrap.js"></script>
+    <script src="assets/plugins/table/bootstrap-table.js"></script>
+    <script src="assets/plugins/table/bootstrap-table-export.js"></script>
+    <link href="assets/css/bootstrap-table.css" type="text/css" rel="stylesheet"/>
+    <link href="assets/css/bootstrap.css" type="text/css" rel="stylesheet"/>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.12.1/locale/bootstrap-table-zh-CN.min.js"></script>
 </head>
 <body>
-<div style="width: 1000px;" >
-    <table style="border-width: 1px;border-style: dashed;">
-        <tr>
-            <td>name</td>
-            <td>up-time</td>
-            <td>操作</td>
-        </tr>
-        <tr th:each="doc:${list}">
-            <td th:text="${doc.name}">ID</td>
-            <td th:text="${doc.upTime}">省份</td>
-            <td>还没有</td>
-        </tr>
-    </table>
+<div class="container">
+    <div class="row" id="header" style="background: #00aced">
+        <div class="col-md-6">
+            <div style="padding: 20px">
+                <img height="60px" width="60px" style=" margin: 0px 20px 15px 20px"/>
+                <h1 style="display: inline-block;">检索系统 管理后台</h1>
+            </div>
+        </div>
+        <div class="col-md-6" style="text-align: right">
+            <div style="padding: 40px;font-size: larger">
+                <a style="margin-right: 30px">用户名</a>
+                <a style="margin-right: 30px">退出登录</a>
+            </div>
+        </div>
+    </div>
+    <div class="row" style="margin-top: 20px">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="col-md-12">
+                        <div class="btn-group form-inline">
+                            <form action="upload" method="post" enctype="multipart/form-data">
+                                <p>一个选择上传的文件</p>
+                                <input type="text" name="reck" value=""/><br/>
+                                <!-- 可以选取一张或者多种图片上传 -->
+                                <input type="file" name="files" multiple/><br/>
+                                <!-- 每个input元素只能选中一个文件 -->
+                                <!--        <input type="file" name="files" /><br/>
+                                        <input type="file" name="files" /><br/>
+                                        <input type="file" name="files" /><br/> -->
+                                <input type="submit" value="Submit"/>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <table data-toggle="table" data-url="/list-docs" data-show-refresh="true" data-show-toggle="true" data-show-columns="true" data-search="true" data-page-list="[10, 25, 50, 100, All]" data-pagination="true" data-sort-name="id" data-sort-order="desc" data-show-export="true" id="result-table">
+                        <thead>
+                        <tr>
+                            <th data-field="name" >文本名称</th>
+                            <th data-field="upTime">上传时间</th>
+                            <th data-field="uploader">上传人</th>
+                            <th data-formatter="operateFormatter" data-events='operateEvents'>操作</th>
+                        </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div><!--/.row-->
+
 </div>
+
+<script>
+    function operateFormatter(value, row, index) {
+        return [
+            '<button type="button" class="btn btn-info detail"> 删除</button> '
+        ].join('');
+
+    };
+
+    window.operateEvents = {
+        'click .detail': function (e, value, row, index) {
+           $.post("delete",{id:row["id"]}),function (rdata) {
+
+           }
+    }
+    };
+</script>
+
+<script>
+    function onEnterDown(event) {
+        var e = event || window.event || arguments.callee.caller.arguments[0];
+        if (e&&e.keyCode==13){
+            search_submit();
+        }
+    }
+    //提交表单
+    function search_submit() {
+        $('#result-table').bootstrapTable('refresh', { url: '/simple-search-result?attr='+$("#type-select").val()+'&keyword='+ $("#search-input").val()});
+    }
+</script>
 </body>
 </html>

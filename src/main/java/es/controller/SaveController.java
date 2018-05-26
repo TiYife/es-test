@@ -1,5 +1,6 @@
 package es.controller;
 
+import com.google.gson.Gson;
 import es.Util.FileUtil;
 import es.entity.jpaEntity.UserEntity;
 import es.service.SaveService;
@@ -23,9 +24,9 @@ public class SaveController {
     @Autowired
     SaveService saveService;
 
-    @RequestMapping("/up")
+    @RequestMapping("/list")
     public String up(){
-     return "upload";
+        return "doc-list";
     }
 
     @RequestMapping("/upload")
@@ -40,9 +41,16 @@ public class SaveController {
             return "fail";
     }
 
+    @RequestMapping("/list-docs")
+    @ResponseBody
+    public String list(){
+        return new Gson().toJson(saveService.listDocs());
+    }
+
     @RequestMapping("delete")
-    public String delete(Model model){
-        model.addAttribute("list",saveService.listDocs());
-        return "doc-list";
+    @ResponseBody
+    public String delete(String id){
+        saveService.deleteDoc(id);
+        return "success";
     }
 }
