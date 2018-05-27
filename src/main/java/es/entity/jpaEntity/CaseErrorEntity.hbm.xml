@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="es.entity.jpaEntity.CaseErrorEntity" table="case_error" schema="esWeb">
+        <id name="id">
+            <column name="id" sql-type="int(11)"/>
+        </id>
+        <property name="errorType">
+            <column name="error_type" sql-type="varchar(20)" length="20"/>
+        </property>
+        <property name="errorMessage">
+            <column name="error_message" sql-type="varchar(100)" length="100"/>
+        </property>
+        <property name="errorLocation">
+            <column name="error_location" sql-type="varchar(100)" length="100"/>
+        </property>
+        <property name="errorTime">
+            <column name="error_time" sql-type="varchar(45)" length="45"/>
+        </property>
+        <property name="remark">
+            <column name="remark" sql-type="varchar(200)" length="200" not-null="true"/>
+        </property>
+    </class>
+</hibernate-mapping>

@@ -1,5 +1,6 @@
 package es.controller;
 
+import com.google.gson.Gson;
 import es.Util.VerifyCodeUtil;
 import es.entity.jpaEntity.UserEntity;
 import es.repository.jpaRepository.UserRepository;
@@ -103,5 +104,15 @@ public class UserController {
         return code;
     }
 
+    @RequestMapping("/user-admin")
+    public String userAdmin(){
+        return "user-admin";
+    }
+
+    @RequestMapping("/list-users")
+    @ResponseBody
+    public String listUsers(){
+        return new Gson().toJson(userRepository.findAll());
+    }
 
 }

@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="es.entity.jpaEntity.NewWordEntity" table="new_word" schema="esWeb">
+        <id name="id">
+            <column name="id" sql-type="int(11)"/>
+        </id>
+        <property name="word">
+            <column name="word" sql-type="varchar(45)" length="45"/>
+        </property>
+        <property name="createTime">
+            <column name="create_time" sql-type="varchar(45)" length="45"/>
+        </property>
+        <property name="createLocation">
+            <column name="create_location" sql-type="varchar(100)" length="100"/>
+        </property>
+        <property name="context">
+            <column name="context" sql-type="varchar(1000)" length="1000"/>
+        </property>
+        <property name="sepaType">
+            <column name="sepa_type" sql-type="varchar(45)" length="45" not-null="true"/>
+        </property>
+        <property name="processFlag">
+            <column name="process_flag" sql-type="int(11)"/>
+        </property>
+        <property name="remark">
+            <column name="remark" sql-type="varchar(300)" length="300" not-null="true"/>
+        </property>
+    </class>
+</hibernate-mapping>

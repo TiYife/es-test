@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="es.entity.jpaEntity.DicEntity" table="dic" schema="esWeb">
+        <id name="id">
+            <column name="id" sql-type="int(11)"/>
+        </id>
+        <property name="word">
+            <column name="word" sql-type="varchar(30)" length="30"/>
+        </property>
+        <property name="type">
+            <column name="type" sql-type="varchar(20)" length="20"/>
+        </property>
+        <property name="sepaType">
+            <column name="sepa_type" sql-type="varchar(45)" length="45"/>
+        </property>
+        <property name="parentId">
+            <column name="parent_id" sql-type="int(11)" not-null="true"/>
+        </property>
+        <property name="createTime">
+            <column name="create_time" sql-type="varchar(45)" length="45"/>
+        </property>
+        <property name="createUserId">
+            <column name="create_user_id" sql-type="int(11)"/>
+        </property>
+        <property name="createId">
+            <column name="create_id" sql-type="int(11)"/>
+        </property>
+        <property name="remark">
+            <column name="remark" sql-type="varchar(300)" length="300" not-null="true"/>
+        </property>
+    </class>
+</hibernate-mapping>
