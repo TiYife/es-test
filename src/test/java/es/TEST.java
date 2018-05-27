@@ -136,6 +136,7 @@ public class TEST {
     public void testJava()
     {
         wordSeparateService.NLPTR_Init();
+        wordSeparateService.stringToRead("","E:\\桌面存放\\测试\\errorTest.txt",false);
         wordSeparateService.multiFileProcessAndSave("E:\\桌面存放\\测试\\20150104","E:\\桌面存放\\测试\\20150104","E:\\桌面存放\\测试2");
         //wordSeparateService.NLPTR_Exit();
         //String s=System.getProperty("user.dir");
@@ -149,6 +150,12 @@ public class TEST {
         String fileStringPre = wordSeparateService.filePreProcess(fileString);
         wordSeparateService.stringToRead(fileStringPre,"E:\\桌面存放\\测试\\13pre1.txt");*/
         //wordSeparateService.fileProcessAndSave(fileAddress,"E:\\桌面存放\\测试","E:\\桌面存放\\测试2");
+    }
+
+    @Test
+    public void testS2r()
+    {
+        wordSeparateService.getHFWordFormFiles("all");
     }
 
 

@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <script src="assets/plugins/jquery-1.10.2.js"></script>
+    <script src="assets/plugins/jquery.cookie.js"></script>
+
+    <script src="assets/plugins/table/bootstrap.js"></script>
+    <script src="assets/plugins/table/bootstrap-table.js"></script>
+    <script src="assets/plugins/table/bootstrap-table-export.js"></script>
+    <link href="assets/css/bootstrap-table.css" type="text/css" rel="stylesheet"/>
+    <link href="assets/css/bootstrap.css" type="text/css" rel="stylesheet"/>
+
+
+    <script src="assets/plugins/bootstrap-fileinput/js/fileinput.min.js"></script>
+    <script src="assets/plugins/bootstrap-fileinput/js/zh.js"></script>
+    <script src="assets/plugins/gy-alert.js"></script>
+    <link href="assets/plugins/bootstrap-fileinput/css/fileinput.min.css" rel="stylesheet">
+    <link href="assets/plugins/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div id="toolbar1" class="btn-group">
+                    <a   type="button" onclick="$('#addDicModal').modal('show')" class="btn btn-default">
+                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增词典
+                    </a>
+                    <a type="button"  onclick="$('#addFileModal').modal('show')" class="btn btn-default">
+                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>导入词典文件
+                    </a>
+                    <a  type="button" onclick="batchDelete()" class="btn btn-default">
+                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>批量删除词典
+                    </a>
+                </div>
+                <table data-toggle="table" data-url="/multi-search-result2" data-show-refresh="true" data-show-toggle="true" data-show-columns="true" data-search="true" data-select-item-name="toolbar1" data-pagination="true" data-sort-order="desc" data-show-export="true" id="word-table">
+                    <thead>
+                    <tr>
+                        <th data-formatter="idFormatter" data-field="id">编号</th>
+                        <th data-field="word">词组</th>
+                        <th data-field="type">类型</th>
+                        <th data-field="sepa_type">分词词性</th>
+                        <th data-field="parent_id"  data-visible="false">父级编号</th>
+                        <th data-field="create_time">创建时间</th>
+                        <th data-field="create_user_id">创建人编号</th>
+                        <th data-field="create_id">词典导入编号</th>
+                        <th data-field="remark">备注</th>
+                        <th data-formatter="operateFormatter" data-events='operateEvents'>操作</th>
+                    </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+</div><!--/.row-->
+
+<div class="modal fade" id="addDicModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="margin-top: 130px;width: 400px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" style="text-align: center">
+                    添加词典
+                </h4>
+            </div>
+            <div class="modal-body" style="text-align: center;padding: 0px 55px">
+
+                <div class="col-sm-12" style="margin-top: 25px;text-align: center">
+                    <input id="login-username-input" class="form-control" placeholder="词组" style="width: 100%" />
+                </div>
+                <div class="col-sm-12" style="margin-top: 25px;text-align: center">
+                    <input id="login-password-input" class="form-control" placeholder="词性" type="password" style="width: 100%" />
+                </div>
+
+                <div class="col-sm-12" style="margin-top: 25px;text-align: center">
+                    <input id="login-code-input" class="form-control" placeholder="类型"  style="width: 100%" />
+                </div>
+                <div style="clear: both"></div>
+            </div>
+            <div class="modal-footer" style="text-align: center">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary">添加</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+
+<div id="addFileModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="gridSystemModalLabel">上传文件</h4>
+            </div>
+            <div class="modal-body">
+                <input id="input-id" type="file" multiple data-preview-file-type="text" name="file">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="close-teacher-modal">Close</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<script>
+    $("#input-id").fileinput({
+        language: 'zh', //设置语言
+        uploadUrl: '/Teacher/uploadFiles',
+        overwriteInitial: false,
+        maxFileSize: 0,
+        //: ['jpg', 'gif', 'png', 'xls', 'xlsx', 'pdf', 'txt', 'doc', 'docx', 'rar', 'mp4', 'zip'],//接收的文件后缀
+        maxFilesNum: 10,
+        preferIconicPreview: true, // this will force thumbnails to display icons for following file extensions
+        previewFileIconSettings: { // configure your icon file extensions
+            'doc': '<i class="fa fa-file-word-o text-primary"></i>',
+            'xls': '<i class="fa fa-file-excel-o text-success"></i>',
+            'ppt': '<i class="fa fa-file-powerpoint-o text-danger"></i>',
+            'pdf': '<i class="fa fa-file-pdf-o text-danger"></i>',
+            'zip': '<i class="fa fa-file-archive-o text-muted"></i>',
+            'htm': '<i class="fa fa-file-code-o text-info"></i>',
+            'txt': '<i class="fa fa-file-text-o text-info"></i>',
+            'mov': '<i class="fa fa-file-movie-o text-warning"></i>',
+            'mp3': '<i class="fa fa-file-audio-o text-warning"></i>',
+            // note for these file types below no extension determination logic
+            // has been configured (the keys itself will be used as extensions)
+            'jpg': '<i class="fa fa-file-photo-o text-danger"></i>',
+            'gif': '<i class="fa fa-file-photo-o text-muted"></i>',
+            'png': '<i class="fa fa-file-photo-o text-primary"></i>'
+        },
+        previewFileExtSettings: { // configure the logic for determining icon file extensions
+            'doc': function (ext) {
+                return ext.match(/(doc|docx)$/i);
+            },
+            'xls': function (ext) {
+                return ext.match(/(xls|xlsx)$/i);
+            },
+            'ppt': function (ext) {
+                return ext.match(/(ppt|pptx)$/i);
+            },
+            'zip': function (ext) {
+                return ext.match(/(zip|rar|tar|gzip|gz|7z)$/i);
+            },
+            'htm': function (ext) {
+                return ext.match(/(htm|html)$/i);
+            },
+            'txt': function (ext) {
+                return ext.match(/(txt|ini|csv|java|php|js|css)$/i);
+            },
+            'mov': function (ext) {
+                return ext.match(/(avi|mpg|mkv|mov|mp4|3gp|webm|wmv)$/i);
+            },
+            'mp3': function (ext) {
+                return ext.match(/(mp3|wav)$/i);
+            }
+        },
+        uploadExtraData: function () {
+            return { path: currentFolderPath };
+        },
+        hideThumbnailContent: true,
+    }).off('filepreupload').on('filepreupload', function () {
+        //alert("Initial pre-upload message!");
+    });
+
+    function operateFormatter(value, row, index) {
+        return [
+            '<button type="button" class="btn btn-info edit"> 修改</button> '+
+            '<button type="button" class="btn btn-danger delete"> 删除</button> '
+        ].join('');
+
+    };
+    function idFormatter(index, row) {
+        var html = [];
+        html.push(''+(index+1));
+
+        return html.join('');
+    }
+    window.operateEvents = {
+        'click .detail': function (e, value, row, index) {
+            var html = [];
+            html.push('<div  class="row">');
+            html.push('<div class="col-md-12">');
+            html.push(''+row["content"]+'')
+            html.push('</div>');
+            html.push('</div>');
+            var coln = $('#result-table').bootstrapTable('getVisibleColumns').length;
+            $('#result-table').find('tr[data-index='+index+']').after('<tr class="detail-view" detail-index="'+index+'"><td colspan="'+coln+'">'+html.join('')+'</td></tr>');
+        }
+    };
+    
+    function batchDelete() {
+        var $table = $('#word-table');
+        // alert('getSelections: ' + JSON.stringify($table.bootstrapTable('getSelections')));
+        var obj = $table.bootstrapTable('getSelections');
+        //alert(JSON.stringify($('#edit-vm-table').bootstrapTable('getData')));
+        if (obj.length < 1) {
+            alert("请先选择要删除的条目！");
+        }
+        else {
+            var data = new Array();
+            for (var i = 0 ; i < obj.length ; i++) {
+                data.push(obj[id]);
+            }
+            $.post("",data,function (rdata) {
+                if(rdata.startsWith("success")){
+                    $.gyAlert({
+                   title:"删除成功",
+                    contentText:"已成功删除"+rdata.substring(8)+"条词组",
+                    confirm:function () {
+                        //点确定之后的操作
+                    }
+                    });
+                }
+                else {
+                    $.gyAlert({
+                        title:"删除失败",
+                        contentText:"删除失败，"+rdata,
+                        confirm:function () {
+                            //点确定之后的操作
+                        }
+                    });
+                }
+            })
+
+
+
+        }
+    }
+</script>
+
+</body>
+</html>

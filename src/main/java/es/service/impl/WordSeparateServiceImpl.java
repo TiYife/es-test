@@ -5,11 +5,13 @@ import es.Constant;
 import es.Util.FileUtil;
 import es.entity.esEntity.DocEntity;
 import es.entity.wordSepa.wordSepaEnity;
+import es.repository.esRepository.DocRepository;
 import es.service.NLPTRService;
 import es.service.SearchService;
 import es.service.WordSeparateService;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
@@ -27,6 +29,9 @@ public class WordSeparateServiceImpl implements WordSeparateService {
     public NLPTRService instance =(NLPTRService) Native.loadLibrary(System.getProperty("user.dir") + "\\source\\NLPIR", NLPTRService.class);
 
     private String FILE_PATH=Constant.xmlLocation;
+
+    @Autowired
+    DocRepository docRepository;
 
     public int NLPTR_Init(){
         int init_flag = instance.NLPIR_Init("", 1, "0");
@@ -126,7 +131,56 @@ public class WordSeparateServiceImpl implements WordSeparateService {
 
     public String filePreProcess(String fileString)
     {
-        return fileString.replaceAll("(\r\n)+\t*","\r\n").replaceAll(" ","").replaceAll("([^　])　(?!　)","$1");
+        return fileString.replaceAll("(\r\n)+\t*","\r\n")
+                .replaceAll(" ","")
+                .replaceAll("([^　])　(?!　)","$1")
+                .replaceAll("(</?[a-z0-9]+?>)+\r\n","");
+    }
+
+    public void testA(String fileAddress,wordSepaEnity wEnity)
+    {
+        String re=fileAddress+"\t\t"+(wEnity.docId==null?"文书ID无":"文书ID")
+                +"\t\t"
+                +(wEnity.caseName==null?"案件名称无":"案件名称")
+                +"\t\t"
+                +(wEnity.courtName==null?"法院名称无":"法院名称")
+                +"\t\t"
+                +(wEnity.courtProvince==null?"法院省份无":"法院省份")
+                +"\t\t"
+                +(wEnity.courtCountry==null?"法院区县无":"法院区县")
+                +"\t\t"
+                +(wEnity.courtRegion==null?"法院区域无":"法院区域")
+                +"\t\t"
+                +(wEnity.caseType==null?"案件类型无":"案件类型")
+                +"\t\t"
+                +(wEnity.trialProcedure==null?"审判程序无":"审判程序")
+                +"\t\t"
+                +(wEnity.docType==null?"文书类型无":"文书类型")
+                +"\t\t"
+                +(wEnity.caseNo==null?"案号无":"案号")
+                +"\t\t"
+                +(wEnity.caseCause==null?"案由无":"案由")
+                +"\t\t"
+                +(wEnity.client==null?"当事人无":"当事人")
+                +"\t\t"
+                +(wEnity.judge==null?"审判人员无":"审判人员")
+                +"\t\t"
+                +(wEnity.clerk==null?"书记员无":"书记员")
+                +"\t\t"
+                +(wEnity.trialDate==null?"裁判月份无":"裁判月份")
+                +"\t\t"
+                +(wEnity.trialMonth==null?"裁判日期无":"裁判日期")
+                +"\t\t"
+                +(wEnity.trialYear==null?"裁判年份无":"裁判年份")
+                +"\t\t"
+                +(wEnity.content==null?"DocContent无":"DocContent")
+                +"\t\t"
+                +(wEnity.courtId==null?"法院ID无":"法院ID")
+                +"\r\n";
+
+
+        stringToRead(re,"E:\\桌面存放\\测试\\errorTest.txt",true);//ceshi
+
     }
 
     public void fileProcessAndSave(String fileAddress,String fileAddressHead, String saveAddress)
@@ -174,8 +228,9 @@ public class WordSeparateServiceImpl implements WordSeparateService {
                     case 1:
                         if(Pattern.matches("^.+书([0-9]+号)?$", fileLines[i])){
                             wordSepaEnity1.caseName = content;
-                            if (fileLinesAfterProcess[i].contains("/ay"))
-                                ayResult+=getWordByType(fileLinesAfterProcess[i],"ay");
+                            if (fileLinesAfterProcess[i].contains("/ay")) {
+                                ayResult += getWordByType(fileLinesAfterProcess[i], "ay");
+                            }
                         }
                         else
                         {
@@ -357,7 +412,7 @@ public class WordSeparateServiceImpl implements WordSeparateService {
             if(ayResult.equals(""))
                 errorDetail+="\n无法获取案由";
 
-            stringToRead(errorDetail,fileAddress+".error.etxt");
+            stringToRead(errorDetail,fileAddress+".error.etxt",false);
 
             String saveFileAddress="";
             if(fileAddress.indexOf(fileAddressHead)==0)
@@ -366,6 +421,7 @@ public class WordSeparateServiceImpl implements WordSeparateService {
             }
             else
                 throw new Exception( "存储地址错误");
+            testA(fileAddress,wordSepaEnity1);
             wordSepaEnityToXMLAndSave(wordSepaEnity1, FileUtil.rmSuffix(saveFileAddress)+".xml");
 
         } catch (Exception e) {
@@ -477,14 +533,14 @@ public class WordSeparateServiceImpl implements WordSeparateService {
         }
     }
 
-    public String stringToRead(String sourceString,String fileAddress){
+    public String stringToRead(String sourceString,String fileAddress,boolean append){
         try {
 
 
             File file = new File(fileAddress);
             if (!file.exists())
                 file.createNewFile();
-            FileOutputStream out = new FileOutputStream(file, true);
+            FileOutputStream out = new FileOutputStream(file, append);
             StringBuffer sb = new StringBuffer();
             sb.append(sourceString);
             out.write(sb.toString().getBytes("gbk"));
@@ -500,13 +556,16 @@ public class WordSeparateServiceImpl implements WordSeparateService {
     {
         try {
             SearchService searchService = new SearchServiceImpl();
-            //List<DocEntity> list;
-            List<DocEntity> list=searchService.searchLaw(0,10,"","");
-            if (caseType == "all") {
+            List<DocEntity> list;
+            //list=docRepository.findAll();
+            list=searchService.allLaw();
+            //List<DocEntity> list=searchService.searchLaw(0,10,"","");
+            /*if (caseType == "all") {
                 //list = searchService.
             } else {
+                list=searchService.allLaw();
 
-            }
+            }*/
             int size=list.size();
             int a = 20,b=100,d=30;
             double  c = 0.5;
@@ -543,7 +602,7 @@ public class WordSeparateServiceImpl implements WordSeparateService {
                 result+=sp+w;
                 sp="\n";
             }
-            stringToRead(result,HFWord_PATH);
+            stringToRead(result,HFWord_PATH,false);
             return "success";
         }catch (Exception e)
         {
