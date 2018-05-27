@@ -1,12 +1,14 @@
 package es.controller;
 
 import es.entity.esEntity.DocEntity;
+import es.repository.esRepository.DocRepository;
 import es.repository.jpaRepository.XmlRepository;
 import es.entity.word.Primitive;
 import es.service.SaveService;
 import es.service.SearchService;
 import es.entity.word.WordSimilarity;
 import es.service.impl.WordSeparateServiceImpl;
+import org.assertj.core.util.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,7 +29,7 @@ public class TestController {
     @Autowired
     private SaveService saveService;
     @Autowired
-    private XmlRepository xmlRepository;
+    private DocRepository docRepository;
     private WordSeparateServiceImpl wordSeparateService = new WordSeparateServiceImpl();
 
 //    @RequestMapping("/add")
@@ -119,4 +121,10 @@ public class TestController {
         System.out.println(sim);
     }
 
+    @RequestMapping("sss")
+    @ResponseBody
+    public String sss(){
+        List<DocEntity> docEntities = Lists.newArrayList(docRepository.findAll());
+        return wordSeparateService.getHFWordFormFiles("all",docEntities);
+    }
 }

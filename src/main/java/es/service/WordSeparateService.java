@@ -1,5 +1,9 @@
 package es.service;
 
+import es.entity.esEntity.DocEntity;
+
+import java.util.List;
+
 public interface WordSeparateService {
     public String getnn(String s);
 
@@ -13,4 +17,7 @@ public interface WordSeparateService {
     public String readToString(String fileName);
 
     void fileProcessAndSave(String fileAddress,String fileAddressHead, String saveAddress);
+
+    String getHFWordFormFiles(String caseType, List<DocEntity> docEntities)//获取高频词组 参数代表案件类型 all所有类型
+    ;
 }

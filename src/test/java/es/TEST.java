@@ -155,7 +155,7 @@ public class TEST {
     @Test
     public void testS2r()
     {
-        wordSeparateService.getHFWordFormFiles("all");
+        //wordSeparateService.getHFWordFormFiles("all");
     }
 
 

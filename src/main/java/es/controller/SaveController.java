@@ -3,6 +3,7 @@ package es.controller;
 import com.google.gson.Gson;
 import es.Util.FileUtil;
 import es.entity.jpaEntity.UserEntity;
+import es.repository.jpaRepository.UserRepository;
 import es.service.SaveService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -23,6 +24,8 @@ public class SaveController {
 
     @Autowired
     SaveService saveService;
+    @Autowired
+    UserRepository userRepository;
 
     @RequestMapping("/doc-admin")
     public String docAdmin(){
@@ -32,7 +35,8 @@ public class SaveController {
     @RequestMapping("/upload")
     @ResponseBody
     public String upload(@RequestParam("files")List<MultipartFile> files, HttpSession session){
-        UserEntity userEntity = (UserEntity)session.getAttribute("user");
+        UserEntity userEntity = (UserEntity)session.getAttribute("user");//todo
+        userEntity = userRepository.findById(123);
         if(userEntity.equals(null))
             return "redirect:login";
         if(saveService.uploadDoc(files,userEntity))

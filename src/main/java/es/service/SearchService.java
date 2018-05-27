@@ -21,5 +21,4 @@ public interface SearchService {
     void favorDoc(int userId, String docId);
 
     List<FavoriteEntity> listFavorDocs(int userId);
-    List<DocEntity> allLaw();
 }
