@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="es.entity.jpaEntity.DicLogEntity" table="dic_log" schema="esWeb">
+        <id name="id">
+            <column name="id" sql-type="int(11)"/>
+        </id>
+        <property name="operateType">
+            <column name="operate_type" sql-type="varchar(45)" length="45"/>
+        </property>
+        <property name="operateTarget">
+            <column name="operate_target" sql-type="varchar(45)" length="45"/>
+        </property>
+        <property name="operateTime">
+            <column name="operate_time" sql-type="varchar(45)" length="45"/>
+        </property>
+        <property name="operateUserId">
+            <column name="operate_user_id" sql-type="int(11)"/>
+        </property>
+        <property name="operateDetail">
+            <column name="operate_detail" sql-type="varchar(100)" length="100" not-null="true"/>
+        </property>
+        <property name="operateFlag">
+            <column name="operate_flag" sql-type="int(11)"/>
+        </property>
+        <property name="remark">
+            <column name="remark" sql-type="varchar(300)" length="300" not-null="true"/>
+        </property>
+    </class>
+</hibernate-mapping>
