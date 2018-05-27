@@ -557,9 +557,10 @@ public class WordSeparateServiceImpl implements WordSeparateService {
         try {
             SearchService searchService = new SearchServiceImpl();
             List<DocEntity> list;
+            //DocRepository docRepository=new DocRepository();
             //list=docRepository.findAll();
             list=searchService.allLaw();
-            //List<DocEntity> list=searchService.searchLaw(0,10,"","");
+            //list=searchService.searchLaw(0,10,"","");
             /*if (caseType == "all") {
                 //list = searchService.
             } else {

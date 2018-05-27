@@ -1,8 +1,10 @@
 package es.controller;
 
+import com.sun.jna.Native;
 import es.entity.esEntity.DocEntity;
 import es.repository.jpaRepository.XmlRepository;
 import es.entity.word.Primitive;
+import es.service.NLPTRService;
 import es.service.SaveService;
 import es.service.SearchService;
 import es.entity.word.WordSimilarity;
@@ -14,7 +16,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import static es.Constant.HFWord_PATH;
 
 /**
  * Created by TYF on 2018/1/29.
@@ -96,6 +102,69 @@ public class TestController {
         test_simWord();
         return r;
     }
+
+    @RequestMapping("ssw")
+    @ResponseBody
+    public String rch( Model model){
+        //return wordSeparateService.getHFWordFormFiles("all");
+        List<DocEntity> docEntities=searchService.searchLaw(1,20,"content","火车");
+
+        List<DocEntity> list=searchService.allLaw();
+        try {
+        int size=list.size();
+        int a = 20,b=100,d=30;
+        double  c = 0.5;
+        NLPTRService instance = (NLPTRService) Native.loadLibrary(System.getProperty("user.dir") + "\\source\\NLPIR", NLPTRService.class);
+            int init_flag = instance.NLPIR_Init("", 1, "0");
+            String resultString = null;
+            if (0 == init_flag) {
+                resultString = instance.NLPIR_GetLastErrorMsg();
+                System.err.println("初始化失败！\n" + resultString);
+                return "";
+            }
+        Map<String, Integer> Word = new HashMap<String, Integer>();
+
+        int k=0;
+        for(DocEntity doc :list)
+        {
+            k++;
+            instance.NLPIR_ParagraphProcess(doc.getContent(), 1);
+            String docAfterProcess = instance.NLPIR_ParagraphProcess(doc.getContent(),0);
+            String[] wlist=docAfterProcess.split(" ");
+            for(String s:wlist)
+            {
+                if(s.equals("")) continue;
+                if(Word.containsKey(s))
+                    Word.put(s,Word.get(s)+1);
+                else
+                    Word.put(s,1);
+                for(int i=0;i<s.length();i++)
+                    if(wlist[i].equals(s))
+                        wlist[i]="";
+            }
+            for (String w : Word.keySet()) {
+                //map.keySet()返回的是所有key的值
+                int f=Word.get(w);
+                if(k>a&&k<b&&(double)f/(double)size<c) Word.remove(w);
+                if(k>b&&f<d) Word.remove(w);
+            }
+        }
+        String result="";
+        String sp="";
+        for (String w : Word.keySet()) {
+            result+=sp+w;
+            sp="\n";
+        }
+        wordSeparateService.stringToRead(result,HFWord_PATH,false);
+        return "success";
+    }catch (Exception e)
+    {
+        return e.getMessage();
+    }
+        //return "";
+    }
+
+
 
     public void test_loadGlossary(){
         WordSimilarity.loadGlossary();
