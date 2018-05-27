@@ -3,6 +3,10 @@ package es.repository.jpaRepository;
 import es.entity.jpaEntity.UserEntity;
 import org.springframework.data.repository.CrudRepository;
 
+import java.util.List;
+
 public interface UserRepository extends CrudRepository<UserEntity,Integer> {
-    public UserEntity findById(int id);
+    UserEntity findById(int id);
+
+    List<UserEntity> findAll();
 }

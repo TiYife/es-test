@@ -24,9 +24,9 @@ public class SaveController {
     @Autowired
     SaveService saveService;
 
-    @RequestMapping("/list")
-    public String up(){
-        return "doc-list";
+    @RequestMapping("/doc-admin")
+    public String docAdmin(){
+        return "doc-admin";
     }
 
     @RequestMapping("/upload")
@@ -43,7 +43,7 @@ public class SaveController {
 
     @RequestMapping("/list-docs")
     @ResponseBody
-    public String list(){
+    public String listDocs(){
         return new Gson().toJson(saveService.listDocs());
     }
 
