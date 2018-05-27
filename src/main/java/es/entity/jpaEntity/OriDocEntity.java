@@ -70,21 +70,21 @@ public class OriDocEntity {
 
     @Basic
     @Column(name = "is_save", nullable = true)
-    public Boolean getSave() {
+    public Boolean getIsSave() {
         return isSave;
     }
 
-    public void setSave(Boolean save) {
+    public void setIsSave(Boolean save) {
         isSave = save;
     }
 
     @Basic
     @Column(name = "is_del", nullable = true)
-    public Boolean getDel() {
+    public Boolean getIsDel() {
         return isDel;
     }
 
-    public void setDel(Boolean del) {
+    public void setIsDel(Boolean del) {
         isDel = del;
     }
 

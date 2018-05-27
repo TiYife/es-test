@@ -32,6 +32,14 @@
             flex: 0 0 auto;
         }
     </style>
+    <style>
+        .panel-group{max-height:770px;overflow: auto;}
+        .leftMenu{margin:10px;margin-top:5px;}
+        .leftMenu .panel-heading{font-size:14px;padding-left:20px;height:36px;line-height:36px;color:white;position:relative;cursor:pointer;}/*转成手形图标*/
+        .leftMenu .panel-heading span{position:absolute;right:10px;top:12px;}
+        .leftMenu .menu-item-left{padding: 2px; background: transparent; border:1px solid transparent;border-radius: 6px;}
+        .leftMenu .menu-item-left:hover{background:#C4E3F3;border:1px solid #1E90FF;}
+    </style>
 </head>
 <body>
     <div class="container" id="container">
@@ -77,74 +85,116 @@
                 }
             </script>
         </div>
-        <div class="row" id="main" style="margin-top: 20px">
-            <div class="col-md-12">
-                <div class="panel panel-default">
-                    <div class="panel-body">
-                        <div class="col-md-12">
-                            <div class="btn-group form-inline">
-                                <div class="btn-group-vertical">
-                                    <select id ="type-select"class="form-control " style="width: 100px">
-                                        <option value="caseName" th:selected="${attr}=='caseName'?'true':'false'">标题</option>
-                                        <option value="content" th:selected="${attr}=='caseName'?'false':'true'">关键字</option>
-                                    </select>
-                                </div>
-                                <input id="search-input" class="form-control" style="width: 400px" th:value="${keyword}" onkeydown="onEnterDown()"/>
-                                <button class="form-control" style="width: 60px" onclick="search_submit()"> 搜索</button>
-                                <a style="margin-left: 20px">高级检索</a>
-                            </div>
+        <div class="row" id="main" style="margin-top: 40px">
+            <div class="col-md-2">
+                <div class="panel-group table-responsive" role="tablist">
+                    <div class="panel panel-primary leftMenu">
+                        <!-- 利用data-target指定要折叠的分组列表 -->
+                        <div class="panel-heading" id="collapseListGroupHeading1" data-toggle="collapse" data-target="#collapseListGroup1" role="tab" >
+                            <h4 class="panel-title">
+                                用户管理
+                                <span class="glyphicon glyphicon-chevron-up right"></span>
+                            </h4>
+                        </div>
+                        <!-- .panel-collapse和.collapse标明折叠元素 .in表示要显示出来 -->
+                        <div id="collapseListGroup1" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="collapseListGroupHeading1">
+                            <ul class="list-group">
+                                <li class="list-group-item">
+                                    <!-- 利用data-target指定URL -->
+                                    <button class="menu-item-left" data-target="test2.html">
+                                        <span class="glyphicon glyphicon-folder-close"></span>用户列表
+                                    </button>
+                                </li>
+                                <li class="list-group-item">
+                                    <button class="menu-item-left" data-target="test2.html">
+                                        <span class="glyphicon glyphicon-triangle-right"></span>管理员列表
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+                    </div><!--panel end-->
+                    <div class="panel panel-primary leftMenu">
+                        <div class="panel-heading" id="collapseListGroupHeading2" data-toggle="collapse" data-target="#collapseListGroup2" role="tab" >
+                            <h4 class="panel-title">
+                                案例管理
+                                <span class="glyphicon glyphicon-chevron-up right"></span>
+                            </h4>
+                        </div>
+                        <div id="collapseListGroup2" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="collapseListGroupHeading2">
+                            <ul class="list-group">
+                                <li class="list-group-item">
+                                    <button class="menu-item-left" data-target="test2.html">
+                                        <span class="glyphicon glyphicon-triangle-right"></span>导入案例
+                                    </button>
+                                </li>
+                                <li class="list-group-item">
+                                    <button class="menu-item-left" data-target="test2.html">
+                                        <span class="glyphicon glyphicon-triangle-right"></span>案例列表
+                                    </button>
+                                </li>
+                                <li class="list-group-item">
+                                    <button class="menu-item-left" data-target="test2.html">
+                                        <span class="glyphicon glyphicon-triangle-right"></span>导入日志
+                                    </button>
+                                </li>
+                                <li class="list-group-item">
+                                    <button class="menu-item-left" data-target="test2.html">
+                                        <span class="glyphicon glyphicon-triangle-right"></span>出错日志
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="panel panel-primary leftMenu">
+                        <div class="panel-heading" id="collapseListGroupHeading3" data-toggle="collapse" data-target="#collapseListGroup3" role="tab" >
+                            <h4 class="panel-title">
+                                词典管理
+                                <span class="glyphicon glyphicon-chevron-up right"></span>
+                            </h4>
+                        </div>
+                        <div id="collapseListGroup3" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="collapseListGroupHeading2">
+                            <ul class="list-group">
+                                <li class="list-group-item">
+                                    <button class="menu-item-left" data-target="test2.html">
+                                        <span class="glyphicon glyphicon-triangle-right"></span>词典列表
+                                    </button>
+                                </li>
+                                <li class="list-group-item">
+                                    <button class="menu-item-left" data-target="test2.html">
+                                        <span class="glyphicon glyphicon-triangle-right"></span>新词管理
+                                    </button>
+                                </li>
+                            </ul>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-lg-12">
-                <div class="panel panel-default">
-                    <div class="panel-body">
-                        <table data-toggle="table" th:attr="data-url='/simple-search-result?attr='+${attr}+'&keyword='+${keyword}" data-url="/simpleSearch?type=" data-show-refresh="true" data-show-toggle="true" data-show-columns="true" data-search="true" data-page-list="[10, 25, 50, 100, All]" data-pagination="true" data-sort-name="id" data-sort-order="desc" data-show-export="true" id="result-table">
-                            <thead>
-                            <tr>
-                                <th data-field="caseName" data-formatter="contentFormatter">案件名称</th>
-                                <th data-field="courtName">法院名称</th>
-                                <th data-field="courtLevel" data-visible="false">法院层级</th>
-                                <th data-field="courtProvince">法院省份</th>
-                                <th data-field="courtCity" data-visible="false">法院地市</th>
-                                <th data-field="courtCountry" data-visible="false">法院区县</th>
-                                <th data-field="courtRegion" data-visible="false">法院区域</th>
-                                <th data-field="isExpUnit" data-visible="false">法院试点</th>
-                                <th data-field="courtType" data-visible="false">法院类型</th>
-                                <th data-field="caseType">案件类型</th>
-                                <th data-field="trialProcedure" data-visible="false">审判程序</th>
-                                <th data-field="docType">文书类型</th>
-                                <th data-field="caseNo" data-visible="false">案号</th>
-                                <th data-field="caseCause" data-visible="false">案由</th>
-                                <th data-field="client" data-visible="false">当事人</th>
-                                <th data-field="judge" data-visible="false">审判人员</th>
-                                <th data-field="clerk" data-visible="false">书记员</th>
-                                <th data-field="trialMonth" data-visible="false">裁判月份</th>
-                                <th data-field="trialDate">裁判日期</th>
-                                <th data-field="trialYear" data-visible="false">裁判年份</th>
-                                <th data-field="courtLevelOne" data-visible="false">一级法院</th>
-                                <th data-field="courtLevelTwo" data-visible="false">二级法院</th>
-                                <th data-field="courtLevelThree" data-visible="false">三级法院</th>
-                                <th data-field="courtLevelFour" data-visible="false">四级法院</th>
-                                <th data-field="courtSuperior" data-visible="false">上级法院名称</th>
-                                <th data-field="content" data-visible="false" data-formatter="contentFormatter">判决内容</th>
-                                <th data-formatter="operateFormatter" data-events='operateEvents'>操作</th>
-                            </tr>
-                            </thead>
-                        </table>
-                    </div>
-                </div>
+            <div class="col-md-10">
+                <h2 id="menu-name" style="color: #555">用户列表</h2>
+                <iframe id="menu-frame" src="/index" style="border: none;width: 100%;height: auto"></iframe>
             </div>
-        </div><!--/.row-->
+        </div>
 
         <div class="row" id="footer">
             <div class="col-sm-12" style="text-align: center">
                 <p>版权信息：发生大叫发哦奇偶is到if和</p>
             </div>
         </div>
-
     </div>
+    <script>
+        $(function(){
+            $(".glyphicon").css("margin-right","5px");
+            $(".panel-heading").click(function(e){
+                /*切换折叠指示图标*/
+                $(this).find("span").toggleClass("glyphicon-chevron-down");
+                $(this).find("span").toggleClass("glyphicon-chevron-up");
+            });
+            $(".menu-item-left").click(function (e) {
+                $("#menu-name").text($(this).text());
+                $("#menu-frame").src($(this).attr("data-target"));
+            })
+        });
+    </script>
 
 
     <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -235,34 +285,6 @@
         </div><!-- /.modal -->
     </div>
 
-
-    <script>
-        function operateFormatter(value, row, index) {
-            return [
-                '<button type="button" class="btn btn-info detail"> 详情</button> '+
-                '<button type="button" class="btn btn-info"> 收藏</button> '
-            ].join('');
-
-        };
-
-        function contentFormatter(value, row, index) {
-            return value.replace($("#search-input").val(),'<span style="color: red">'+$("#search-input").val()+'</span>');
-
-        };
-
-        window.operateEvents = {
-            'click .detail': function (e, value, row, index) {
-
-                console.log(
-                $(this).parent().parent().after('<tr style="display:">'+row["content"]+'</tr>'));
-                $(".login-ip-span").text(row["IPAddress"]);
-                $("#VMLoginInfo").modal('show');
-
-            }
-        };
-    </script>
-
-
     <script src="assets/js/pages/jsVerifyCode.js"></script>
     <script>
         function login() {
@@ -331,34 +353,18 @@
         }
     </script>
 
-<script th:inline="javascript">
-    /*<![CDATA[*/
+    <script th:inline="javascript">
+        /*<![CDATA[*/
 
-    var verifycode = [[${verifyCode}]];
-    var verifycoderegister = [[${verifyCode}]];
+        var verifycode = [[${verifyCode}]];
+        var verifycoderegister = [[${verifyCode}]];
 
-    /*]]>*/
-</script>
+        /*]]>*/
+    </script>
 
-<script>
-    var verifyCode = new GVerify({id:"login-code-div",showCode:verifycode});
-    var verifyCodeRegister = new GVerify({id:"register-code-div",showCode:verifycoderegister,canvasId:"verifyCode2"});
-</script>
-
-<script>
-
-    function onEnterDown(event) {
-        var e = event || window.event || arguments.callee.caller.arguments[0];
-        if (e&&e.keyCode==13){
-            search_submit();
-        }
-    }
-    //提交表单
-    function search_submit() {
-        var attr = $("#type-select").val();
-        var keyword = $("#search-input").val();
-        location.href = "simple-search?attr=" + attr + "&keyword=" + keyword;
-    }
-</script>
+    <script>
+        var verifyCode = new GVerify({id:"login-code-div",showCode:verifycode});
+        var verifyCodeRegister = new GVerify({id:"register-code-div",showCode:verifycoderegister,canvasId:"verifyCode2"});
+    </script>
 </body>
 </html>

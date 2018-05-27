@@ -5,6 +5,7 @@
     <title>Title</title>
 
     <script src="assets/plugins/jquery-1.10.2.js"></script>
+    <script src="assets/plugins/jquery.cookie.js"></script>
 
     <script src="assets/plugins/table/bootstrap.js"></script>
     <script src="assets/plugins/table/bootstrap-table.js"></script>
@@ -35,7 +36,7 @@
 <body>
 <div class="container" id="container">
     <div class="row" id="header" style="">
-        <div class="col-md-12" id="before-login" style="text-align: right">
+        <div class="col-md-12" id="before-login" style="text-align: right;display: none">
             <div style="padding: 40px;font-size: larger">
                 <a style="text-decoration: none;margin-right: 30px" onclick="$('#loginModal').modal('show')">登录</a>
                 <a style="text-decoration: none;margin-right: 30px" onclick="$('#registerModal').modal('show')">注册</a>
@@ -43,10 +44,23 @@
         </div>
         <div class="col-md-12" id="after-login" style="text-align: right;display: none">
             <div style="padding: 40px;font-size: larger">
-                <a style="text-decoration: none;margin-right: 30px">用户名</a>
-                <a style="text-decoration: none;margin-right: 30px">退出登录</a>
+                <a id="username-a" style="text-decoration: none;margin-right: 30px">用户名</a>
+                <a  style="text-decoration: none;margin-right: 30px" onclick="logout()">退出登录</a>
             </div>
         </div>
+        <script>
+            if($.cookie("userId").toString()!= "null" && $.cookie("userPasswd").toString()!= "null")
+            {
+                $("#username-a").text($.cookie("userName"));
+                $("#after-login").show();
+                $("#before-login").remove();
+            }
+            else
+            {
+                $("#after-login").hide();
+                $("#before-login").show();
+            }
+        </script>
     </div>
     <div class="row" id="main" style="margin-top: 20px">
         <div class="col-md-12" style="text-align: center">
@@ -106,14 +120,13 @@
                 </div>
 
                 <div class="col-sm-5" id="login-code-div" style="margin-top: 25px;text-align: center">
-                    <img style="width: 50px" />
                 </div>
                 <div style="clear:both;"></div>
 
             </div>
             <div class="modal-footer" style="text-align: center;border-top: none;padding: 0px 55px">
                 <div class="col-sm-12" style="margin-top: 10px">
-                <button id="login-btn" type="button" class="btn btn-default" style="width: 100%">登录
+                <button id="login-btn" type="button" class="btn btn-default" onclick="login()" style="width: 100%">登录
                 </button>
                 </div>
                 <div class="col-sm-6" style="margin: 25px 0px 20px 0px;text-align: center">
@@ -154,8 +167,7 @@
                     <input id="register-code-input" class="form-control" placeholder="验证码"  style="width: 100%" />
                 </div>
 
-                <div class="col-sm-5" style="margin-top: 25px;text-align: center">
-                    <img style="width: 50px" />
+                <div class="col-sm-5" id="register-code-div" style="margin-top: 25px;text-align: center">
                 </div>
                 <div style="clear:both;"></div>
 
@@ -166,7 +178,7 @@
                     <label for="radioInput" style="font-weight: normal">我同意《xxxxxxx协议》</label>
                 </div>
                 <div class="col-sm-12" style="margin: 12px 0px 25px 0px;">
-                    <button id="register-btn" type="button" class="btn btn-default" style="width: 100%">注册
+                    <button id="register-btn" type="button" class="btn btn-default" onclick="register()" style="width: 100%">注册
                     </button>
                 </div>
             </div>
@@ -187,15 +199,21 @@
         $("#login-btn").text("正在登录...");
         $("#login-btn").attr("disabled","disabled");
         $.post("/uLogin",data,function (rdata) {
-            if(rdata=="success")
+            if(rdata.startsWith( "success:"))
             {
-                $.cookie("userId",$("#login-username-input").val());
-                $.cookie("userPasswd",$("#login-password-input").val());
+                $.cookie("userId",$("#login-username-input").val(), { expires: 1 });
+                $.cookie("userName",rdata.substring(8), { expires: 1 });
+                $.cookie("userPasswd",$("#login-password-input").val(), { expires: 1 });
                 $("#loginModal").modal("hide");
-                alert("注册成功");
+                $("#username-a").text(rdata.substring(8));
+                $("#after-login").show();
+                $("#before-login").remove();
+                alert("登录成功");
             }
             else {
                 alert(rdata);
+                $("#login-btn").text("登录");
+                $("#login-btn").removeAttr("disabled");
             }
         });
     }
@@ -222,8 +240,17 @@
             }
             else {
                 alert(rdata);
+                $("#register-btn").text("注册");
+                $("#register-btn").removeAttr("disabled");
             }
         });
+    }
+
+    function logout() {
+        $.cookie("userName",null);
+        $.cookie("userId",null);
+        $.cookie("userPasswd",null);
+        location.reload();
     }
 </script>
 </body>
@@ -232,12 +259,14 @@
     /*<![CDATA[*/
 
     var verifycode = [[${verifyCode}]];
+    var verifycoderegister = [[${verifyCode}]];
 
     /*]]>*/
 </script>
 
 <script>
     var verifyCode = new GVerify({id:"login-code-div",showCode:verifycode});
+    var verifyCodeRegister = new GVerify({id:"register-code-div",showCode:verifycoderegister,canvasId:"verifyCode2"});
 </script>
 
 <script>

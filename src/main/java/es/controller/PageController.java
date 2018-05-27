@@ -17,12 +17,12 @@ public class PageController {
 
     @RequestMapping("/")
     public String toIndex(HttpServletRequest request ,HttpSession session){
-        return "index";
+        return "index1";
     }
 
     @RequestMapping("/index")
     public String toIndex2(HttpServletRequest request ,HttpSession session){
-        return "index";
+        return "index1";
     }
 
     @RequestMapping("/admin")

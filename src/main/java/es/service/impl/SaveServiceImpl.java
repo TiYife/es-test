@@ -156,7 +156,7 @@ public class SaveServiceImpl implements SaveService {
             if(oriDocEntity==null)
                 LOGGER.info(FileUtil.getFileName(docName)+"无上传记录");
             else {
-                oriDocEntity.setSave(true);
+                oriDocEntity.setIsSave(true);
                 oriDocEntity.setSaveTime(timeFormat.format(new Date()));
             }
         }

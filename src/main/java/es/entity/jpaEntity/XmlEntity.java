@@ -7,8 +7,8 @@ import javax.persistence.*;
 public class XmlEntity {
     private String id;
     private String location;
-    private byte up;
-    private byte del;
+    private boolean up;
+    private boolean del;
 
     @Id
     @Column(name = "id")
@@ -32,21 +32,21 @@ public class XmlEntity {
 
     @Basic
     @Column(name = "up")
-    public byte getUp() {
+    public boolean isUp() {
         return up;
     }
 
-    public void setUp(byte up) {
+    public void setUp(boolean up) {
         this.up = up;
     }
 
     @Basic
     @Column(name = "del")
-    public byte getDel() {
+    public boolean isDel() {
         return del;
     }
 
-    public void setDel(byte del) {
+    public void setDel(boolean del) {
         this.del = del;
     }
 
@@ -69,8 +69,8 @@ public class XmlEntity {
     public int hashCode() {
         int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (location != null ? location.hashCode() : 0);
-        result = 31 * result + (int) up;
-        result = 31 * result + (int) del;
+        result = 31 * result + (up ? 1 : 0);
+        result = 31 * result + (del ? 1 : 0);
         return result;
     }
 }
