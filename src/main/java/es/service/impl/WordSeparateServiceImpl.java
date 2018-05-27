@@ -26,12 +26,73 @@ import static es.Constant.HFWord_PATH;
 @Service
 public class WordSeparateServiceImpl implements WordSeparateService {
 
+    @Autowired
+    DocRepository docRepository;
+
     public NLPTRService instance =(NLPTRService) Native.loadLibrary(System.getProperty("user.dir") + "\\source\\NLPIR", NLPTRService.class);
 
     private String FILE_PATH=Constant.xmlLocation;
 
-    @Autowired
-    DocRepository docRepository;
+
+
+    @Override
+    public String getHFWordFormFiles(String caseType,List<DocEntity> docEntities)//获取高频词组 参数代表案件类型 all所有类型
+    {
+        List<DocEntity> list = docEntities;
+        try {
+
+            //list=docRepository.findAll();
+            //list=searchService.allLaw();
+            //List<DocEntity> list=searchService.searchLaw(0,10,"","");
+            /*if (caseType == "all") {
+                //list = searchService.
+            } else {
+                list=searchService.allLaw();
+
+            }*/
+            int size=list.size();
+            int a = 20,b=100,d=30;
+            double  c = 0.5;
+            if (NLPTR_Init() != 1) throw new Exception("分词程序初始化失败");
+            Map<String, Integer> Word = new HashMap<String, Integer>();
+
+            int k=0;
+            for(DocEntity doc :list)
+            {
+                k++;
+                String docAfterProcess = instance.NLPIR_ParagraphProcess(doc.getContent(),0);
+                String[] wlist=docAfterProcess.split(" ");
+                for(String s:wlist)
+                {
+                    if(s.equals("")) continue;
+                    if(Word.containsKey(s))
+                        Word.put(s,Word.get(s)+1);
+                    else
+                        Word.put(s,1);
+                    for(int i=0;i<s.length();i++)
+                        if(wlist[i].equals(s))
+                            wlist[i]="";
+                }
+                for (String w : Word.keySet()) {
+                    //map.keySet()返回的是所有key的值
+                    int f=Word.get(w);
+                    if(k>a&&k<b&&(double)f/(double)size<c) Word.remove(w);
+                    if(k>b&&f<d) Word.remove(w);
+                }
+            }
+            String result="";
+            String sp="";
+            for (String w : Word.keySet()) {
+                result+=sp+w;
+                sp="\n";
+            }
+            stringToRead(result,HFWord_PATH,false);
+            return "success";
+        }catch (Exception e)
+        {
+            return e.getMessage();
+        }
+    }
 
     public int NLPTR_Init(){
         int init_flag = instance.NLPIR_Init("", 1, "0");
@@ -557,10 +618,9 @@ public class WordSeparateServiceImpl implements WordSeparateService {
         try {
             SearchService searchService = new SearchServiceImpl();
             List<DocEntity> list;
-            //DocRepository docRepository=new DocRepository();
             //list=docRepository.findAll();
             list=searchService.allLaw();
-            //list=searchService.searchLaw(0,10,"","");
+            //List<DocEntity> list=searchService.searchLaw(0,10,"","");
             /*if (caseType == "all") {
                 //list = searchService.
             } else {

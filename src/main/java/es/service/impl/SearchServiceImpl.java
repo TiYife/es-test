@@ -75,13 +75,6 @@ public class SearchServiceImpl implements SearchService {
         return lawPage.getContent();
     }
 
-
-    //@Override
-    public List<DocEntity> allLaw() {
-
-        return docRepository.findAll();
-    }
-
     @Override
     public List<DocEntity> multiSearch(Integer pageNumber, Integer pageSize, JSONArray json) throws JSONException {
         if (pageSize == null || pageSize <= 0) {
