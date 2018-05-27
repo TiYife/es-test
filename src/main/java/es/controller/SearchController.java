@@ -64,7 +64,34 @@ public class SearchController {
         return gson.toJson(list);
     }
 
+    @RequestMapping("/favor")
+    public String favor(@RequestParam("docId")String docId){
+        int userId = 123;//todo
+        searchService.favorDoc(userId,docId);
+        return "success";
+    }
+
+    @RequestMapping("/favorite")
+    public String favorite(Model model){
+        int userId = 123;//todo
+        model.addAttribute("userId",userId);
+        return "favorites";
+    }
+
+    @RequestMapping("favorite-list")
+    @ResponseBody
+    public String favoriteList(@RequestParam("userId")int userId){
+        return new Gson().toJson(searchService.listFavorDocs(userId));
+    }
+
+    @RequestMapping("/recommend")
+    public String recommend(@RequestParam("docId")String docId,Model model){
+        model.addAttribute("docId",docId);
+        return "recommendation";
+    }
+
     @RequestMapping("/recommendation")
+    @ResponseBody
     public String recommendation(@RequestParam("docId")String docId){
         DocEntity docEntity = docRepository.findOne(docId);
         List<DocEntity> list = searchService.similarSearch(0,10,docEntity.getContent());

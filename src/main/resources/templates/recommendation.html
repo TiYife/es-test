@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"></meta>
+    <title>Title</title>
+
+    <script src="assets/plugins/jquery-1.10.2.js"></script>
+
+    <script src="assets/plugins/table/bootstrap.js"></script>
+    <script src="assets/plugins/table/bootstrap-table.js"></script>
+    <script src="assets/plugins/table/bootstrap-table-export.js"></script>
+    <link href="assets/css/bootstrap-table.css" type="text/css" rel="stylesheet"/>
+    <link href="assets/css/bootstrap.css" type="text/css" rel="stylesheet"/>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.12.1/locale/bootstrap-table-zh-CN.min.js"></script>
+</head>
+<body>
+<div class="container">
+    <div class="row" id="header" style="background: #00aced">
+        <div class="col-md-6">
+            <div style="padding: 20px">
+                <img height="60px" width="60px" style=" margin: 0px 20px 15px 20px"/>
+                <h1 style="display: inline-block;">检索系统 相关推荐</h1>
+            </div>
+        </div>
+        <div class="col-md-6" style="text-align: right">
+            <div style="padding: 40px;font-size: larger">
+                <a style="margin-right: 30px">用户名</a>
+                <a style="margin-right: 30px">退出登录</a>
+            </div>
+        </div>
+    </div>
+    <div class="row" style="margin-top: 20px">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="col-md-12">
+                        <div class="btn-group form-inline">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <table data-toggle="table" th:attr="data-url='/recommendation?docId='+${docId}" data-show-refresh="true" data-show-toggle="true" data-show-columns="true" data-search="true" data-page-list="[10, 25, 50, 100, All]" data-pagination="true" data-sort-name="id" data-sort-order="desc" data-show-export="true" id="result-table">
+                        <thead>
+                        <tr>
+                            <th data-field="caseName" >案件名称</th>
+                            <th data-field="courtName">法院名称</th>
+                            <th data-field="courtLevel" data-visible="false">法院层级</th>
+                            <th data-field="courtProvince">法院省份</th>
+                            <th data-field="courtCity" data-visible="false">法院地市</th>
+                            <th data-field="courtCountry" data-visible="false">法院区县</th>
+                            <th data-field="courtRegion" data-visible="false">法院区域</th>
+                            <th data-field="isExpUnit" data-visible="false">法院试点</th>
+                            <th data-field="courtType" data-visible="false">法院类型</th>
+                            <th data-field="caseType">案件类型</th>
+                            <th data-field="trialProcedure" data-visible="false">审判程序</th>
+                            <th data-field="docType">文书类型</th>
+                            <th data-field="caseNo" data-visible="false">案号</th>
+                            <th data-field="caseCause" data-visible="false">案由</th>
+                            <th data-field="client" data-visible="false">当事人</th>
+                            <th data-field="judge" data-visible="false">审判人员</th>
+                            <th data-field="clerk" data-visible="false">书记员</th>
+                            <th data-field="trialMonth" data-visible="false">裁判月份</th>
+                            <th data-field="trialDate">裁判日期</th>
+                            <th data-field="trialYear" data-visible="false">裁判年份</th>
+                            <th data-field="courtLevelOne" data-visible="false">一级法院</th>
+                            <th data-field="courtLevelTwo" data-visible="false">二级法院</th>
+                            <th data-field="courtLevelThree" data-visible="false">三级法院</th>
+                            <th data-field="courtLevelFour" data-visible="false">四级法院</th>
+                            <th data-field="courtSuperior" data-visible="false">上级法院名称</th>
+                            <th data-field="content" data-visible="false" data-formatter="contentFormatter">判决内容</th>
+                            <th data-formatter="operateFormatter" data-events='operateEvents'>操作</th>
+                        </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div><!--/.row-->
+
+</div>
+
+<script>
+    function operateFormatter(value, row, index) {
+        return [
+            '<button type="button" class="btn btn-info detail"> 详情</button> '+
+            '<button type="button" class="btn btn-info recommend"> 推荐</button> ' +
+            '<button type="button" class="btn btn-info collect"> 收藏</button> '
+        ].join('');
+
+    };
+
+    window.operateEvents = {
+        'click .detail': function (e, value, row, index) {
+            var html = [];
+            html.push('<div  class="row">');
+            html.push('<div class="col-md-12">');
+            html.push(''+row["content"]+'')
+            html.push('</div>');
+            html.push('</div>');
+            var coln = $('#result-table').bootstrapTable('getVisibleColumns').length;
+            $('#result-table').find('tr[data-index='+index+']').after('<tr class="detail-view" detail-index="'+index+'"><td colspan="'+coln+'">'+html.join('')+'</td></tr>');
+        }
+    };
+
+    window.operateEvents = {
+        'click .recommend': function (e, value, row, index) {
+            location.href = "recommend?docId=" + row["docId"];
+        }
+    };
+</script>
+</body>
+</html>
