@@ -7,7 +7,6 @@ import es.entity.esEntity.DocEntity;
 import es.entity.wordSepa.wordSepaEnity;
 import es.repository.esRepository.DocRepository;
 import es.service.NLPTRService;
-import es.service.SearchService;
 import es.service.WordSeparateService;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
@@ -15,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,14 +53,23 @@ public class WordSeparateServiceImpl implements WordSeparateService {
             int size=list.size();
             int a = 20,b=100,d=30;
             double  c = 0.5;
-            if (NLPTR_Init() != 1) throw new Exception("分词程序初始化失败");
+            //if (NLPTR_Init() != 1) throw new Exception("分词程序初始化失败");
             Map<String, Integer> Word = new HashMap<String, Integer>();
 
+
+            NLPTRService instance1 = (NLPTRService) Native.loadLibrary(System.getProperty("user.dir") + "\\source\\NLPIR", NLPTRService.class);
+            int init_flag = instance1.NLPIR_Init("", 1, "0");
+            String resultString = null;
+            if (0 == init_flag) {
+                resultString = instance1.NLPIR_GetLastErrorMsg();
+                System.err.println("初始化失败！\n" + resultString);
+                return "";
+            }
             int k=0;
             for(DocEntity doc :list)
             {
                 k++;
-                String docAfterProcess = instance.NLPIR_ParagraphProcess(doc.getContent(),0);
+                String docAfterProcess = instance1.NLPIR_ParagraphProcess(doc.getContent(),0);
                 String[] wlist=docAfterProcess.split(" ");
                 for(String s:wlist)
                 {
@@ -69,21 +78,25 @@ public class WordSeparateServiceImpl implements WordSeparateService {
                         Word.put(s,Word.get(s)+1);
                     else
                         Word.put(s,1);
-                    for(int i=0;i<s.length();i++)
+                    for(int i=0;i<wlist.length;i++)
                         if(wlist[i].equals(s))
                             wlist[i]="";
                 }
+                List<String> wordToDeleteList=new ArrayList<String>();
+
                 for (String w : Word.keySet()) {
                     //map.keySet()返回的是所有key的值
                     int f=Word.get(w);
-                    if(k>a&&k<b&&(double)f/(double)size<c) Word.remove(w);
-                    if(k>b&&f<d) Word.remove(w);
+                    if(k>a&&k<b&&(double)f/(double)k<c) wordToDeleteList.add(w);
+                    if(k>b&&f<d) wordToDeleteList.add(w);
                 }
+                for(int i=0;i<wordToDeleteList.size();i++)
+                    Word.remove(wordToDeleteList.get(i));
             }
             String result="";
             String sp="";
             for (String w : Word.keySet()) {
-                result+=sp+w;
+                result+=sp+w+"\t"+Word.get(w).toString();
                 sp="\n";
             }
             stringToRead(result,HFWord_PATH,false);
@@ -613,7 +626,7 @@ public class WordSeparateServiceImpl implements WordSeparateService {
         }
     }
 
-    public String getHFWordFormFiles(String caseType)//获取高频词组 参数代表案件类型 all所有类型
+    /*public String getHFWordFormFiles(String caseType)//获取高频词组 参数代表案件类型 all所有类型
     {
         try {
             SearchService searchService = new SearchServiceImpl();
@@ -621,12 +634,12 @@ public class WordSeparateServiceImpl implements WordSeparateService {
             //list=docRepository.findAll();
             list=searchService.allLaw();
             //List<DocEntity> list=searchService.searchLaw(0,10,"","");
-            /*if (caseType == "all") {
+            if (caseType == "all") {
                 //list = searchService.
             } else {
                 list=searchService.allLaw();
 
-            }*/
+            }
             int size=list.size();
             int a = 20,b=100,d=30;
             double  c = 0.5;
@@ -669,5 +682,5 @@ public class WordSeparateServiceImpl implements WordSeparateService {
         {
             return e.getMessage();
         }
-    }
+    }*/
 }

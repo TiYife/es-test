@@ -1,14 +1,11 @@
 package es.controller;
 
-import com.sun.jna.Native;
 import es.entity.esEntity.DocEntity;
-import es.repository.esRepository.DocRepository;
-import es.repository.jpaRepository.XmlRepository;
 import es.entity.word.Primitive;
-import es.service.NLPTRService;
+import es.entity.word.WordSimilarity;
+import es.repository.esRepository.DocRepository;
 import es.service.SaveService;
 import es.service.SearchService;
-import es.entity.word.WordSimilarity;
 import es.service.impl.WordSeparateServiceImpl;
 import org.assertj.core.util.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,11 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-import static es.Constant.HFWord_PATH;
 
 /**
  * Created by TYF on 2018/1/29.
@@ -105,7 +98,7 @@ public class TestController {
         return r;
     }
 
-    @RequestMapping("ssw")
+    /*@RequestMapping("ssw")
     @ResponseBody
     public String rch( Model model){
         //return wordSeparateService.getHFWordFormFiles("all");
@@ -164,7 +157,7 @@ public class TestController {
         return e.getMessage();
     }
         //return "";
-    }
+    }*/
 
 
 

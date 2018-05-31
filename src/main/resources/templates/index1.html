@@ -49,7 +49,7 @@
             </div>
         </div>
         <script>
-            if($.cookie("userId").toString()!= "null" && $.cookie("userPasswd").toString()!= "null")
+            if(($.cookie("userId").toString()!= "null" && $.cookie("userPasswd").toString()!= "null")||)
             {
                 $("#username-a").text($.cookie("userName"));
                 $("#after-login").show();

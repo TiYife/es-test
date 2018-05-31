@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <script src="assets/plugins/jquery-1.10.2.js"></script>
+    <script src="assets/plugins/jquery.cookie.js"></script>
+
+    <script src="assets/plugins/table/bootstrap.js"></script>
+    <script src="assets/plugins/table/bootstrap-table.js"></script>
+    <script src="assets/plugins/table/bootstrap-table-export.js"></script>
+    <link href="assets/css/bootstrap-table.css" type="text/css" rel="stylesheet"/>
+    <link href="assets/css/bootstrap.css" type="text/css" rel="stylesheet"/>
+
+
+    <script src="assets/plugins/bootstrap-fileinput/js/fileinput.min.js"></script>
+    <script src="assets/plugins/bootstrap-fileinput/js/zh.js"></script>
+    <script src="assets/plugins/gy-alert.js"></script>
+    <link href="assets/plugins/bootstrap-fileinput/css/fileinput.min.css" rel="stylesheet">
+    <link href="assets/plugins/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div id="toolbar1" class="btn-group">
+                    <a   type="button" onclick="addAdminModal()" class="btn btn-default">
+                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增管理员
+                    </a>
+                    </a>
+                </div>
+                <table data-toggle="table" data-url="/multi-search-result2" data-show-refresh="true" data-show-toggle="true" data-show-columns="true" data-search="true" data-select-item-name="toolbar1" data-pagination="true" data-sort-order="desc" data-show-export="true" id="admin-table">
+                    <thead>
+                    <tr>
+                        <th data-field="id">编号</th>
+                        <th data-field="user_name">用户名</th>
+                        <th data-field="email">邮箱</th>
+                        <th data-field="register_time">添加时间</th>
+                        <th data-formatter="operateFormatter" data-events='operateEvents'>操作</th>
+                    </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+</div><!--/.row-->
+
+
+<div class="modal fade" id="addAdminModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="margin-top: 130px;width: 400px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" style="text-align: center">
+                    添加管理员
+                </h4>
+            </div>
+            <div class="modal-body" style="text-align: center;padding: 0px 55px">
+
+                <div class="col-sm-12" style="margin-top: 25px;text-align: center">
+                    <input id="admin-name-input" class="form-control" placeholder="输入用户名" style="width: 100%" />
+                </div>
+                <div class="col-sm-12" style="margin-top: 25px;text-align: center">
+                    <input id="admin-password-input" class="form-control" placeholder="输入密码" style="width: 100%" />
+                </div>
+                <div class="col-sm-12" style="margin-top: 25px;text-align: center">
+                    <input id="admin-email-input" class="form-control" placeholder="输入邮箱" style="width: 100%" />
+                </div>
+                <div style="clear: both"></div>
+            </div>
+            <div class="modal-footer" style="text-align: center">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" onclick="addAdmin()">添加</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+<div class="modal fade" id="editPasswdModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="margin-top: 130px;width: 400px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" style="text-align: center">
+                    修改密码
+                </h4>
+            </div>
+            <div class="modal-body" style="text-align: center;padding: 0px 55px">
+
+                <div class="col-sm-12" style="margin-top: 25px;text-align: center">
+                    <input id="password-input" class="form-control" placeholder="输入新密码" style="width: 100%" />
+                </div>
+                <div style="clear: both"></div>
+            </div>
+            <div class="modal-footer" style="text-align: center">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" onclick="editPasswd()">添加</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+
+<script>
+
+    function operateFormatter(value, row, index) {
+        return [
+            '<button type="button" class="btn btn-info edit"> 修改密码</button> '+
+            '<button type="button" class="btn btn-danger delete"> 删除</button> '
+        ].join('');
+
+    };
+    function idFormatter(index, row) {
+        var html = [];
+        html.push(''+(index+1));
+
+        return html.join('');
+    }
+
+    function editPasswd() {
+        $("",{passwd:$("#password-input").val()},function (rdata) {
+            $("#addAdminModal").modal("hide");
+            if (rdata == "success") {
+                $.gyAlert({
+                    title: "操作成功",
+                    contentText: "已成功修改该管理员的密码"
+                });
+                $('#assistant-table').bootstrapTable('refresh', { url: '/Teacher/getAssistant' });
+
+            }
+            else {
+                $.gyAlert({
+                    title: "操作失败",
+                    contentText: "修改失败 " + rdata
+                })
+            }
+        })
+    }
+
+    function addAdminModal() {
+        $("#admin-password-input").val("");
+        $("#admin-name-input").val("");
+        $("#admin-email-input").val("");
+        $("#addAdminModal").modal("show");
+    }
+
+    function addAdmin() {
+        var data={
+            name:$("#admin-name-input").val(),
+            passwd:$("#admin-password-input").val(),
+            email:$("#admin-email-input").val()
+        }
+        $("",data,function (rdata) {
+            $("#editPasswdModal").modal("hide");
+            if (rdata == "success") {
+                $.gyAlert({
+                    title: "操作成功",
+                    contentText: "已成功添加该管理员"
+                });
+                $('#admin-table').bootstrapTable('refresh', { url: '/Teacher/getAssistant' });
+
+            }
+            else {
+                $.gyAlert({
+                    title: "操作失败",
+                    contentText: "添加失败 " + rdata
+                })
+            }
+        })
+    }
+
+    window.operateEvents = {
+        'click .edit': function (e, value, row, index) {
+            $("#password-input").val("");
+            $("#editPasswdModal").modal("show");
+        },
+        'click .delete':function (e,value,row,index) {
+            $.gyAlert({
+                title:"删除管理员",
+                contentText:"确认删除该管理员吗？",
+                confirm:function () {
+                    //点确定之后的操作
+                    $.post("",{id:row["id"]},function (rdata) {
+                        if (rdata == "success") {
+                            $.gyAlert({
+                                title: "操作成功",
+                                contentText: "已成功删除该条管理员"
+                            });
+                            $('#user-table').bootstrapTable('refresh', { url: '/Teacher/getAssistant' });
+
+                        }
+                        else {
+                            $.gyAlert({
+                                title: "操作失败",
+                                contentText: "删除失败 " + rdata
+                            })
+                        }
+                    })
+                }
+            })
+        }
+    };
+
+</script>
+
+</body>
+</html>

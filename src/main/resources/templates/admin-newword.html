@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <script src="assets/plugins/jquery-1.10.2.js"></script>
+    <script src="assets/plugins/jquery.cookie.js"></script>
+
+    <script src="assets/plugins/table/bootstrap.js"></script>
+    <script src="assets/plugins/table/bootstrap-table.js"></script>
+    <script src="assets/plugins/table/bootstrap-table-export.js"></script>
+    <link href="assets/css/bootstrap-table.css" type="text/css" rel="stylesheet"/>
+    <link href="assets/css/bootstrap.css" type="text/css" rel="stylesheet"/>
+
+
+    <script src="assets/plugins/bootstrap-fileinput/js/fileinput.min.js"></script>
+    <script src="assets/plugins/bootstrap-fileinput/js/zh.js"></script>
+    <script src="assets/plugins/gy-alert.js"></script>
+    <script src="assets/plugins/jquery-editable-select/jquery-editable-select.js"></script>
+    <link href="assets/plugins/bootstrap-fileinput/css/fileinput.min.css" rel="stylesheet">
+    <link href="assets/plugins/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="assets/plugins/jquery-editable-select/jquery-editable-select.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div id="toolbar1" class="btn-group">
+                    <a   type="button" onclick="$('#addDicModal').modal('show')" class="btn btn-default">
+                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增词典
+                    </a>
+                    <a type="button"  onclick="$('#addFileModal').modal('show')" class="btn btn-default">
+                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>导入词典文件
+                    </a>
+                    <a  type="button" onclick="batchDelete()" class="btn btn-default">
+                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>批量删除词典
+                    </a>
+                </div>
+                <table data-toggle="table" data-url="/multi-search-result2" data-show-refresh="true" data-show-toggle="true" data-show-columns="true" data-search="true" data-select-item-name="toolbar1" data-pagination="true" data-sort-order="desc" data-show-export="true" id="word-table">
+                    <thead>
+                    <tr>
+                        <th data-formatter="idFormatter" data-field="id">编号</th>
+                        <th data-field="word">新词</th>
+                        <th data-field="Create_time">发现时间</th>
+                        <th data-field="Create_location">发现文件位置</th>
+                        <th data-field="context">上下文语境</th>
+                        <th data-field="Sepa_type">分词词性</th>
+                        <th data-field="Process_flag">处理结果</th>
+                        <th data-field="remark">备注</th>
+                        <th data-formatter="operateFormatter" data-events='operateEvents'>操作</th>
+                    </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+</div><!--/.row-->
+
+<div class="modal fade" id="newWordModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="margin-top: 130px;width: 400px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" style="text-align: center">
+                    词性标注并添加到词典
+                </h4>
+            </div>
+            <div class="modal-body" style="text-align: center;padding: 0px 55px">
+
+                <div class="col-sm-12" style="margin-top: 25px;display: inline-table">
+                    <label style="width: 30%;text-align: right">词组：</label>
+                    <p id="word-p" style="width: 70%;display: inline-block">.</p>
+                </div>
+                <div class="col-sm-12" style="margin-top: 25px;display: inline-table">
+                    <label style="width: 30%;text-align: right">词性：</label>
+                    <select id="word-type-select" class="form-control" style="width: 70%;display: inline-block" id="editable-select">
+                        <option>Alfa Romeo</option>
+                        <option>Audi</option>
+                        <option>中国人民银行</option>
+                        <option>中国人民</option>
+                        <option>中国</option>
+                        <option>BMW</option>
+                    </select>
+                </div>
+                <div class="col-sm-12" style="margin-top: 25px;display: inline-table">
+                    <label style="width: 30%;text-align: right">备注：</label>
+                    <input id="word-mark-input" class="form-control" style="width: 70%;display: inline-block" id="editable-se" />
+                </div>
+                <div style="clear: both"></div>
+            </div>
+            <div class="modal-footer" style="text-align: center">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary">添加</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+
+
+<script>
+
+
+    $('#editable-select').editableSelect({
+        effects: 'slide'
+    });
+
+    function operateFormatter(value, row, index) {
+        return [
+            '<button type="button" class="btn btn-info mark"> 标注并添加</button> '+
+            '<button type="button" class="btn btn-danger delete"> 忽略</button> '
+        ].join('');
+
+    };
+    function idFormatter(index, row) {
+        var html = [];
+        html.push(''+(index+1));
+
+        return html.join('');
+    }
+    window.operateEvents = {
+        'click .mark': function (e, value, row, index) {
+            $("#word-p").text( row["word"]    );
+            $("#word-mark-input").val("");
+            $("#newWordModal").modal("show");
+        },
+        'click .delete': function (e, value, row, index) {
+            $.gyAlert({
+                title:"忽略新词",
+                contentText:"确认忽略该新词吗？",
+                confirm:function () {
+                    //点确定之后的操作
+                    $.post("",{id:row["id"]},function (rdata) {
+                        if (rdata == "success") {
+                            $.gyAlert({
+                                title: "操作成功",
+                                contentText: "已成功忽略该条新词"
+                            });
+                            $('#assistant-table').bootstrapTable('refresh', { url: '/Teacher/getAssistant' });
+
+                        }
+                        else {
+                            $.gyAlert({
+                                title: "操作失败",
+                                contentText: "忽略失败 " + rdata
+                            })
+                        }
+                    })
+                }
+            })
+        },
+    };
+
+</script>
+
+</body>
+</html>
