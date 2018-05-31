@@ -70,7 +70,7 @@
             </div>
 
             <script>
-                if($.cookie("userId").toString()!= "null" && $.cookie("userPasswd").toString()!= "null")
+                if($.cookie("userId")!=null&&$.cookie("userPasswd")!=null&&$.cookie("userId").toString()!= "null" && $.cookie("userPasswd").toString()!= "null")
                 {
                     $("#username-a").text($.cookie("userName"));
                     $("#after-login").show();
