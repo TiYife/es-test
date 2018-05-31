@@ -24,6 +24,7 @@ import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilde
 import org.springframework.data.elasticsearch.core.query.SearchQuery;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.io.File;
 import java.util.List;
 
 import static es.Constant.xmlLocation;
@@ -229,6 +230,26 @@ public class TEST {
     @Test
     public void testDelete(){
         FileUtil.delAllFile(xmlLocation);
+    }
+
+    @Test
+    public void testUnZip(){
+        try {
+            FileUtil.unZip(new File("C:\\Users\\13051\\Desktop\\毕设\\data\\test\\20150104.zip"),
+                    "C:\\Users\\13051\\Desktop\\毕设\\data\\test\\");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void testUnRar(){
+        try {
+            FileUtil.unRar(new File("C:\\Users\\13051\\Desktop\\毕设\\data\\test\\20140107.rar"),
+                    "C:\\Users\\13051\\Desktop\\毕设\\data\\test\\");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
 

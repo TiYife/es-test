@@ -114,6 +114,19 @@
 			<version>2.0.5</version>
 		</dependency>
 
+		<!--解压缩 zip-->
+		<dependency>
+			<groupId>net.lingala.zip4j</groupId>
+			<artifactId>zip4j</artifactId>
+			<version>1.3.2</version>
+		</dependency>
+
+		<!--解压缩rar-->
+		<dependency>
+			<groupId>com.github.junrar</groupId>
+			<artifactId>junrar</artifactId>
+			<version>0.7</version>
+		</dependency>
 
 	</dependencies>
 </project>
