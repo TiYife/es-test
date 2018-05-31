@@ -4,7 +4,6 @@ import es.Constant;
 import es.Util.ConvertUtil;
 import es.Util.FileUtil;
 import es.entity.jpaEntity.OriDocEntity;
-import es.entity.jpaEntity.UserEntity;
 import es.repository.esRepository.DocRepository;
 import es.repository.jpaRepository.OriDocRepository;
 import es.service.SaveService;
@@ -23,6 +22,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import static es.Constant.timeFormat;
 
@@ -50,42 +50,111 @@ public class SaveServiceImpl implements SaveService {
 
 
     @Override
-    public boolean uploadDoc(MultipartFile multipartFile, UserEntity userEntity){
+    public boolean uploadZip(MultipartFile multipartFile, int userId){
+
+        //上传
+        File rar = FileUtil.uploadFile(multipartFile,newDocLocation);
+
+        //解压
         try {
-            OriDocEntity entity = FileUtil.uploadFile(multipartFile,newDocLocation,userEntity.getId());
+            FileUtil.unZip(rar,newDocLocation);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        //遍历
+        File file = new File(newDocLocation+FileUtil.getFileName(rar.getName()));
+        List<String> fileList = new ArrayList<>();
+        try {
+            FileUtil.listFile(file,fileList);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        //记录
+        File f ;
+        OriDocEntity entity;
+        for (String s:fileList
+                ) {
+            f = new File(s);
+            entity = new OriDocEntity();
+            entity.setId(UUID.fromString(FileUtil.getFileName(f.getName())).toString());
+            entity.setName(FileUtil.getFileName(f.getName()));
+            entity.setUploader(userId);
+            entity.setUpTime(timeFormat.format(new Date()));
+            entity.setLocation(f.getAbsolutePath());
             oriDocRepository.save(entity);
-        } catch (Exception e) {
-            e.printStackTrace();
-            LOGGER.info(e.getMessage());
-            return false;
         }
         return true;
     }
 
     @Override
-    public boolean uploadDoc(List<MultipartFile> multipartFileList,UserEntity userEntity){
+    public boolean uploadRar(MultipartFile multipartFile, int userId){
+        //上传
+        File rar = FileUtil.uploadFile(multipartFile,newDocLocation);
+
+        //解压
         try {
-            List<OriDocEntity> entities = FileUtil.uploadFile(multipartFileList,newDocLocation,userEntity.getId());
-            oriDocRepository.save(entities);
+            FileUtil.unRar(rar,newDocLocation);
         } catch (Exception e) {
             e.printStackTrace();
-            LOGGER.info(e.getMessage());
             return false;
+        }
+
+        //遍历
+        File file = new File(newDocLocation+FileUtil.getFileName(rar.getName()));
+        List<String> fileList = new ArrayList<>();
+        try {
+            FileUtil.listFile(file,fileList);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        //记录
+        File f ;
+        OriDocEntity entity;
+        for (String s:fileList
+             ) {
+            f = new File(s);
+            entity = new OriDocEntity();
+            entity.setId(UUID.fromString(FileUtil.getFileName(f.getName())).toString());
+            entity.setName(FileUtil.getFileName(f.getName()));
+            entity.setUploader(userId);
+            entity.setUpTime(timeFormat.format(new Date()));
+            entity.setLocation(f.getAbsolutePath());
+            oriDocRepository.save(entity);
         }
         return true;
     }
 
+
     @Override
-    public boolean saveDoc(MultipartFile multipartFile, UserEntity userEntity){
-        if(uploadDoc(multipartFile,userEntity)){
-            if(saveDoc())
-                return true;
-        }
-        return false;
+    public void uploadAndSave(MultipartFile multipartFile, int userId){
+       //todo
+        File up = FileUtil.uploadFile(multipartFile,newDocLocation);
+        //分词
+        File save = wordSeparateService.fileProcessAndSave(up.getAbsolutePath(),newDocLocation,xmlLocation);
+
+        //转移
+        String saveLocation = FileUtil.fileMappingMove(up.getAbsolutePath(),newDocLocation,originalDocLocation);
+
+        //索引
+        docRepository.save(ConvertUtil.xmlToEntity(save));
+
+        //记录
+        OriDocEntity entity = new OriDocEntity();
+        entity.setId(FileUtil.getFileName(up.getName()));
+        entity.setName(FileUtil.getFileName(multipartFile.getName()));
+        entity.setLocation(saveLocation);
+        entity.setUpTime(timeFormat.format(new Date()));
+        entity.setUploader(userId);
     }
 
     @Override
-    public boolean saveDoc(){
+    public boolean saveAllDoc(){
         File file = new File(newDocLocation);
         if(!file.exists()){
             LOGGER.info("没有新文本");
@@ -104,21 +173,14 @@ public class SaveServiceImpl implements SaveService {
         return true;
     }
 
-    @Override
-    public boolean saveDoc(List<MultipartFile> multipartFileList,UserEntity userEntity){
-       if(uploadDoc(multipartFileList,userEntity)){
-           if(saveDoc())
-               return true;
-       }
-       return false;
-    }
-
     @Scheduled(cron = "0 30 0 * * ? ")
     //@Scheduled(cron = "0 0/2 * * * ? ")
     public void autoSave(){
-        saveDoc();
+        saveAllDoc();
+        File file = new File(newDocLocation);
+        file.delete();
         String newDirName = Constant.newDocLocation+Constant.dateFormat.format(new Date())+"\\";
-        File file = new File(newDirName);
+        file = new File(newDirName);
         file.mkdir();
         newDocLocation=newDirName;
     }

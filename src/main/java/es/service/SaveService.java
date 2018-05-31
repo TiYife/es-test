@@ -11,15 +11,13 @@ import java.util.List;
  */
 public interface SaveService {
 
-    boolean uploadDoc(MultipartFile multipartFile, UserEntity userEntity);
+    boolean uploadZip(MultipartFile multipartFile, int userId);
 
-    boolean uploadDoc(List<MultipartFile> multipartFileList, UserEntity userEntity);
+    boolean uploadRar(MultipartFile multipartFile, int userId);
 
-    boolean saveDoc(MultipartFile multipartFile, UserEntity userEntity);
+    void uploadAndSave(MultipartFile multipartFile, int userId);
 
-    boolean saveDoc();
-
-    boolean saveDoc(List<MultipartFile> multipartFileList, UserEntity userEntity);
+    boolean saveAllDoc();
 
     List<OriDocEntity> listDocs();
 

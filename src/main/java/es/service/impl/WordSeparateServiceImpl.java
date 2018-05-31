@@ -7,7 +7,6 @@ import es.entity.esEntity.DocEntity;
 import es.entity.wordSepa.wordSepaEnity;
 import es.repository.esRepository.DocRepository;
 import es.service.NLPTRService;
-import es.service.SearchService;
 import es.service.WordSeparateService;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
@@ -244,7 +243,7 @@ public class WordSeparateServiceImpl implements WordSeparateService {
 
     }
 
-    public void fileProcessAndSave(String fileAddress,String fileAddressHead, String saveAddress)
+    public File fileProcessAndSave(String fileAddress, String fileAddressHead, String saveAddress)
     {
         try {
             if(NLPTR_Init()!=1) throw new Exception( "分词程序初始化失败");
@@ -484,12 +483,13 @@ public class WordSeparateServiceImpl implements WordSeparateService {
                 throw new Exception( "存储地址错误");
             testA(fileAddress,wordSepaEnity1);
             wordSepaEnityToXMLAndSave(wordSepaEnity1, FileUtil.rmSuffix(saveFileAddress)+".xml");
-
+            return new File(FileUtil.rmSuffix(saveFileAddress)+".xml");
         } catch (Exception e) {
             // TODO Auto-generated catch block
             //System.out.println(line);
             e.printStackTrace();
         }
+        return null;
     }
 
     @Override

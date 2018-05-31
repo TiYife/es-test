@@ -2,10 +2,12 @@ package es.controller;
 
 import com.google.gson.Gson;
 import es.Util.FileUtil;
+import es.Util.IdentityUtil;
 import es.entity.jpaEntity.UserEntity;
 import es.repository.jpaRepository.UserRepository;
 import es.service.SaveService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
@@ -34,15 +37,23 @@ public class SaveController {
 
     @RequestMapping("/upload")
     @ResponseBody
-    public String upload(@RequestParam("files")List<MultipartFile> files, HttpSession session){
-        UserEntity userEntity = (UserEntity)session.getAttribute("user");//todo
-        userEntity = userRepository.findById(123);
-        if(userEntity.equals(null))
-            return "redirect:login";
-        if(saveService.uploadDoc(files,userEntity))
-            return "success";
+    public String upload(@RequestParam("files")MultipartFile file, HttpServletRequest request){
+        String uId=IdentityUtil.getCookieValue(request,"userId");
+        if(uId==null)    return "not login";
+
+        int userId = Integer.parseInt(uId);
+        String pwd = IdentityUtil.getCookieValue(request,"userPasswd");
+        if(userRepository.findById(userId).getPassword()!=pwd)  return "not login";
+        String suffix = FileUtil.getSuffix(file.getName());
+        if (suffix.equals(".txt"))
+            saveService.uploadAndSave(file,userId);
+        else if(suffix.equals(".rar"))
+            saveService.uploadRar(file,userId);
+        else if(suffix.equals(".zip"))
+            saveService.uploadZip(file,userId);
         else
-            return "fail";
+            return "wrong file type";
+        return "success";
     }
 
     @RequestMapping("/list-docs")
