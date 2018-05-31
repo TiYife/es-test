@@ -1,10 +1,8 @@
 package es.Util;
 
 import com.github.junrar.Archive;
-import com.github.junrar.exception.RarException;
-import es.entity.jpaEntity.OriDocEntity;
+import es.entity.jpaEntity.UpLogEntity;
 import es.service.impl.SearchServiceImpl;
-import net.lingala.zip4j.model.FileHeader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,6 +26,7 @@ public class FileUtil {
 
     /*日志*/
     private static final Logger LOGGER = LoggerFactory.getLogger(SearchServiceImpl.class);
+
 
     //列举出文件夹下所有的文件,生成list
     public static boolean listFile(File file, List<String> list) throws IOException {
@@ -140,7 +139,7 @@ public class FileUtil {
         dir.delete();
     }
 
-    public static void fileMappingMove(String fileAddress, String fileAddressHead, String saveAddress) {
+    public static String fileMappingMove(String fileAddress, String fileAddressHead, String saveAddress) {
         try {
             String saveFileAddress = "";
             File file = new File(fileAddress);
@@ -151,15 +150,17 @@ public class FileUtil {
                 if (!preFile.exists())
                     preFile.mkdirs();
                 file.renameTo(new File(saveFileAddress));
+                return saveFileAddress;
             } else
                 throw new Exception("存储地址错误");
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return "";
     }
 
 
-    public static OriDocEntity uploadFile(@NotNull MultipartFile multipartFile, String saveLocation, int userId) {
+    public static File uploadFile(@NotNull MultipartFile multipartFile, String saveLocation) {
         File file = new File(saveLocation);
         if (!file.exists()) {
             file.mkdirs();
@@ -167,7 +168,7 @@ public class FileUtil {
 
         String oldName = multipartFile.getOriginalFilename();
         if (!Objects.equals(oldName, "")) {
-            UUID uuid = UUID.randomUUID();
+            UUID uuid = UUID.fromString(getFileName(oldName));
 //            TODO IMPORTANT: 获取文件名后缀带点  example:   suffix='.docx'
             String suffix = oldName.substring(oldName.lastIndexOf("."));
             String newName = uuid.toString().replaceAll("-", "");
@@ -175,27 +176,18 @@ public class FileUtil {
             File isFile = new File(saveLocation + fileTotalName);
             try {
                 multipartFile.transferTo(isFile);
+                return isFile;
             } catch (IOException e) {
                 e.printStackTrace();
                 return null;
             }
-
-            OriDocEntity entity = new OriDocEntity();
-            entity.setId(newName);
-            entity.setName(oldName);
-            entity.setLocation(saveLocation + fileTotalName);
-            entity.setUpTime(timeFormat.format(new Date()));
-            entity.setUploader(userId);
-
-            return entity;
-
         }
         return null;
     }
 
-    public static List<OriDocEntity> uploadFile(@NotNull List<MultipartFile> files, String saveLocation, int userId) {
+    public static List<File> uploadFile(@NotNull List<MultipartFile> files, String saveLocation) {
 
-        List<OriDocEntity> list = new ArrayList<>();
+        List<File> list = new ArrayList<>();
 
         //文件格式要求
         String[] suffixArr = suffixList;
@@ -216,7 +208,7 @@ public class FileUtil {
                 if (!suffixList.contains(suffix)) {
                     continue;
                 }
-                list.add(uploadFile(mf, saveLocation, userId));
+                list.add(uploadFile(mf, saveLocation));
             }
         }
         return list;
