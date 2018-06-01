@@ -32,7 +32,7 @@
     <div class="col-sm-12" style="margin-top: 10px;padding-left: 30px">
         <label style="display: inline-block">定时更新状态：</label>
         <p style="display: inline-block;color: green">开启</p>
-        <button class="btn btn-info" style="margin-left: 30px">开启定时更新</button>
+        <button class="btn btn-info" style="margin-left: 30px" onclick="">关闭定时更新</button>
 
     </div>
     <div class="col-sm-12"style="margin-top: 10px;padding-left: 30px">
@@ -45,7 +45,7 @@
     <div class="col-sm-12"style="margin-top: 10px">
         <div class="panel panel-default">
             <div class="panel-body">
-                <table data-toggle="table" data-url="/list-uploading" data-show-refresh="true" data-show-toggle="true" data-show-columns="true" data-search="true" data-select-item-name="toolbar1" data-pagination="true" data-sort-order="desc" data-show-export="true" id="word-table">
+                <table data-toggle="table" data-url="/list-uploading" data-show-refresh="true" data-show-toggle="true" data-show-columns="true" data-search="true" data-select-item-name="toolbar1" data-pagination="true" data-sort-order="desc" data-show-export="true" id="user-table">
                     <thead>
                     <tr>
                         <th data-field="id">编号</th>
@@ -175,7 +175,7 @@
                                 title: "操作成功",
                                 contentText: "正在进行结构化处理和导入，该过程可能会花费比较长的时间，请耐心等候"
                             });
-                            $('#user-table').bootstrapTable('refresh', { url: '/Teacher/getAssistant' });
+                            $('#user-table').bootstrapTable('refresh', { url: '/list-uploading' });
 
                         }
                         else {
@@ -188,7 +188,7 @@
                 }
             })
         },
-        'click .start': function (e, value, row, index) {
+        'click .delete': function (e, value, row, index) {
             $.gyAlert({
                 title:"确认删除",
                 contentText:"即将删除该批次导入的所有数据，您可能因此丢失重要的数据，确定操作吗",
@@ -200,7 +200,7 @@
                                 title: "操作成功",
                                 contentText: "正在进行删除，该过程可能会花费比较长的时间，请耐心等候"
                             });
-                            $('#user-table').bootstrapTable('refresh', { url: '/Teacher/getAssistant' });
+                            $('#user-table').bootstrapTable('refresh', { url: '/list-uploading' });
 
                         }
                         else {

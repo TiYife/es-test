@@ -318,6 +318,7 @@
         function setIframeHeight(iframe) {
             if (iframe) {
                 var iframeWin = iframe.contentWindow || iframe.contentDocument.parentWindow;
+                //var iframeWin = iframe.contentWindow ;
                 if (iframeWin.document.body) {
                     iframe.height = iframeWin.document.documentElement.scrollHeight || iframeWin.document.body.scrollHeight;
                 }
@@ -326,7 +327,7 @@
 
 
         setInterval(function () {
-            setIframeHeight($("#menu-frame"));
+            setIframeHeight(document.getElementById("menu-frame"));
         },1000);
 
 
