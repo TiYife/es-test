@@ -25,17 +25,33 @@
         #header{
             flex: 0 0 auto;
         }
+        #header a{
+            color: #428bca
+        }
         #main{
             flex: 1 0 auto;
         }
         #footer{
             flex: 0 0 auto;
         }
+        #container:before{
+            background: url('assets/img/lawBack2.png') no-repeat;
+            background-size: cover;
+            width: 100%;
+            height: 100%;
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: -1;/*-1 可以当背景*/
+            -webkit-filter: opacity(0.3);
+            filter: alpha(opacity=50);
+        }
     </style>
 </head>
-<body>
+<body >
 <div class="container" id="container">
-    <div class="row" id="header" style="">
+    <div class="row" id="header" style="background: transparent!important;">
         <div class="col-md-12" id="before-login" style="text-align: right;display: none">
             <div style="padding: 40px;font-size: larger">
                 <a style="text-decoration: none;margin-right: 30px" onclick="$('#loginModal').modal('show')">登录</a>
@@ -66,33 +82,33 @@
     <div class="row" id="main" style="margin-top: 20px">
         <div class="col-md-12" style="text-align: center">
             <div >
-                <img style="width: 100px;height: 100px" />
-                <h1 style="display: inline-block;height: 100px;line-height: 100px">法律案例检索系统</h1>
+                <img style="width: 100px;height: 100px" src="assets/img/lawLogoBlue.png" />
+                <h1 style="display: inline-block;height: 100px;line-height: 100px;font-family: alihanyi;color: #124380">法律案例检索系统</h1>
             </div>
         </div>
         <div class="col-md-12" style="text-align: center;margin-top: 50px">
                         <div class="btn-group form-inline">
-                                <select id ="type-select"class="form-control " style="width: 100px">
+                                <select id ="type-select"class="form-control" style="width: 100px;height: 50px;font-size: 20px">
                                     <option value="caseName">标题</option>
                                     <option value="content">关键字</option>
                                 </select>
-                            <input id="search-input" class="form-control" style="width: 400px"  onkeydown="onEnterDown()"/>
-                            <button class="form-control" style="width: 60px" onclick="search_submit()"> 搜索</button>
-                            <a style="margin-left: 20px">高级检索</a>
+                            <input id="search-input" class="form-control" style="width: 400px;height: 50px;font-size: 20px"  onkeydown="onEnterDown()"/>
+                            <button class="form-control" style="width: 100px;height: 50px;font-size: 20px" onclick="search_submit()"> 搜索</button>
+                            <a style="margin-left: 20px;font-size: larger">高级检索</a>
                         </div>
         </div>
-        <div class="col-sm-6" style="text-align: right;margin-top: 50px">
-            <img style="width: 70px;height: 70px" />
-            <h2 style="display: inline-block;height: 70px;line-height: 70px">我的收藏</h2>
+        <div class="col-sm-6" style="text-align: right;margin-top: 50px;color: #00aced">
+            <span class="glyphicon glyphicon-star-empty" style="font-size: 30px"></span>
+            <h2 style="display: inline-block;height: 70px;line-height: 70px;font-family: alihanyi">我的收藏</h2>
         </div>
-        <div class="col-sm-6" style="text-align: left;margin-top: 50px">
-            <img style="width: 70px;height: 70px" />
-            <h2 onclick="$('#registerModal').modal('show')" style="display: inline-block;height: 70px;line-height: 70px">联系我们</h2>
+        <div class="col-sm-6" style="text-align: left;margin-top: 50px;color: #00aced">
+            <span class="glyphicon glyphicon-send" style="font-size: 30px"></span>
+            <h2 onclick="$('#registerModal').modal('show')" style="display: inline-block;height: 70px;line-height: 70px;font-family: alihanyi">联系我们</h2>
         </div>
     </div><!--/.row-->
     <div class="row" id="footer">
         <div class="col-sm-12" style="text-align: center">
-            <p>版权信息：发生大叫发哦奇偶is到if和</p>
+            <p>版权信息：@北航软院阳光工作室</p>
         </div>
     </div>
 
