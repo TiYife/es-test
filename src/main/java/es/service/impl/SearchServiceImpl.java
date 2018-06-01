@@ -24,6 +24,7 @@ import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilde
 import org.springframework.data.elasticsearch.core.query.SearchQuery;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -114,9 +115,23 @@ public class SearchServiceImpl implements SearchService {
         favoriteRepository.save(favoriteEntity);
     }
 
+    public void deleteFavorDoc(int userId, String docId){
+        FavoriteEntity favoriteEntity= favoriteRepository.findByUserIdAndDocId(userId,docId);
+        favoriteRepository.delete(favoriteEntity);
+    }
+
+
     @Override
-    public List<FavoriteEntity> listFavorDocs(int userId){
-        return favoriteRepository.findByUserId(userId);
+    public List<DocEntity> listFavorDocs(int userId){
+        DocEntity docEntity;
+        List<FavoriteEntity> favoriteEntityList = favoriteRepository.findByUserId(userId);
+        List<DocEntity> docEntityList = new ArrayList<>();
+        for (FavoriteEntity f:favoriteEntityList
+             ) {
+            docEntity  = docRepository.findOne(f.getDocId());
+            docEntityList.add(docEntity);
+        }
+        return docEntityList;
     }
 
     /**
