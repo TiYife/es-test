@@ -178,7 +178,6 @@ public class FileUtil {
         String oldName = multipartFile.getOriginalFilename();
         if (!Objects.equals(oldName, "")) {
             UUID uuid = UUID.randomUUID();
-//            TODO IMPORTANT: 获取文件名后缀带点  example:   suffix='.docx'
             String suffix = oldName.substring(oldName.lastIndexOf("."));
             String newName = uuid.toString().replaceAll("-", "");
             String fileTotalName = newName + suffix;

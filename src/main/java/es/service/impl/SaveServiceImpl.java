@@ -92,7 +92,6 @@ public class SaveServiceImpl implements SaveService {
 
     @Override
     public void uploadAndSave(MultipartFile multipartFile, int userId){
-       //todo
         File up = FileUtil.uploadFile(multipartFile,newDocLocation);
         //分词
         File save = wordSeparateService.fileProcessAndSave(up.getAbsolutePath(),Constant.newDocLocation,xmlLocation);

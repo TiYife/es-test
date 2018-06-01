@@ -104,15 +104,4 @@ public class UserController {
         return code;
     }
 
-    @RequestMapping("/user-admin")
-    public String userAdmin(){
-        return "user-admin";
-    }
-
-    @RequestMapping("/list-users")
-    @ResponseBody
-    public String listUsers(){
-        return new Gson().toJson(userRepository.findAll());
-    }
-
 }

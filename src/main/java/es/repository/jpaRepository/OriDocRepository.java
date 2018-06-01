@@ -11,4 +11,6 @@ import java.util.List;
 public interface OriDocRepository extends CrudRepository<OriDocEntity,String> {
 
     List<OriDocEntity> findAll();
+
+    List<OriDocEntity> findBySave(boolean b);
 }
