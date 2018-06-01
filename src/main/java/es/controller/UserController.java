@@ -1,6 +1,5 @@
 package es.controller;
 
-import com.google.gson.Gson;
 import es.Util.VerifyCodeUtil;
 import es.entity.jpaEntity.UserEntity;
 import es.repository.jpaRepository.UserRepository;
@@ -55,7 +54,7 @@ public class UserController {
 
     @RequestMapping("/uRegister")
     @ResponseBody
-    public  String register(@RequestParam("userId") int userId,
+    public  String register(@RequestParam("userId") String userId,
                             @RequestParam("userPasswd") String userPasswd,
                             @RequestParam("userPasswdConfirm") String userPasswdConfirm,
                             @RequestParam("userEmail") String userEmail,
@@ -67,10 +66,8 @@ public class UserController {
         {
             if(userPasswd.equals(userPasswdConfirm))
             {
-                UserEntity user=userRepository.findById(userId);
-                if(user == null){
                     UserEntity newUser=new UserEntity();
-                    newUser.setId(userId);
+                    newUser.setUserName(userId);
                     newUser.setPassword(userPasswd);
                     newUser.setEmail(userEmail);
                     newUser.setRole(2);
@@ -80,9 +77,6 @@ public class UserController {
                     userRepository.save(newUser);
                     return "success";
 
-                }
-                else
-                    return "用户名已存在";
             }
             else
             {

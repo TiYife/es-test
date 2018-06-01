@@ -94,7 +94,7 @@
                                 </select>
                             <input id="search-input" class="form-control" style="width: 400px;height: 50px;font-size: 20px"  onkeydown="onEnterDown()"/>
                             <button class="form-control" style="width: 100px;height: 50px;font-size: 20px" onclick="search_submit()"> 搜索</button>
-                            <a style="margin-left: 20px;font-size: larger">高级检索</a>
+                            <a style="margin-left: 20px;font-size: larger" href="/advanced-search">高级检索</a>
                         </div>
         </div>
         <div class="col-sm-6" style="text-align: right;margin-top: 50px;color: #00aced">
@@ -207,7 +207,7 @@
 <script>
     function login() {
         var data={
-            userId:parseInt( $("#login-username-input").val()),
+            userId:$("#login-username-input").val(),
             userPasswd:$("#login-password-input").val(),
             code:$("#login-code-input").val()
         };
@@ -240,7 +240,7 @@
     }
     function register() {
         var data={
-            userId:parseInt( $("#register-username-input").val()),
+            userId:$("#register-username-input").val(),
             userPasswd:$("#register-password-input").val(),
             userPasswdConfirm:$("#register-repassword-input").val(),
             userEmail:$("#register-email-input").val(),
@@ -254,6 +254,7 @@
         $("#register-btn").text("正在注册...");
         $("#register-btn").attr("disabled","disabled");
         $.post("/uRegister",data,function (rdata) {
+            $("#registerModal").modal("hide");
             if(rdata=="success")
             {
                 $("#registerModal").hide();
