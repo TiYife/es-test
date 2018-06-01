@@ -18,17 +18,17 @@ public interface SaveService {
 
     boolean saveAllDoc();
 
-    @Scheduled(cron = "0 30 0 * * ? ")
-    //@Scheduled(cron = "0 0/5 * * * ? ")
-    void saveToday();
-
     List<OriDocEntity> listDocs();
 
     void deleteDoc(String docId);
 
-    void delete(List<String> docIds);
+    void deleteDoc(List<String> docIds);
 
     List<UpLogEntity> listUploading();
 
     List<UpLogEntity> listUploaded();
+
+    void deleteUpLog(String id);
+
+    void deleteUpLog(List<String> docIds);
 }

@@ -27,6 +27,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import static es.Constant.dateFormat;
 import static es.Constant.timeFormat;
 
 /**
@@ -52,6 +53,9 @@ public class SaveServiceImpl implements SaveService {
     private String originalDocLocation=Constant.originalDocLocation;
     private String xmlLocation=Constant.xmlLocation;
     private String newDocLocation=Constant.newDocLocation+Constant.dateFormat.format(new Date())+"\\";
+    private int upNo=1;
+
+    byte flagT=1,flagF=0;
 
     @Override
     public String uploadFile(MultipartFile multipartFile, int userId){
@@ -60,12 +64,14 @@ public class SaveServiceImpl implements SaveService {
             return "wrong file type";
         UpLogEntity entity = new UpLogEntity();
         File file = FileUtil.uploadFile(multipartFile,newDocLocation);
-        entity.setId(timeFormat.format(new Date()));
+        entity.setId(dateFormat.format(new Date())+ "-"+upNo++);
         entity.setFileName(multipartFile.getOriginalFilename());
         entity.setNewName(file.getName());
         entity.setUploader(userId);
         entity.setUpTime(timeFormat.format(new Date()));
         entity.setLocation(file.getAbsolutePath());
+        entity.setIsSave(flagF);
+        entity.setIsDel(flagF);
         upLogRepository.save(entity);
         return "success";
     }
@@ -107,9 +113,8 @@ public class SaveServiceImpl implements SaveService {
         return true;
     }
 
-    @Override
     @Scheduled(cron = "0 30 0 * * ? ")
-    public void saveToday(){
+    public void setEveryDay(){
         saveAllDoc();
         File file = new File(newDocLocation);
         file.delete();
@@ -117,6 +122,7 @@ public class SaveServiceImpl implements SaveService {
         file = new File(newDirName);
         file.mkdir();
         newDocLocation=newDirName;
+        upNo=1;
     }
 
 
@@ -127,31 +133,46 @@ public class SaveServiceImpl implements SaveService {
     }
     @Override
     public void deleteDoc(String docId){
-        File file = new File(oriDocRepository.findOne(docId).getLocation());
+        OriDocEntity entity = oriDocRepository.findOne(docId);
+        File file = new File(entity.getLocation());
         if(file.exists()) file.delete();
         oriDocRepository.delete(docId);
-        docRepository.delete(docId);
+        if(entity.getIsSave().equals(flagT))
+            docRepository.delete(docId);
     }
     @Override
-    public void delete(List<String> docIds){
-        File file;
+    public void deleteDoc(List<String> docIds){
         for (String id:docIds
                 ) {
-            file = new File(oriDocRepository.findOne(id).getLocation());
-            if(file.exists()) file.delete();
-            oriDocRepository.delete(id);
-            docRepository.delete(id);
+            deleteDoc(id);
         }
     }
 
     @Override
     public List<UpLogEntity> listUploading(){
-       return upLogRepository.findByIsSaveOrderByUpTime(false);
+       return upLogRepository.findByIsSaveOrderByUpTime(flagF);
     }
 
     @Override
     public List<UpLogEntity> listUploaded(){
-        return upLogRepository.findByIsSaveOrderByUpTime(true);
+        return upLogRepository.findByIsSaveOrderByUpTime(flagT);
+    }
+
+    @Override
+    public void deleteUpLog(String id){
+        UpLogEntity entity = upLogRepository.findOne(id);
+        if(entity.getIsSave().equals(flagT))return;
+        File file = new File(entity.getLocation());
+        if(file.exists()) file.delete();
+        upLogRepository.delete(id);
+    }
+
+    @Override
+    public void deleteUpLog(List<String> docIds){
+        for (String id:docIds
+                ) {
+            deleteUpLog(id);
+        }
     }
 
 
@@ -224,7 +245,8 @@ public class SaveServiceImpl implements SaveService {
             if(oriDocEntity==null)
                 LOGGER.info(FileUtil.getFileName(docName)+"无上传记录");
             else {
-                oriDocEntity.setIsSave((byte)1);
+
+                oriDocEntity.setIsSave(flagT);
                 oriDocEntity.setSaveTime(timeFormat.format(new Date()));
                 oriDocEntity.setXmlLocation(docName);
                 oriDocRepository.save(oriDocEntity);

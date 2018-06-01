@@ -3,6 +3,8 @@ package es.controller;
 import com.google.gson.Gson;
 import es.Util.FileUtil;
 import es.Util.IdentityUtil;
+import es.entity.jpaEntity.UpLogEntity;
+import es.repository.jpaRepository.UpLogRepository;
 import es.repository.jpaRepository.UserRepository;
 import es.service.SaveService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +26,8 @@ public class SaveController {
     SaveService saveService;
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    UpLogRepository upLogRepository;
 
     @RequestMapping("/doc-admin")
     public String docAdmin(){
@@ -40,7 +44,10 @@ public class SaveController {
         String pwd = IdentityUtil.getCookieValue(request,"userPasswd");
         if(!userRepository.findById(userId).getPassword().equals(pwd))  return "not login";
 
-        return saveService.uploadFile(file,userId);
+        String message = saveService.uploadFile(file,userId);
+        if(message.equals("success"))
+            return "{}";
+        else return "{error:"+message+"}";
     }
 
     @RequestMapping("/list-uploaded")
@@ -55,13 +62,28 @@ public class SaveController {
         return new Gson().toJson(saveService.listUploading());
     }
 
+    @RequestMapping("/save-file")
+    @ResponseBody
+    public String saveFile(String id){
+        UpLogEntity entity = upLogRepository.findOne(id);
+        return saveService.saveFile(entity);
+    }
+
+    @RequestMapping("/delete-up")
+    @ResponseBody
+    public String deleteUp(String id){
+        saveService.deleteUpLog(id);
+        //刷新
+        return "success";
+    }
+
     @RequestMapping("/list-docs")
     @ResponseBody
     public String listDocs(){
         return new Gson().toJson(saveService.listDocs());
     }
 
-    @RequestMapping("delete")
+    @RequestMapping("/delete-doc")
     @ResponseBody
     public String delete(String id){
         saveService.deleteDoc(id);
@@ -69,10 +91,10 @@ public class SaveController {
         return "success";
     }
 
-    @RequestMapping("save-all")
+    @RequestMapping("/save-all")
     @ResponseBody
     public String saveAll(){
-        saveService.saveToday();
+        saveService.saveAllDoc();
         return "success";
     }
 }
