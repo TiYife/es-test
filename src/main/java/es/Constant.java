@@ -18,7 +18,7 @@ public class Constant {
     public static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
 
     //文件位置相关
-    public static final String FILE_LOCATION="C:\\Users\\13051\\Desktop\\毕设\\data\\";
+    public static final String FILE_LOCATION="E:\\系统测试\\data\\";
     public static String originalDocLocation=FILE_LOCATION+"txt\\";
     public static String xmlLocation=FILE_LOCATION+"xml\\";
     public static String newDocLocation=FILE_LOCATION+"new\\";

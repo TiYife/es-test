@@ -4,6 +4,7 @@ package es;
 import com.sun.jna.Native;
 import es.Util.FileUtil;
 import es.entity.esEntity.DocEntity;
+import es.entity.word.WordSimilarity;
 import es.repository.esRepository.DocRepository;
 import es.service.NLPTRService;
 import es.service.SaveService;
@@ -165,15 +166,17 @@ public class TEST {
     public void testJava2()
     {
         wordSeparateService.NLPTR_Init();
-        wordSeparateService.multiFileProcessAndSave("E:\\系统测试\\案例元数据\\20150104","E:\\系统测试\\案例元数据\\20150104","E:\\系统测试\\处理结果\\20150104");
+        wordSeparateService.getKeyWord("E:\\桌面存放\\测试\\20150104\\安徽\\1161\\民事案件\\（2013）皖民四终字第00220号_ee7846c9-c0b3-49da-8b68-b49ab6119091判决书.txt");
     }
 
     //语义相似度模块测试
     @Test
     public void testJava3()
     {
-        wordSeparateService.NLPTR_Init();
-        wordSeparateService.multiFileProcessAndSave("E:\\系统测试\\案例元数据\\20150104","E:\\系统测试\\案例元数据\\20150104","E:\\系统测试\\处理结果\\20150104");
+        double sim1 = WordSimilarity.simWord("喜欢", "喜爱");
+        double sim2 = WordSimilarity.simWord("激动", "喜欢");
+        System.out.println(sim1);
+        System.out.println(sim2);
     }
 
     //高频词组提取测试
@@ -181,7 +184,7 @@ public class TEST {
     public void testJava4()
     {
         wordSeparateService.NLPTR_Init();
-        wordSeparateService.multiFileProcessAndSave("E:\\系统测试\\案例元数据\\20150104","E:\\系统测试\\案例元数据\\20150104","E:\\系统测试\\处理结果\\20150104");
+        wordSeparateService.getHFWord("E:\\系统测试\\高频词组.txt");
     }
 
     @Test

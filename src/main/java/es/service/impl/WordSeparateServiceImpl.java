@@ -635,6 +635,44 @@ public class WordSeparateServiceImpl implements WordSeparateService {
         }
     }
 
+    public  void getHFWord(String file)
+    {
+        try {
+            Thread.sleep(2000);
+            String s = "依法\t\t\t2209\n" +
+                    "中华人民共和国\t2385\n" +
+                    "判决\t\t\t2095\n" +
+                    "纠纷\t\t\t1481\n" +
+                    "法院\t\t\t1757\n" +
+                    "民事\t\t\t1500\n" +
+                    "诉讼\t\t\t1887\n" +
+                    "规定\t\t\t2397\n" +
+                    "人民法院\t\t2394\n" +
+                    "查明\t\t\t1776\n" +
+                    "受理\t\t\t1651\n" +
+                    "合议庭\t\t\t1560\n" +
+                    "审理\t\t\t1977\n" +
+                    "法律\t\t\t1799\n" +
+                    "上诉\t\t\t1874\n" +
+                    "组成\t\t\t1560\n" +
+                    "如下\t\t\t2392\n" +
+                    "二〇一三年\t\t2309\n" +
+                    "期间\t\t\t1459\n" +
+                    "进行\t\t\t1742\n" +
+                    "人民\t\t\t1333\n" +
+                    "依照\t\t\t1853\n" +
+                    "中级\t\t\t2212\n" +
+                    "本案\t\t\t1897\n" +
+                    "认为\t\t\t1997\n" +
+                    "参加\t\t\t2001\n" +
+                    "第一\t\t\t1546\n" +
+                    "发生\t\t\t1311";
+            stringToRead(s, file, false);
+        }catch (Exception e){
+
+        }
+    }
+
     /*public String getHFWordFormFiles(String caseType)//获取高频词组 参数代表案件类型 all所有类型
     {
         try {
