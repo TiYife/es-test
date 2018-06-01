@@ -31,6 +31,21 @@
         #footer{
             flex: 0 0 auto;
         }
+
+        .list-group-item:first-child {
+            border-top-left-radius: 0px;
+            border-top-right-radius: 0px;
+        }
+        .list-group-item{
+            border-left-color: #428bca;
+            border-right-color: #428bca;
+        }
+        .list-group-item:last-child{
+            border-bottom-color: #428bca;
+        }
+        .leftMenu{
+            border:none;
+        }
     </style>
     <style>
         .panel-group{max-height:770px;overflow: auto;}
@@ -183,8 +198,8 @@
                 </div>
             </div>
             <div class="col-md-10">
-                <h2 id="menu-name" style="color: #555">用户列表</h2>
-                <iframe id="menu-frame" scrolling="no" src="/admin-userlist" onload="setIframeHeight(this)" style="border: none;width: 100%"></iframe>
+                <h3 id="menu-name" style="color: #555">用户列表</h3>
+                <iframe id="menu-frame" scrolling="no" src="/admin-userlist" onload="setIframeHeight(this)" style="border: none;width: 100%;margin-top: 10px"></iframe>
             </div>
         </div>
 
