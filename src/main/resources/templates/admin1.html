@@ -220,7 +220,7 @@
             $(".menu-item-left").click(function (e) {
                 $("#menu-name").text($(this).text());
                 $("#menu-frame").attr("src",$(this).attr("data-target"));
-            })
+            });
         });
     </script>
 
@@ -323,6 +323,11 @@
                 }
             }
         };
+
+
+        setInterval(function () {
+            setIframeHeight($("#menu-frame"));
+        },1000);
 
 
         function login() {

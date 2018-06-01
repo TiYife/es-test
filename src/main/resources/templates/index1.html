@@ -45,6 +45,7 @@
         <div class="col-md-12" id="after-login" style="text-align: right;display: none">
             <div style="padding: 40px;font-size: larger">
                 <a id="username-a" style="text-decoration: none;margin-right: 30px">用户名</a>
+                <a id="toadmin-a"  style="text-decoration: none;margin-right: 30px;display: none" href="admin1">管理员入口</a>
                 <a  style="text-decoration: none;margin-right: 30px" onclick="logout()">退出登录</a>
             </div>
         </div>
@@ -202,10 +203,14 @@
             if(rdata.startsWith( "success:"))
             {
                 $.cookie("userId",$("#login-username-input").val(), { expires: 1 });
-                $.cookie("userName",rdata.substring(8), { expires: 1 });
+                $.cookie("userName",rdata.substring(9), { expires: 1 });
                 $.cookie("userPasswd",$("#login-password-input").val(), { expires: 1 });
                 $("#loginModal").modal("hide");
-                $("#username-a").text(rdata.substring(8));
+                $("#username-a").text(rdata.substring(9));
+                if(rdata.substring(8).startsWith("1"))
+                    $("#toadmin-a").show();
+                else
+                    $("#toadmin-a").remove();
                 $("#after-login").show();
                 $("#before-login").remove();
                 alert("登录成功");
