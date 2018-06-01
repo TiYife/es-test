@@ -1,9 +1,13 @@
 package es.controller;
 
+import com.google.gson.Gson;
 import es.entity.esEntity.DocEntity;
+import es.entity.jpaEntity.DicEntity;
+import es.entity.jpaEntity.NewWordEntity;
 import es.entity.word.Primitive;
 import es.entity.word.WordSimilarity;
 import es.repository.esRepository.DocRepository;
+import es.repository.jpaRepository.DicRepository;
 import es.service.SaveService;
 import es.service.SearchService;
 import es.service.impl.WordSeparateServiceImpl;
@@ -15,7 +19,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+
+import static es.Constant.dateFormat;
+import static es.Constant.timeFormat;
 
 /**
  * Created by TYF on 2018/1/29.
@@ -26,7 +35,7 @@ public class TestController {
     @Autowired
     private SearchService searchService;
     @Autowired
-    private SaveService saveService;
+    private DicRepository dicRepository;
     @Autowired
     private DocRepository docRepository;
     private WordSeparateServiceImpl wordSeparateService = new WordSeparateServiceImpl();
@@ -77,19 +86,20 @@ public class TestController {
 
     @RequestMapping("search")
     public String search(@RequestParam("attr") String attr,
-                         @RequestParam("content") String content, Model model){
-        List<DocEntity> docEntities=searchService.searchLaw(1,20,attr,content);
-        model.addAttribute("list",docEntities);
+                         @RequestParam("content") String content, Model model) {
+        List<DocEntity> docEntities = searchService.searchLaw(1, 20, attr, content);
+        model.addAttribute("list", docEntities);
         return "searchResult";
     }
+
     @RequestMapping("ss")
     @ResponseBody
-    public String search(@RequestParam("attr") String attr, Model model){
+    public String search(@RequestParam("attr") String attr, Model model) {
         String primitive = "攻打";
-        String r="";
+        String r = "";
         List<Integer> list = Primitive.getParents(attr);
-        for(Integer i : list){
-            r+= i.toString()+" | ";
+        for (Integer i : list) {
+            r += i.toString() + " | ";
         }
         test_loadGlossary();
         test_disPrimitive();
@@ -160,23 +170,24 @@ public class TestController {
     }*/
 
 
-
-    public void test_loadGlossary(){
+    public void test_loadGlossary() {
         WordSimilarity.loadGlossary();
     }
+
     /**
      * test the method {@link WordSimilarity#disPrimitive(String, String)}.
      */
-    public void test_disPrimitive(){
+    public void test_disPrimitive() {
         int dis = WordSimilarity.disPrimitive("雇用", "争斗");
-        System.out.println("雇用 and 争斗 dis : "+ dis);
+        System.out.println("雇用 and 争斗 dis : " + dis);
     }
 
-    public void test_simPrimitive(){
+    public void test_simPrimitive() {
         double simP = WordSimilarity.simPrimitive("雇用", "争斗");
-        System.out.println("雇用 and 争斗 sim : "+ simP);
+        System.out.println("雇用 and 争斗 sim : " + simP);
     }
-    public void test_simWord(){
+
+    public void test_simWord() {
         String word1 = "牛";
         String word2 = "猪";
         double sim = WordSimilarity.simWord(word2, word1);
@@ -185,8 +196,67 @@ public class TestController {
 
     @RequestMapping("sss")
     @ResponseBody
-    public String sss(){
+    public String sss() {
         List<DocEntity> docEntities = Lists.newArrayList(docRepository.findAll());
-        return wordSeparateService.getHFWordFormFiles("all",docEntities);
+        return wordSeparateService.getHFWordFormFiles("all", docEntities);
+    }
+
+    @RequestMapping("/test1")
+    @ResponseBody
+    public String test1() {
+        List<DicEntity> list = new ArrayList<>();
+        DicEntity entity;
+        entity = new DicEntity();
+        entity.setId(1);
+        entity.setWord("审判人");
+        entity.setType("spr");
+        entity.setSepaType("标志词词典");
+        entity.setCreateUserId(123);
+        entity.setCreateTime(timeFormat.format(new Date()));
+        list.add(entity);
+
+        entity = new DicEntity();
+        entity.setId(2);
+        entity.setWord("上诉人");
+        entity.setType("dsr");
+        entity.setSepaType("标志词词典");
+        entity.setCreateUserId(123);
+        entity.setCreateTime(timeFormat.format(new Date()));
+        list.add(entity);
+
+        entity = new DicEntity();
+        entity.setId(3);
+        entity.setWord("西岔镇");
+        entity.setType("na");
+        entity.setSepaType("地区词典");
+        entity.setCreateUserId(123);
+        entity.setCreateTime(timeFormat.format(new Date()));
+        list.add(entity);
+
+        entity = new DicEntity();
+        entity.setId(4);
+        entity.setWord("被告人");
+        entity.setType("dsr");
+        entity.setSepaType("标志词词典");
+        entity.setCreateUserId(123);
+        entity.setCreateTime(timeFormat.format(new Date()));
+        list.add(entity);
+        return new Gson().toJson(list);
+    }
+
+    @RequestMapping("/test2")
+    @ResponseBody
+    public String test2() {
+        List<NewWordEntity> list = new ArrayList<>();
+        NewWordEntity entity = new NewWordEntity();
+        entity.setId(1);
+        entity.setWord("居间合同");
+        entity.setCreateTime(timeFormat.format(new Date()));
+        entity.setCreateLocation("a681599a-2d8e-4895-b257-b8e3074c64c8裁定书.txt");
+        entity.setContext("姜善伟与徐钊、涡阳县长建建筑材料有限公司居间合同纠纷再审民事裁定书");
+        entity.setSepaType("n");
+        entity.setRemark("已处理");
+        list.add(entity);
+        return new Gson().toJson(list);
     }
 }
