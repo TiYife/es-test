@@ -143,7 +143,7 @@
       </div>
       <div class="col-lg-12 col-md-12">
         <div class="panel panel-default">
-          <table data-toggle="table" th:attr="data-url='/recommendation?userId='+${userId}" data-show-refresh="true" data-show-toggle="true" data-show-columns="true" data-search="true" data-select-item-name="toolbar1" data-pagination="true" data-sort-name="vmName" data-sort-order="desc" data-show-export="true" id="temp-table">
+          <table data-toggle="table" th:attr="data-url='/list-favorite?userId='+${userId}" data-show-refresh="true" data-show-toggle="true" data-show-columns="true" data-search="true" data-select-item-name="toolbar1" data-pagination="true" data-sort-name="vmName" data-sort-order="desc" data-show-export="true" id="result-table">
             <thead>
             <tr>
               <th data-field="state" data-checkbox="true"></th>
@@ -285,13 +285,15 @@
     $("li").click(function () {
         $(this).next("ol").toggle(200);
     });
+
     function operateFormatter(value, row, index) {
         return [
-            '<button type="button" class="btn btn-info detail show="off""> 详情</button> '+
-            '<button type="button" class="btn btn-info"> 收藏</button> '
+            '<button type="button" class="btn btn-info detail"> 详情</button> '+
+            '<button type="button" class="btn btn-info delete"> 刪除</button> '
         ].join('');
 
     };
+
     function detailFormatter(index, row) {
         var html = [];
         html.push('<div  class="row">');
@@ -319,7 +321,23 @@
             else {
                 $(this).attr("show","off");
                 $('#result-table').find('tr[detail-index=' + index + ']').remove();
-            }}
+            }},
+
+        'click .delete': function (e, value, row, index) {
+            var data={
+                docId:row["docId"]
+            };
+            $.post("/delete-favor",data,function (rdata) {
+                if(rdata=="success")
+                {
+                    alert("刪除成功");
+                    $('#result-table').bootstrapTable('refresh');
+                }
+                else {
+                    alert(rdata);
+                }
+            });
+        }
     };
 </script>
 

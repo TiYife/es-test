@@ -245,10 +245,8 @@
                 $(this).attr("show","off");
                 $('#result-table').find('tr[detail-index=' + index + ']').remove();
             }
-        }
-    };
+        },
 
-    window.operateEvents = {
         'click .recommend': function (e, value, row, index) {
             location.href = "recommend?docId=" + row["docId"];
         }

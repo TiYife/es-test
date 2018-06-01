@@ -224,7 +224,7 @@ public class FileUtil {
     }
 
 
-    public static File unZip(File zipFile, String desDir) throws Exception {
+    public static File unZip(File zipFile, String desDir) throws Exception{
 
         ZipFile zip = new ZipFile(zipFile, Charset.forName(ENCODING));//解决中文文件夹乱码
 
@@ -256,6 +256,7 @@ public class FileUtil {
                 continue;
             }
 
+            try{
             InputStream in = zip.getInputStream(entry);
             FileOutputStream out = new FileOutputStream(saveFile);
             byte[] buf1 = new byte[1024];
@@ -265,6 +266,10 @@ public class FileUtil {
             }
             in.close();
             out.close();
+            }catch (Exception e){
+                continue;
+            }
+
         }
         return pathFile;
     }

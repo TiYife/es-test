@@ -33,6 +33,7 @@ public class SearchController {
     @Autowired
     UserRepository userRepository;
 
+    private int linshi = 123;
     @RequestMapping("/simple-search")
     public String simpleSearchResult(@RequestParam("attr")String attr,
                                      @RequestParam("keyword") String keyword,
@@ -70,11 +71,13 @@ public class SearchController {
     }
 
     @RequestMapping("/favor")
+    @ResponseBody
     public String favor(@RequestParam("docId")String docId, HttpServletRequest request){
         String uId= IdentityUtil.getCookieValue(request,"userId");
-        if(uId==null)    return "not login";
+        if(uId==null || uId.equals("null"))    return "not login";
 
-        int userId = Integer.parseInt(uId);
+       // int userId = Integer.parseInt(uId);
+        int userId = linshi;
         String pwd = IdentityUtil.getCookieValue(request,"userPasswd");
         if(!userRepository.findById(userId).getPassword().equals(pwd))
             return "not login";
@@ -82,12 +85,20 @@ public class SearchController {
         return "success";
     }
 
+    @RequestMapping("/delete-favor")
+    @ResponseBody
+    public String deleteFavor(@RequestParam("docId")String docId, HttpServletRequest request){
+        int userId = linshi;
+        searchService.deleteFavorDoc(userId,docId);
+        return "success";
+    }
+
     @RequestMapping("/favorite")
     public String favorite(Model model,HttpServletRequest request){
         String uId= IdentityUtil.getCookieValue(request,"userId");
-        if(uId==null)    return "not login";
+        if(uId==null || uId.equals("null"))    return "not login";
 
-        int userId = Integer.parseInt(uId);
+        int userId = linshi;// = Integer.parseInt(uId);
         String pwd = IdentityUtil.getCookieValue(request,"userPasswd");
         if(!userRepository.findById(userId).getPassword().equals(pwd))
             return "not login";
