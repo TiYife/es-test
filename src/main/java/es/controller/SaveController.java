@@ -43,14 +43,14 @@ public class SaveController {
 
         int userId = Integer.parseInt(uId);
         String pwd = IdentityUtil.getCookieValue(request,"userPasswd");
-        if(userRepository.findById(userId).getPassword()!=pwd)  return "not login";
-        String suffix = FileUtil.getSuffix(file.getName());
-        if (suffix.equals(".txt"))
+        if(!userRepository.findById(userId).getPassword().equals(pwd))  return "not login";
+        String suffix = FileUtil.getSuffix(file.getOriginalFilename());
+        if (suffix.equals("txt"))
             saveService.uploadAndSave(file,userId);
-        else if(suffix.equals(".rar"))
-            saveService.uploadRar(file,userId);
-        else if(suffix.equals(".zip"))
-            saveService.uploadZip(file,userId);
+        else if(suffix.equals("rar"))
+            saveService.uploadPackage(file,userId);
+        else if(suffix.equals("zip"))
+            saveService.uploadPackage(file,userId);
         else
             return "wrong file type";
         return "success";
@@ -66,6 +66,14 @@ public class SaveController {
     @ResponseBody
     public String delete(String id){
         saveService.deleteDoc(id);
+        //刷新
+        return "success";
+    }
+
+    @RequestMapping("save-all")
+    @ResponseBody
+    public String saveAll(){
+        saveService.autoSave();
         return "success";
     }
 }

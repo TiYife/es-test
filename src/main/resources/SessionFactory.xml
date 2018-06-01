@@ -6,21 +6,9 @@
   <session-factory>
     <property name="connection.url">jdbc:mysql://10.251.254.236:3306/esWeb</property>
     <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
-    <mapping resource="es/entity/jpaEntity/UserEntity.hbm.xml"/>
-      <mapping class="es.entity.jpaEntity.UserEntity"/>
-      <mapping resource="es/entity/jpaEntity/OriDocEntity.hbm.xml"/>
       <mapping class="es.entity.jpaEntity.OriDocEntity"/>
-      <mapping resource="es/entity/jpaEntity/FavoriteEntity.hbm.xml"/>
-      <mapping class="es.entity.jpaEntity.FavoriteEntity"/>
-    <mapping resource="es/entity/jpaEntity/CaseErrorEntity.hbm.xml"/>
-    <mapping class="es.entity.jpaEntity.CaseErrorEntity"/>
-    <mapping resource="es/entity/jpaEntity/DicEntity.hbm.xml"/>
-    <mapping class="es.entity.jpaEntity.DicEntity"/>
-    <mapping resource="es/entity/jpaEntity/DicLogEntity.hbm.xml"/>
-    <mapping class="es.entity.jpaEntity.DicLogEntity"/>
-    <mapping resource="es/entity/jpaEntity/NewWordEntity.hbm.xml"/>
-    <mapping class="es.entity.jpaEntity.NewWordEntity"/>
-    <!-- <property name="connection.username"/> -->
+      <mapping resource="es/entity/jpaEntity/OriDocEntity.hbm.xml"/>
+      <!-- <property name="connection.username"/> -->
     <!-- <property name="connection.password"/> -->
 
     <!-- DB schema will be updated if needed -->

@@ -6,8 +6,8 @@ import java.text.SimpleDateFormat;
  * Created by TYF on 2018/2/26.
  */
 public class Constant {
-    public static final String INDEX_NAME="es_web";
-    //public static final String INDEX_NAME="es";
+    //public static final String INDEX_NAME="es_web";
+    public static final String INDEX_NAME="es";
 
     //文件格式相关
     public static final String ENCODING="GBK";

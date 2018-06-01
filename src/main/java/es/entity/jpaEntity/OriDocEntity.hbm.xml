@@ -29,8 +29,5 @@
         <property name="uploader">
             <column name="uploader" sql-type="int(11)" not-null="true"/>
         </property>
-        <property name="oriDoccol">
-            <column name="ori_doccol" sql-type="varchar(45)" length="45" not-null="true"/>
-        </property>
     </class>
 </hibernate-mapping>

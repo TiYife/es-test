@@ -3,7 +3,7 @@ package es.entity.jpaEntity;
 import javax.persistence.*;
 
 /**
- * Created by TYF on 2018/5/24.
+ * Created by TYF on 2018/6/1.
  */
 @Entity
 @Table(name = "ori_doc", schema = "esWeb", catalog = "")
@@ -16,7 +16,6 @@ public class OriDocEntity {
     private Boolean isSave;
     private Boolean isDel;
     private Integer uploader;
-    private String oriDoccol;
 
     @Id
     @Column(name = "id", nullable = false, length = 100)
@@ -70,21 +69,21 @@ public class OriDocEntity {
 
     @Basic
     @Column(name = "is_save", nullable = true)
-    public Boolean getIsSave() {
+    public Boolean getSave() {
         return isSave;
     }
 
-    public void setIsSave(Boolean save) {
+    public void setSave(Boolean save) {
         isSave = save;
     }
 
     @Basic
     @Column(name = "is_del", nullable = true)
-    public Boolean getIsDel() {
+    public Boolean getDel() {
         return isDel;
     }
 
-    public void setIsDel(Boolean del) {
+    public void setDel(Boolean del) {
         isDel = del;
     }
 
@@ -96,16 +95,6 @@ public class OriDocEntity {
 
     public void setUploader(Integer uploader) {
         this.uploader = uploader;
-    }
-
-    @Basic
-    @Column(name = "ori_doccol", nullable = true, length = 45)
-    public String getOriDoccol() {
-        return oriDoccol;
-    }
-
-    public void setOriDoccol(String oriDoccol) {
-        this.oriDoccol = oriDoccol;
     }
 
     @Override
@@ -123,7 +112,6 @@ public class OriDocEntity {
         if (isSave != null ? !isSave.equals(entity.isSave) : entity.isSave != null) return false;
         if (isDel != null ? !isDel.equals(entity.isDel) : entity.isDel != null) return false;
         if (uploader != null ? !uploader.equals(entity.uploader) : entity.uploader != null) return false;
-        if (oriDoccol != null ? !oriDoccol.equals(entity.oriDoccol) : entity.oriDoccol != null) return false;
 
         return true;
     }
@@ -138,7 +126,6 @@ public class OriDocEntity {
         result = 31 * result + (isSave != null ? isSave.hashCode() : 0);
         result = 31 * result + (isDel != null ? isDel.hashCode() : 0);
         result = 31 * result + (uploader != null ? uploader.hashCode() : 0);
-        result = 31 * result + (oriDoccol != null ? oriDoccol.hashCode() : 0);
         return result;
     }
 }

@@ -29,4 +29,5 @@ public class wordSepaEnity {
     //public String courtSuperior;
     public String content;
     public String courtId;
+    public String keyWord;
 }
