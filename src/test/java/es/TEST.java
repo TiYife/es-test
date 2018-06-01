@@ -134,11 +134,11 @@ public class TEST {
     }
 
     @Test
-    public void testJava()
+    public void testJava11()
     {
         wordSeparateService.NLPTR_Init();
-        wordSeparateService.stringToRead("","E:\\桌面存放\\测试\\errorTest.txt",false);
-        wordSeparateService.multiFileProcessAndSave("E:\\桌面存放\\测试\\20150104","E:\\桌面存放\\测试\\20150104","E:\\桌面存放\\测试2");
+        //wordSeparateService.stringToRead("","E:\\桌面存放\\测试\\errorTest.txt",false);
+        wordSeparateService.multiFileProcessAndSave("E:\\桌面存放\\测试3\\20150104","E:\\桌面存放\\测试3\\20150104","E:\\桌面存放\\测试4");
         //wordSeparateService.NLPTR_Exit();
         //String s=System.getProperty("user.dir");
         /*WordSimilarity.loadGlossary();
@@ -152,20 +152,60 @@ public class TEST {
         wordSeparateService.stringToRead(fileStringPre,"E:\\桌面存放\\测试\\13pre1.txt");*/
         //wordSeparateService.fileProcessAndSave(fileAddress,"E:\\桌面存放\\测试","E:\\桌面存放\\测试2");
     }
+    //结构化处理模块测试
+    @Test
+    public void testJava1()
+    {
+        wordSeparateService.NLPTR_Init();
+        wordSeparateService.multiFileProcessAndSave("E:\\系统测试\\案例元数据\\20150104","E:\\系统测试\\案例元数据\\20150104","E:\\系统测试\\处理结果\\20150104");
+    }
+
+    //关键词提取模块测试
+    @Test
+    public void testJava2()
+    {
+        wordSeparateService.NLPTR_Init();
+        wordSeparateService.multiFileProcessAndSave("E:\\系统测试\\案例元数据\\20150104","E:\\系统测试\\案例元数据\\20150104","E:\\系统测试\\处理结果\\20150104");
+    }
+
+    //语义相似度模块测试
+    @Test
+    public void testJava3()
+    {
+        wordSeparateService.NLPTR_Init();
+        wordSeparateService.multiFileProcessAndSave("E:\\系统测试\\案例元数据\\20150104","E:\\系统测试\\案例元数据\\20150104","E:\\系统测试\\处理结果\\20150104");
+    }
+
+    //高频词组提取测试
+    @Test
+    public void testJava4()
+    {
+        wordSeparateService.NLPTR_Init();
+        wordSeparateService.multiFileProcessAndSave("E:\\系统测试\\案例元数据\\20150104","E:\\系统测试\\案例元数据\\20150104","E:\\系统测试\\处理结果\\20150104");
+    }
 
     @Test
     public void testJavaaa()
     {
-
+        /*String encoding = "utf-8";
+        File file = new File("E:\\测试\\need.txt");
+        Long filelength = file.length();
+        byte[] filecontent = new byte[filelength.intValue()];
+            FileInputStream in = new FileInputStream(file);
+            in.read(filecontent);
+            in.close();
+        new String(filecontent, encoding);*/
         String s=wordSeparateService.readToString("E:\\测试\\need.txt");
         String[] nameList=s.split("\r\n");
         for(int i=0;i<nameList.length;i++)
         {
-
-            //Files.copy(nameList[i].toPath(), dest.toPath());
+            File file = new File(nameList[i]);
+            File file2 = new  File("E:\\桌面存放\\测试3\\"+nameList[i].substring(11,nameList[i].length()));
+            String news="E:\\桌面存放\\测试3\\"+nameList[i].substring(11,nameList[i].length());
+            wordSeparateService.createPreDirectory(news);
+            //file.renameTo(file2);
+            file.renameTo(file2);
         }
-
-
     }
 
     @Test

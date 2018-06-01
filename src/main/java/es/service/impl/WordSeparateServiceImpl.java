@@ -482,6 +482,10 @@ public class WordSeparateServiceImpl implements WordSeparateService {
 
                 }
             }
+            //TODO 关键字重写
+            String keyword=instance.NLPIR_GetKeyWords(wordSepaEnity1.content,10,false);
+            wordSepaEnity1.keyWord=keyword;
+
             //TODO 继续添加其他属性
             if(ayResult.equals(""))
                 errorDetail+="\n无法获取案由";
@@ -573,6 +577,7 @@ public class WordSeparateServiceImpl implements WordSeparateService {
         root.setAttribute("裁判年份", wEnity.trialYear==null ? "" : wEnity.trialYear.toString());
         root.setAttribute("DocContent", wEnity.content==null ? "" : wEnity.content.toString());
         root.setAttribute("法院ID", wEnity.courtId==null ? "" : wEnity.courtId.toString());
+        root.setAttribute("关键字", wEnity.keyWord==null ? "" : wEnity.keyWord.toString());
         document.setRootElement(root);
         XMLOutputter outputter=new XMLOutputter();
         outputter.setFormat(Format.getPrettyFormat());//设置文本格式
@@ -589,6 +594,7 @@ public class WordSeparateServiceImpl implements WordSeparateService {
 
     public String readToString(String fileName) {
         String encoding = Constant.ENCODING;
+        //String encoding = "utf-8";
         File file = new File(fileName);
         Long filelength = file.length();
         byte[] filecontent = new byte[filelength.intValue()];
