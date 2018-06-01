@@ -12,34 +12,18 @@ import java.io.Serializable;
 @Document(indexName = Constant.INDEX_NAME, type = "law")
 public class DocEntity implements Serializable{
     @Id
-    private String docId;
-    private String caseName;
-    private String courtName;
-    private String courtLevel;
-    private String courtProvince;
-    private String courtCity;
-    private String courtCountry;
-    private String courtRegion;
-    private boolean isExpUnit;//是否是试点法院
-    private String courtType;
-    private String caseType;
-    private String trialProcedure;//审批程序
-    private String docType;
-    private String caseNo;
-    private String caseCause;
-    private String client;
-    private String judge;
-    private String clerk;
-    private String trialDate;
-    private String trialMonth;
-    private String trialYear;
-    private String courtLevelOne;
-    private String courtLevelTwo;
-    private String courtLevelThree;
-    private String courtLevelFour;
-    private String courtSuperior;
-    private String content;
-    private String courtId;
+    public String docId;
+    public String caseName;
+    public String courtName;
+    public String courtProvince;
+    public String courtCountry;
+    public String courtRegion;
+    public String caseType;
+    public String trialProcedure;//审批程序
+    public String docType;
+    public String caseNo;
+    public String caseCause;
+    public String client;
 
     public String getDocId() {
         return docId;
@@ -73,14 +57,6 @@ public class DocEntity implements Serializable{
         this.courtProvince = courtProvince;
     }
 
-    public String getCourtCity() {
-        return courtCity;
-    }
-
-    public void setCourtCity(String courtCity) {
-        this.courtCity = courtCity;
-    }
-
     public String getCourtCountry() {
         return courtCountry;
     }
@@ -95,22 +71,6 @@ public class DocEntity implements Serializable{
 
     public void setCourtRegion(String courtRegion) {
         this.courtRegion = courtRegion;
-    }
-
-    public boolean isExpUnit() {
-        return isExpUnit;
-    }
-
-    public void setExpUnit(boolean expUnit) {
-        isExpUnit = expUnit;
-    }
-
-    public String getCourtType() {
-        return courtType;
-    }
-
-    public void setCourtType(String courtType) {
-        this.courtType = courtType;
     }
 
     public String getCaseType() {
@@ -185,62 +145,6 @@ public class DocEntity implements Serializable{
         this.trialDate = trialDate;
     }
 
-    public String getCourtLevelOne() {
-        return courtLevelOne;
-    }
-
-    public void setCourtLevelOne(String courtLevelOne) {
-        this.courtLevelOne = courtLevelOne;
-    }
-
-    public String getCourtLevelTwo() {
-        return courtLevelTwo;
-    }
-
-    public void setCourtLevelTwo(String courtLevelTwo) {
-        this.courtLevelTwo = courtLevelTwo;
-    }
-
-    public String getCourtLevelThree() {
-        return courtLevelThree;
-    }
-
-    public void setCourtLevelThree(String courtLevelThree) {
-        this.courtLevelThree = courtLevelThree;
-    }
-
-    public String getCourtLevelFour() {
-        return courtLevelFour;
-    }
-
-    public void setCourtLevelFour(String courtLevelFour) {
-        this.courtLevelFour = courtLevelFour;
-    }
-
-    public String getCourtSuperior() {
-        return courtSuperior;
-    }
-
-    public void setCourtSuperior(String courtSuperior) {
-        this.courtSuperior = courtSuperior;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public String getCourtLevel() {
-        return courtLevel;
-    }
-
-    public void setCourtLevel(String courtLevel) {
-        this.courtLevel = courtLevel;
-    }
-
     public String getTrialMonth() {
         return trialMonth;
     }
@@ -257,6 +161,14 @@ public class DocEntity implements Serializable{
         this.trialYear = trialYear;
     }
 
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
     public String getCourtId() {
         return courtId;
     }
@@ -264,4 +176,22 @@ public class DocEntity implements Serializable{
     public void setCourtId(String courtId) {
         this.courtId = courtId;
     }
+
+    public String getKeyWord() {
+        return keyWord;
+    }
+
+    public void setKeyWord(String keyWord) {
+        this.keyWord = keyWord;
+    }
+
+    public String judge;
+    public String clerk;
+    public String trialDate;
+    public String trialMonth;
+    public String trialYear;
+    public String content;
+    public String courtId;
+    public String keyWord;
+
 }

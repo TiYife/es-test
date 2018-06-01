@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.data.elasticsearch.core.query.IndexQuery;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -48,23 +49,31 @@ public class SaveServiceImpl implements SaveService {
     private String xmlLocation=Constant.xmlLocation;
     private String newDocLocation=Constant.newDocLocation+Constant.dateFormat.format(new Date())+"\\";
 
+    public void uploadPackage(MultipartFile multipartFile, int userId){
+        File file = FileUtil.uploadFile(multipartFile,newDocLocation);
+        deCompress(file,userId);
+    }
 
-    @Override
-    public boolean uploadZip(MultipartFile multipartFile, int userId){
-
-        //上传
-        File rar = FileUtil.uploadFile(multipartFile,newDocLocation);
-
+    @Async
+    private boolean deCompress(File pack, int userId){
         //解压
         try {
-            FileUtil.unZip(rar,newDocLocation);
+            String suffix = FileUtil.getSuffix(pack.getName());
+            if(suffix.equals("zip"))
+                FileUtil.unZip(pack,newDocLocation);
+            else if(suffix.equals("rar"))
+                FileUtil.unRar(pack,newDocLocation);
+            else
+                return false;
         } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
 
+        pack.delete();
+
         //遍历
-        File file = new File(newDocLocation+FileUtil.getFileName(rar.getName()));
+        File file = new File(newDocLocation+FileUtil.getFileName(pack.getName()));
         List<String> fileList = new ArrayList<>();
         try {
             FileUtil.listFile(file,fileList);
@@ -74,83 +83,35 @@ public class SaveServiceImpl implements SaveService {
         }
 
         //记录
-        File f ;
-        OriDocEntity entity;
         for (String s:fileList
                 ) {
-            f = new File(s);
-            entity = new OriDocEntity();
-            entity.setId(UUID.fromString(FileUtil.getFileName(f.getName())).toString());
-            entity.setName(FileUtil.getFileName(f.getName()));
-            entity.setUploader(userId);
-            entity.setUpTime(timeFormat.format(new Date()));
-            entity.setLocation(f.getAbsolutePath());
-            oriDocRepository.save(entity);
+            recordOri(s,userId);
         }
         return true;
     }
-
-    @Override
-    public boolean uploadRar(MultipartFile multipartFile, int userId){
-        //上传
-        File rar = FileUtil.uploadFile(multipartFile,newDocLocation);
-
-        //解压
-        try {
-            FileUtil.unRar(rar,newDocLocation);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-
-        //遍历
-        File file = new File(newDocLocation+FileUtil.getFileName(rar.getName()));
-        List<String> fileList = new ArrayList<>();
-        try {
-            FileUtil.listFile(file,fileList);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
-
-        //记录
-        File f ;
-        OriDocEntity entity;
-        for (String s:fileList
-             ) {
-            f = new File(s);
-            entity = new OriDocEntity();
-            entity.setId(UUID.fromString(FileUtil.getFileName(f.getName())).toString());
-            entity.setName(FileUtil.getFileName(f.getName()));
-            entity.setUploader(userId);
-            entity.setUpTime(timeFormat.format(new Date()));
-            entity.setLocation(f.getAbsolutePath());
-            oriDocRepository.save(entity);
-        }
-        return true;
-    }
-
 
     @Override
     public void uploadAndSave(MultipartFile multipartFile, int userId){
        //todo
         File up = FileUtil.uploadFile(multipartFile,newDocLocation);
         //分词
-        File save = wordSeparateService.fileProcessAndSave(up.getAbsolutePath(),newDocLocation,xmlLocation);
+        File save = wordSeparateService.fileProcessAndSave(up.getAbsolutePath(),Constant.newDocLocation,xmlLocation);
 
         //转移
         String saveLocation = FileUtil.fileMappingMove(up.getAbsolutePath(),newDocLocation,originalDocLocation);
 
         //索引
         docRepository.save(ConvertUtil.xmlToEntity(save));
+        save.delete();
 
         //记录
         OriDocEntity entity = new OriDocEntity();
         entity.setId(FileUtil.getFileName(up.getName()));
-        entity.setName(FileUtil.getFileName(multipartFile.getName()));
+        entity.setName(FileUtil.getFileName(multipartFile.getOriginalFilename()));
         entity.setLocation(saveLocation);
         entity.setUpTime(timeFormat.format(new Date()));
         entity.setUploader(userId);
+        oriDocRepository.save(entity);
     }
 
     @Override
@@ -162,7 +123,7 @@ public class SaveServiceImpl implements SaveService {
         }
         try {
             wordSeparateService.multiFileProcessAndSave(newDocLocation,newDocLocation,xmlLocation);
-            FileUtil.dirMappingMove(newDocLocation,newDocLocation,originalDocLocation);
+            FileUtil.dirMappingMove(newDocLocation,Constant.newDocLocation,originalDocLocation);
             saveXml(xmlLocation);
             FileUtil.delAllFile(xmlLocation);
         } catch (Exception e) {
@@ -173,8 +134,9 @@ public class SaveServiceImpl implements SaveService {
         return true;
     }
 
+    @Override
     @Scheduled(cron = "0 30 0 * * ? ")
-    //@Scheduled(cron = "0 0/2 * * * ? ")
+    //@Scheduled(cron = "0 0/5 * * * ? ")
     public void autoSave(){
         saveAllDoc();
         File file = new File(newDocLocation);
@@ -187,7 +149,7 @@ public class SaveServiceImpl implements SaveService {
 
     @Override
     public List<OriDocEntity> listDocs(){
-        return oriDocRepository.findAll();
+        return oriDocRepository.findAll();//todo
     }
     @Override
     public void deleteDoc(String docId){
@@ -223,8 +185,9 @@ public class SaveServiceImpl implements SaveService {
             if(oriDocEntity==null)
                 LOGGER.info(FileUtil.getFileName(docName)+"无上传记录");
             else {
-                oriDocEntity.setIsSave(true);
+                oriDocEntity.setSave(true);
                 oriDocEntity.setSaveTime(timeFormat.format(new Date()));
+                oriDocRepository.save(oriDocEntity);
             }
         }
     }
@@ -261,31 +224,21 @@ public class SaveServiceImpl implements SaveService {
         LOGGER.info("索引完成");
     }
 
-    //从数据库中找到还未索引的文件，将他们的路径创建成list，便于上传
-//    private List<String> listNewXml(){
-//        List<String> list =new ArrayList<String>();
-//        List<XmlEntity> xmlEntities= xmlRepository.findByUpAndDel(false,false);
-//        for (XmlEntity xmlEntity:xmlEntities
-//                ) {
-//            list.add(xmlEntity.getLocation());
-//        }
-//        return list;
-//    }
-
-//    //将所有文件信息记录到数据库，返回文件的list
-//    private String recordFile(String fileLocation) throws IOException {
-//        File file = new File(fileLocation);
-//        List<String> list = new ArrayList<String>();
-//        if(!listFile(file,list)){
-//            OriDocEntity entity = new OriDocEntity();
-//            File f;
-//            for (String location: list
-//                 ) {
-//                f = new File(location);
-//            }
-//        }
-//
-//    }
+    private void recordOri(String s, int userId){
+        File f ;
+        OriDocEntity entity;
+        f = new File(s);
+        entity = new OriDocEntity();
+        entity.setName(FileUtil.getFileName(f.getName()));
+        String uuid = UUID.randomUUID().toString();
+        uuid= uuid.replaceAll("-", "");
+        entity.setId(uuid);
+        FileUtil.reName(f,uuid);
+        entity.setUploader(userId);
+        entity.setUpTime(timeFormat.format(new Date()));
+        entity.setLocation(f.getAbsolutePath());
+        oriDocRepository.save(entity);
+    }
 
 
 }

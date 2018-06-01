@@ -1,10 +1,10 @@
 package es.Util;
 
 import com.github.junrar.Archive;
-import es.entity.jpaEntity.UpLogEntity;
 import es.service.impl.SearchServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotNull;
@@ -16,7 +16,6 @@ import java.util.zip.ZipFile;
 
 
 import static es.Constant.ENCODING;
-import static es.Constant.timeFormat;
 import static es.Constant.suffixList;
 
 /**
@@ -79,6 +78,14 @@ public class FileUtil {
             }
         }
         return fileName;
+    }
+
+    public static void reName(File file, String newName){
+        String oldPath = file.getAbsolutePath();
+        String suffix = getSuffix(oldPath);
+        String  parent = oldPath.substring(0, oldPath.lastIndexOf('\\')+1);
+        String newPath=parent+newName+"."+suffix;
+        file.renameTo(new File(newPath));
     }
 
     //删除文件夹
@@ -168,7 +175,7 @@ public class FileUtil {
 
         String oldName = multipartFile.getOriginalFilename();
         if (!Objects.equals(oldName, "")) {
-            UUID uuid = UUID.fromString(getFileName(oldName));
+            UUID uuid = UUID.randomUUID();
 //            TODO IMPORTANT: 获取文件名后缀带点  example:   suffix='.docx'
             String suffix = oldName.substring(oldName.lastIndexOf("."));
             String newName = uuid.toString().replaceAll("-", "");
@@ -215,6 +222,8 @@ public class FileUtil {
 
     }
 
+
+    @Async
     public static void unZip(File zipFile, String desDir) throws Exception {
 
         ZipFile zip = new ZipFile(zipFile, Charset.forName(ENCODING));//解决中文文件夹乱码
@@ -260,6 +269,7 @@ public class FileUtil {
         return;
     }
 
+    @Async
     public static void unRar(File rarFile, String desDir) throws Exception {
 
         Archive archive = new Archive(rarFile);
