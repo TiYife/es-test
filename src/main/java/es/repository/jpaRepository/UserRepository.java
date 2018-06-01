@@ -9,4 +9,6 @@ public interface UserRepository extends CrudRepository<UserEntity,Integer> {
     UserEntity findById(int id);
 
     List<UserEntity> findAll();
+
+    List<UserEntity> findByRole(int i);
 }

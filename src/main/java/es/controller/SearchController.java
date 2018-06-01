@@ -1,8 +1,10 @@
 package es.controller;
 
 import com.google.gson.Gson;
+import es.Util.IdentityUtil;
 import es.entity.esEntity.DocEntity;
 import es.repository.esRepository.DocRepository;
+import es.repository.jpaRepository.UserRepository;
 import es.service.SearchService;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import java.net.URLEncoder;
 import java.util.List;
 
@@ -27,6 +30,8 @@ public class SearchController {
     SearchService searchService;
     @Autowired
     DocRepository docRepository;
+    @Autowired
+    UserRepository userRepository;
 
     @RequestMapping("/simple-search")
     public String simpleSearchResult(@RequestParam("attr")String attr,
@@ -65,20 +70,32 @@ public class SearchController {
     }
 
     @RequestMapping("/favor")
-    public String favor(@RequestParam("docId")String docId){
-        int userId = 123;//todo
+    public String favor(@RequestParam("docId")String docId, HttpServletRequest request){
+        String uId= IdentityUtil.getCookieValue(request,"userId");
+        if(uId==null)    return "not login";
+
+        int userId = Integer.parseInt(uId);
+        String pwd = IdentityUtil.getCookieValue(request,"userPasswd");
+        if(!userRepository.findById(userId).getPassword().equals(pwd))
+            return "not login";
         searchService.favorDoc(userId,docId);
         return "success";
     }
 
     @RequestMapping("/favorite")
-    public String favorite(Model model){
-        int userId = 123;//todo
+    public String favorite(Model model,HttpServletRequest request){
+        String uId= IdentityUtil.getCookieValue(request,"userId");
+        if(uId==null)    return "not login";
+
+        int userId = Integer.parseInt(uId);
+        String pwd = IdentityUtil.getCookieValue(request,"userPasswd");
+        if(!userRepository.findById(userId).getPassword().equals(pwd))
+            return "not login";
         model.addAttribute("userId",userId);
         return "favorites";
     }
 
-    @RequestMapping("favorite-list")
+    @RequestMapping("list-favorite")
     @ResponseBody
     public String favoriteList(@RequestParam("userId")int userId){
         return new Gson().toJson(searchService.listFavorDocs(userId));

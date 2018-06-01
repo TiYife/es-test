@@ -39,16 +39,16 @@
                         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>批量删除词典
                     </a>
                 </div>
-                <table data-toggle="table" data-url="/multi-search-result2" data-show-refresh="true" data-show-toggle="true" data-show-columns="true" data-search="true" data-select-item-name="toolbar1" data-pagination="true" data-sort-order="desc" data-show-export="true" id="word-table">
+                <table data-toggle="table" data-url="/list-new-words" data-show-refresh="true" data-show-toggle="true" data-show-columns="true" data-search="true" data-select-item-name="toolbar1" data-pagination="true" data-sort-order="desc" data-show-export="true" id="word-table">
                     <thead>
                     <tr>
                         <th data-formatter="idFormatter" data-field="id">编号</th>
                         <th data-field="word">新词</th>
-                        <th data-field="Create_time">发现时间</th>
-                        <th data-field="Create_location">发现文件位置</th>
+                        <th data-field="createTime">发现时间</th>
+                        <th data-field="createLocation">发现文件位置</th>
                         <th data-field="context">上下文语境</th>
-                        <th data-field="Sepa_type">分词词性</th>
-                        <th data-field="Process_flag">处理结果</th>
+                        <th data-field="sepaType">分词词性</th>
+                        <th data-field="processFlag">处理结果</th>
                         <th data-field="remark">备注</th>
                         <th data-formatter="operateFormatter" data-events='operateEvents'>操作</th>
                     </tr>
