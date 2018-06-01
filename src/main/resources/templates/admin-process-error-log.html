@@ -3,8 +3,89 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+
+    <script src="assets/plugins/jquery-1.10.2.js"></script>
+    <script src="assets/plugins/jquery.cookie.js"></script>
+
+    <script src="assets/plugins/table/bootstrap.js"></script>
+    <script src="assets/plugins/table/bootstrap-table.js"></script>
+    <script src="assets/plugins/table/bootstrap-table-export.js"></script>
+    <link href="assets/css/bootstrap-table.css" type="text/css" rel="stylesheet"/>
+    <link href="assets/css/bootstrap.css" type="text/css" rel="stylesheet"/>
+
+
+    <script src="assets/plugins/bootstrap-fileinput/js/fileinput.min.js"></script>
+    <script src="assets/plugins/bootstrap-fileinput/js/zh.js"></script>
+    <script src="assets/plugins/gy-alert.js"></script>
+    <link href="assets/plugins/bootstrap-fileinput/css/fileinput.min.css" rel="stylesheet">
+    <link href="assets/plugins/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet">
 </head>
 <body>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <table data-toggle="table" data-url="/multi-search-result2" data-show-refresh="true" data-show-toggle="true" data-show-columns="true" data-search="true" data-select-item-name="toolbar1" data-pagination="true" data-sort-order="desc" data-show-export="true" id="user-table">
+                    <thead>
+                    <tr>
+                        <th data-field="id">编号</th>
+                        <th data-field="error_type">错误类型</th>
+                        <th data-field="error_message">错误信息</th>
+                        <th data-field="error_location">出错位置</th>
+                        <th data-field="error_time">出错时间</th>
+                        <th data-field="upload_id">上传批次</th>
+                        <th data-formatter="operateFormatter" data-events='operateEvents'>操作</th>
+                    </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+</div><!--/.row-->
+
+
+
+<div class="modal fade" id="errorDetailModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="margin-top: 130px;width: 400px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" style="text-align: center">
+                    错误详情
+                </h4>
+            </div>
+            <div class="modaldy" style="text-align: center;padding: 0px 55px">
+
+                <div class="col-sm-12" style="margin-top: 25px;text-align: center">
+                    <pre id="error-detail-pre">错误详情</pre>
+                </div>
+                <div style="clear: both"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">确定</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+
+<script>
+
+    function operateFormatter(value, row, index) {
+        return [
+            '<button type="button" class="btn btn-info detail"> 详情</button> '
+        ].join('');
+
+    };
+
+    window.operateEvents = {
+        'click .edit': function (e, value, row, index) {
+            $("#error-detail-pre").text("");
+            $("#errorDetailModal").modal("show");
+        }
+    };
+
+</script>
 
 </body>
 </html>
