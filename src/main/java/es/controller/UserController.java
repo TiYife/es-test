@@ -39,7 +39,7 @@ public class UserController {
             if(userPasswd.equals(user.getPassword()))
             {
                 session.setAttribute("user", user);
-                return "success:"+user.getRole()+user.getUserName();
+                return "success:"+user.getRole()+user.getId();
             }
             else
             {

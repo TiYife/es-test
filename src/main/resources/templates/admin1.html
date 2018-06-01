@@ -344,8 +344,8 @@
             $.post("/uLogin",data,function (rdata) {
                 if(rdata.startsWith( "success:"))
                 {
-                    $.cookie("userId",$("#login-username-input").val(), { expires: 1 });
-                    $.cookie("userName",rdata.substring(8), { expires: 1 });
+                    $.cookie("userId",rdata.substring(8), { expires: 1 });
+                    $.cookie("userName",$("#login-username-input").val(), { expires: 1 });
                     $.cookie("userPasswd",$("#login-password-input").val(), { expires: 1 });
                     $("#loginModal").modal("hide");
                     $("#username-a").text(rdata.substring(8));
