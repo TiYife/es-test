@@ -27,12 +27,12 @@ public class PageController {
 
     @RequestMapping("/admin")
     public String toAdmin(){
-        return "admin";
+        return "admin1";
     }
 
     @RequestMapping("/advanced-search")
     public String toAdvancedSearch(){
-        return "advanced-search";
+        return "advanced-search1";
     }
 
     @RequestMapping("/favorites")
