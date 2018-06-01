@@ -16,8 +16,10 @@
 
     <script src="assets/plugins/bootstrap-fileinput/js/fileinput.min.js"></script>
     <script src="assets/plugins/bootstrap-fileinput/js/zh.js"></script>
+    <script src="assets/plugins/bootstrap-timepicker/js/bootstrap-timepicker.js"></script>
     <script src="assets/plugins/gy-alert.js"></script>
     <link href="assets/plugins/bootstrap-fileinput/css/fileinput.min.css" rel="stylesheet">
+    <link href="assets/plugins/bootstrap-timepicker/css/bootstrap-timepicker.css" rel="stylesheet">
     <link href="assets/plugins/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet">
 </head>
 <body>
@@ -27,20 +29,29 @@
         <input id="input-id" type="file" multiple data-preview-file-type="text" name="file">
 
     </div>
-    <div class="col-lg-12">
+    <div class="col-sm-12" style="margin-top: 10px;padding-left: 30px">
+        <label style="display: inline-block">定时更新状态：</label>
+        <p style="display: inline-block;color: green">开启</p>
+        <button class="btn btn-info" style="margin-left: 30px">开启定时更新</button>
+
+    </div>
+    <div class="col-sm-12"style="margin-top: 10px;padding-left: 30px">
+        <label style="display: inline-block">设置自动更新时间：</label>
+        <input type="text" readonly="readonly" id="monday_s" class="form-control timepicker timepicker-default startTime" style="width: 300px;display: inline-block;cursor: pointer">
+        <label style="display: inline-block;margin-left: 50px" >设置自动更新频率：</label>
+        <input class="form-control" style="width: 300px;display: inline-block"/>
+        <p style="display: inline-block;">天</p>
+    </div>
+    <div class="col-lg-12"style="margin-top: 10px">
         <div class="panel panel-default">
             <div class="panel-body">
                 <table data-toggle="table" data-url="/multi-search-result2" data-show-refresh="true" data-show-toggle="true" data-show-columns="true" data-search="true" data-select-item-name="toolbar1" data-pagination="true" data-sort-order="desc" data-show-export="true" id="word-table">
                     <thead>
                     <tr>
-                        <th data-formatter="idFormatter" data-field="id">编号</th>
-                        <th data-field="word">词组</th>
-                        <th data-field="type">类型</th>
-                        <th data-field="sepa_type">分词词性</th>
-                        <th data-field="parent_id"  data-visible="false">父级编号</th>
-                        <th data-field="create_time">创建时间</th>
-                        <th data-field="create_user_id">创建人编号</th>
-                        <th data-field="create_id">词典导入编号</th>
+                        <th data-field="id">编号</th>
+                        <th data-field="word">上传时间</th>
+                        <th data-field="type">处理时间</th>
+                        <th data-field="sepa_type">处理状态</th>
                         <th data-field="remark">备注</th>
                         <th data-formatter="operateFormatter" data-events='operateEvents'>操作</th>
                     </tr>
@@ -142,70 +153,71 @@
         //alert("Initial pre-upload message!");
     });
 
+    $('.timepicker').timepicker({
+        defaultTime:'9:00',
+        showMeridian:false,
+    });
+
     function operateFormatter(value, row, index) {
         return [
-            '<button type="button" class="btn btn-info edit"> 修改</button> '+
+            '<button type="button" class="btn btn-info start"> 开始处理</button> '+
             '<button type="button" class="btn btn-danger delete"> 删除</button> '
         ].join('');
 
     };
-    function idFormatter(index, row) {
-        var html = [];
-        html.push(''+(index+1));
-
-        return html.join('');
-    }
     window.operateEvents = {
-        'click .detail': function (e, value, row, index) {
-            var html = [];
-            html.push('<div  class="row">');
-            html.push('<div class="col-md-12">');
-            html.push(''+row["content"]+'')
-            html.push('</div>');
-            html.push('</div>');
-            var coln = $('#result-table').bootstrapTable('getVisibleColumns').length;
-            $('#result-table').find('tr[data-index='+index+']').after('<tr class="detail-view" detail-index="'+index+'"><td colspan="'+coln+'">'+html.join('')+'</td></tr>');
+        'click .start': function (e, value, row, index) {
+            $.gyAlert({
+                title:"开始处理",
+                contentText:"即将对该次上传进行结构化处理和导入，确定操作吗",
+                confirm:function () {
+                    //点确定之后的操作
+                    $.post("",{id:row["id"]},function (rdata) {
+                        if (rdata == "success") {
+                            $.gyAlert({
+                                title: "操作成功",
+                                contentText: "正在进行结构化处理和导入，该过程可能会花费比较长的时间，请耐心等候"
+                            });
+                            $('#user-table').bootstrapTable('refresh', { url: '/Teacher/getAssistant' });
+
+                        }
+                        else {
+                            $.gyAlert({
+                                title: "操作失败",
+                                contentText: "处理失败 " + rdata
+                            })
+                        }
+                    })
+                }
+            })
+        },
+        'click .start': function (e, value, row, index) {
+            $.gyAlert({
+                title:"确认删除",
+                contentText:"即将删除该批次导入的所有数据，您可能因此丢失重要的数据，确定操作吗",
+                confirm:function () {
+                    //点确定之后的操作
+                    $.post("",{id:row["id"]},function (rdata) {
+                        if (rdata == "success") {
+                            $.gyAlert({
+                                title: "操作成功",
+                                contentText: "正在进行删除，该过程可能会花费比较长的时间，请耐心等候"
+                            });
+                            $('#user-table').bootstrapTable('refresh', { url: '/Teacher/getAssistant' });
+
+                        }
+                        else {
+                            $.gyAlert({
+                                title: "操作失败",
+                                contentText: "处理失败 " + rdata
+                            })
+                        }
+                    })
+                }
+            })
         }
     };
 
-    function batchDelete() {
-        var $table = $('#word-table');
-        // alert('getSelections: ' + JSON.stringify($table.bootstrapTable('getSelections')));
-        var obj = $table.bootstrapTable('getSelections');
-        //alert(JSON.stringify($('#edit-vm-table').bootstrapTable('getData')));
-        if (obj.length < 1) {
-            alert("请先选择要删除的条目！");
-        }
-        else {
-            var data = new Array();
-            for (var i = 0 ; i < obj.length ; i++) {
-                data.push(obj[id]);
-            }
-            $.post("",data,function (rdata) {
-                if(rdata.startsWith("success")){
-                    $.gyAlert({
-                        title:"删除成功",
-                        contentText:"已成功删除"+rdata.substring(8)+"条词组",
-                        confirm:function () {
-                            //点确定之后的操作
-                        }
-                    });
-                }
-                else {
-                    $.gyAlert({
-                        title:"删除失败",
-                        contentText:"删除失败，"+rdata,
-                        confirm:function () {
-                            //点确定之后的操作
-                        }
-                    });
-                }
-            })
-
-
-
-        }
-    }
 </script>
 
 </body>
