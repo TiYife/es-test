@@ -3,6 +3,7 @@ package es.controller;
 import com.google.gson.Gson;
 import es.entity.esEntity.DocEntity;
 import es.entity.jpaEntity.DicEntity;
+import es.entity.jpaEntity.NewWordEntity;
 import es.entity.word.Primitive;
 import es.entity.word.WordSimilarity;
 import es.repository.esRepository.DocRepository;
@@ -239,6 +240,22 @@ public class TestController {
         entity.setSepaType("标志词词典");
         entity.setCreateUserId(123);
         entity.setCreateTime(timeFormat.format(new Date()));
+        list.add(entity);
+        return new Gson().toJson(list);
+    }
+
+    @RequestMapping("/test2")
+    @ResponseBody
+    public String test2() {
+        List<NewWordEntity> list = new ArrayList<>();
+        NewWordEntity entity = new NewWordEntity();
+        entity.setId(1);
+        entity.setWord("居间合同");
+        entity.setCreateTime(timeFormat.format(new Date()));
+        entity.setCreateLocation("a681599a-2d8e-4895-b257-b8e3074c64c8裁定书.txt");
+        entity.setContext("姜善伟与徐钊、涡阳县长建建筑材料有限公司居间合同纠纷再审民事裁定书");
+        entity.setSepaType("n");
+        entity.setRemark("已处理");
         list.add(entity);
         return new Gson().toJson(list);
     }
