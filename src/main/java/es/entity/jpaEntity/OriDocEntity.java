@@ -11,10 +11,11 @@ public class OriDocEntity {
     private String id;
     private String name;
     private String location;
+    private String xmlLocation;
     private String upTime;
     private String saveTime;
-    private Boolean isSave;
-    private Boolean isDel;
+    private Byte isSave;
+    private Byte isDel;
     private Integer uploader;
 
     @Id
@@ -48,6 +49,16 @@ public class OriDocEntity {
     }
 
     @Basic
+    @Column(name = "xml_location", nullable = true, length = 200)
+    public String getXmlLocation() {
+        return xmlLocation;
+    }
+
+    public void setXmlLocation(String xmlLocation) {
+        this.xmlLocation = xmlLocation;
+    }
+
+    @Basic
     @Column(name = "up_time", nullable = false, length = 45)
     public String getUpTime() {
         return upTime;
@@ -69,22 +80,22 @@ public class OriDocEntity {
 
     @Basic
     @Column(name = "is_save", nullable = true)
-    public Boolean getSave() {
+    public Byte getIsSave() {
         return isSave;
     }
 
-    public void setSave(Boolean save) {
-        isSave = save;
+    public void setIsSave(Byte isSave) {
+        this.isSave = isSave;
     }
 
     @Basic
     @Column(name = "is_del", nullable = true)
-    public Boolean getDel() {
+    public Byte getIsDel() {
         return isDel;
     }
 
-    public void setDel(Boolean del) {
-        isDel = del;
+    public void setIsDel(Byte isDel) {
+        this.isDel = isDel;
     }
 
     @Basic
@@ -107,6 +118,7 @@ public class OriDocEntity {
         if (id != null ? !id.equals(entity.id) : entity.id != null) return false;
         if (name != null ? !name.equals(entity.name) : entity.name != null) return false;
         if (location != null ? !location.equals(entity.location) : entity.location != null) return false;
+        if (xmlLocation != null ? !xmlLocation.equals(entity.xmlLocation) : entity.xmlLocation != null) return false;
         if (upTime != null ? !upTime.equals(entity.upTime) : entity.upTime != null) return false;
         if (saveTime != null ? !saveTime.equals(entity.saveTime) : entity.saveTime != null) return false;
         if (isSave != null ? !isSave.equals(entity.isSave) : entity.isSave != null) return false;
@@ -121,6 +133,7 @@ public class OriDocEntity {
         int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (location != null ? location.hashCode() : 0);
+        result = 31 * result + (xmlLocation != null ? xmlLocation.hashCode() : 0);
         result = 31 * result + (upTime != null ? upTime.hashCode() : 0);
         result = 31 * result + (saveTime != null ? saveTime.hashCode() : 0);
         result = 31 * result + (isSave != null ? isSave.hashCode() : 0);

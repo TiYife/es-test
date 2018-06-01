@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="es.entity.jpaEntity.UpLogEntity" table="up_log" schema="esWeb">
+        <id name="id">
+            <column name="id" sql-type="varchar(50)" length="50"/>
+        </id>
+        <property name="fileName">
+            <column name="file_name" sql-type="varchar(100)" length="100"/>
+        </property>
+        <property name="newName">
+            <column name="new_name" sql-type="varchar(200)" length="200"/>
+        </property>
+        <property name="uploader">
+            <column name="uploader" sql-type="int(11)"/>
+        </property>
+        <property name="upTime">
+            <column name="up_time" sql-type="varchar(45)" length="45"/>
+        </property>
+        <property name="location">
+            <column name="location" sql-type="varchar(200)" length="200"/>
+        </property>
+        <property name="isSave">
+            <column name="is_save" sql-type="tinyint(4)" not-null="true"/>
+        </property>
+        <property name="isDel">
+            <column name="is_del" sql-type="tinyint(4)" not-null="true"/>
+        </property>
+        <property name="saveTime">
+            <column name="save_time" sql-type="varchar(45)" length="45" not-null="true"/>
+        </property>
+        <property name="delTime">
+            <column name="del_time" sql-type="varchar(45)" length="45" not-null="true"/>
+        </property>
+    </class>
+</hibernate-mapping>

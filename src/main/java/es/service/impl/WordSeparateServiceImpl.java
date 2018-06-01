@@ -257,7 +257,7 @@ public class WordSeparateServiceImpl implements WordSeparateService {
 
     }
 
-    public File fileProcessAndSave(String fileAddress, String fileAddressHead, String saveAddress)
+    public String fileProcessAndSave(String fileAddress, String fileAddressHead, String saveAddress)
     {
         try {
             if(NLPTR_Init()!=1) throw new Exception( "分词程序初始化失败");
@@ -497,7 +497,7 @@ public class WordSeparateServiceImpl implements WordSeparateService {
                 throw new Exception( "存储地址错误");
             testA(fileAddress,wordSepaEnity1);
             wordSepaEnityToXMLAndSave(wordSepaEnity1, FileUtil.rmSuffix(saveFileAddress)+".xml");
-            return new File(FileUtil.rmSuffix(saveFileAddress)+".xml");
+            return FileUtil.rmSuffix(saveFileAddress)+".xml";
         } catch (Exception e) {
             // TODO Auto-generated catch block
             //System.out.println(line);
@@ -524,7 +524,9 @@ public class WordSeparateServiceImpl implements WordSeparateService {
             }
 
         }
-        return "success";
+        String filePath = fileDirectoryPath.replace('\\','/').replaceAll(fileDirectoryPathHead.replace('\\','/'),fileDirectorySavePath.replace('\\','/')).replace('/','\\');
+
+        return filePath;
     }
 
     public int isWordByType(String sourceString,String type)

@@ -14,6 +14,9 @@
         <property name="location">
             <column name="location" sql-type="varchar(200)" length="200"/>
         </property>
+        <property name="xmlLocation">
+            <column name="xml_location" sql-type="varchar(200)" length="200" not-null="true"/>
+        </property>
         <property name="upTime">
             <column name="up_time" sql-type="varchar(45)" length="45"/>
         </property>

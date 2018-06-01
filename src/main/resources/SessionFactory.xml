@@ -8,6 +8,8 @@
     <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
       <mapping class="es.entity.jpaEntity.OriDocEntity"/>
       <mapping resource="es/entity/jpaEntity/OriDocEntity.hbm.xml"/>
+      <mapping class="es.entity.jpaEntity.UpLogEntity"/>
+      <mapping resource="es/entity/jpaEntity/UpLogEntity.hbm.xml"/>
       <!-- <property name="connection.username"/> -->
     <!-- <property name="connection.password"/> -->
 
