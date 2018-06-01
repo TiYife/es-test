@@ -3,21 +3,16 @@ package es.controller;
 import com.google.gson.Gson;
 import es.Util.FileUtil;
 import es.Util.IdentityUtil;
-import es.entity.jpaEntity.UserEntity;
 import es.repository.jpaRepository.UserRepository;
 import es.service.SaveService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import java.util.List;
 
 /**
  * Created by TYF on 2018/5/14.
@@ -37,23 +32,27 @@ public class SaveController {
 
     @RequestMapping("/upload")
     @ResponseBody
-    public String upload(@RequestParam("files")MultipartFile file, HttpServletRequest request){
+    public String upload(@RequestParam("file")MultipartFile file, HttpServletRequest request){
         String uId=IdentityUtil.getCookieValue(request,"userId");
         if(uId==null)    return "not login";
 
         int userId = Integer.parseInt(uId);
         String pwd = IdentityUtil.getCookieValue(request,"userPasswd");
         if(!userRepository.findById(userId).getPassword().equals(pwd))  return "not login";
-        String suffix = FileUtil.getSuffix(file.getOriginalFilename());
-        if (suffix.equals("txt"))
-            saveService.uploadAndSave(file,userId);
-        else if(suffix.equals("rar"))
-            saveService.uploadPackage(file,userId);
-        else if(suffix.equals("zip"))
-            saveService.uploadPackage(file,userId);
-        else
-            return "wrong file type";
-        return "success";
+
+        return saveService.uploadFile(file,userId);
+    }
+
+    @RequestMapping("/list-uploaded")
+    @ResponseBody
+    public String listUploaded(){
+        return new Gson().toJson(saveService.listUploaded());
+    }
+
+    @RequestMapping("/list-uploading")
+    @ResponseBody
+    public String listUploading(){
+        return new Gson().toJson(saveService.listUploading());
     }
 
     @RequestMapping("/list-docs")
@@ -73,7 +72,7 @@ public class SaveController {
     @RequestMapping("save-all")
     @ResponseBody
     public String saveAll(){
-        saveService.autoSave();
+        saveService.saveToday();
         return "success";
     }
 }

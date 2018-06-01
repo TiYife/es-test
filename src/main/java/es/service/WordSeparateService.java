@@ -13,11 +13,11 @@ public interface WordSeparateService {
     public int NLPTR_Init();
     public int NLPTR_Exit();
 
-    public String multiFileProcessAndSave(String fileDirectoryPath, String fileDirectoryPathHead, String fileDirectorySavePath);
+    String multiFileProcessAndSave(String fileDirectoryPath, String fileDirectoryPathHead, String fileDirectorySavePath);
 
     public String readToString(String fileName);
 
-    File fileProcessAndSave(String fileAddress, String fileAddressHead, String saveAddress);
+    String fileProcessAndSave(String fileAddress, String fileAddressHead, String saveAddress);
 
     String getHFWordFormFiles(String caseType, List<DocEntity> docEntities)//获取高频词组 参数代表案件类型 all所有类型
     ;

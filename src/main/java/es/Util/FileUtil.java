@@ -224,8 +224,7 @@ public class FileUtil {
     }
 
 
-    @Async
-    public static void unZip(File zipFile, String desDir) throws Exception {
+    public static File unZip(File zipFile, String desDir) throws Exception {
 
         ZipFile zip = new ZipFile(zipFile, Charset.forName(ENCODING));//解决中文文件夹乱码
 
@@ -267,11 +266,11 @@ public class FileUtil {
             in.close();
             out.close();
         }
-        return;
+        return pathFile;
     }
 
     @Async
-    public static void unRar(File rarFile, String desDir) throws Exception {
+    public static File unRar(File rarFile, String desDir) throws Exception {
 
         Archive archive = new Archive(rarFile);
         if (archive == null) {
@@ -308,6 +307,7 @@ public class FileUtil {
                 fos.close();
             }
         }
+        return pathFile;
     }
 
 }
