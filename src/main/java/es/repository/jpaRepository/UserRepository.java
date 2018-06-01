@@ -8,6 +8,8 @@ import java.util.List;
 public interface UserRepository extends CrudRepository<UserEntity,Integer> {
     UserEntity findById(int id);
 
+    UserEntity findByUserName(String name);
+
     List<UserEntity> findAll();
 
     List<UserEntity> findByRole(int i);

@@ -26,7 +26,7 @@ public class UserController {
 
     @RequestMapping("/uLogin")
     @ResponseBody
-    public  String login(@RequestParam("userId") int userId,
+    public  String login(@RequestParam("userId") String userId,
                          @RequestParam("userPasswd") String userPasswd,
                          @RequestParam("code") String code,
                          HttpSession session)
@@ -34,7 +34,7 @@ public class UserController {
         String verifyCode = session.getAttribute("verifyCode").toString();
         if(code.toLowerCase().equals(verifyCode.toLowerCase()))
         {
-            UserEntity user=userRepository.findById(userId);
+            UserEntity user=userRepository.findByUserName(userId);
             if(user == null)
                 return "用户名或者密码错误";
             if(userPasswd.equals(user.getPassword()))
