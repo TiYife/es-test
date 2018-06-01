@@ -33,7 +33,7 @@ public class SearchController {
     @Autowired
     UserRepository userRepository;
 
-    private int linshi = 126;
+    private int linshi = 123;
     @RequestMapping("/simple-search")
     public String simpleSearchResult(@RequestParam("attr")String attr,
                                      @RequestParam("keyword") String keyword,

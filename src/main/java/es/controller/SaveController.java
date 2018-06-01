@@ -37,10 +37,10 @@ public class SaveController {
     @RequestMapping("/upload")
     @ResponseBody
     public String upload(@RequestParam("file")MultipartFile file, HttpServletRequest request){
-        String uId=IdentityUtil.getCookieValue(request,"userId");
-        if(uId==null || uId.equals("null"))    return "not login";
+//        String uId=IdentityUtil.getCookieValue(request,"userId");
+//        if(uId==null || uId.equals("null"))    return "not login";
 
-        int userId = Integer.parseInt(uId);
+        int userId = 123;//Integer.parseInt(uId);
         String pwd = IdentityUtil.getCookieValue(request,"userPasswd");
         if(!userRepository.findById(userId).getPassword().equals(pwd))  return "not login";
 

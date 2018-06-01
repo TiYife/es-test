@@ -169,7 +169,7 @@
                 contentText:"即将对该次上传进行结构化处理和导入，确定操作吗",
                 confirm:function () {
                     //点确定之后的操作
-                    $.post("",{id:row["id"]},function (rdata) {
+                    $.post("/save-file",{id:row["id"]},function (rdata) {
                         if (rdata == "success") {
                             $.gyAlert({
                                 title: "操作成功",
