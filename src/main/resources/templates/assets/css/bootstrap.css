@@ -3,6 +3,24 @@
  * Copyright 2011-2014 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  */
+/*以下我自己的*/
+@font-face {
+  font-family: alihanyi;
+  src: url("../fonts/AliHYAiHei-Beta.ttf");
+}
+#header a{
+  color: white;
+}
+#header h1{
+  color: white;
+  font-family: alihanyi;
+}
+#header h4{
+  color: white;
+}
+#header{
+  background: #2365a5!important;
+}
 
 /*! normalize.css v3.0.0 | MIT License | git.io/normalize */
 html {
