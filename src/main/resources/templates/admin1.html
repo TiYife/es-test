@@ -101,12 +101,12 @@
                             <ul class="list-group">
                                 <li class="list-group-item">
                                     <!-- 利用data-target指定URL -->
-                                    <button class="menu-item-left" data-target="test2.html">
+                                    <button class="menu-item-left" data-target="admin-userlist">
                                         <span class="glyphicon glyphicon-folder-close"></span>用户列表
                                     </button>
                                 </li>
                                 <li class="list-group-item">
-                                    <button class="menu-item-left" data-target="test2.html">
+                                    <button class="menu-item-left" data-target="admin-adminlist">
                                         <span class="glyphicon glyphicon-triangle-right"></span>管理员列表
                                     </button>
                                 </li>
@@ -123,17 +123,17 @@
                         <div id="collapseListGroup2" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="collapseListGroupHeading2">
                             <ul class="list-group">
                                 <li class="list-group-item">
-                                    <button class="menu-item-left" data-target="test2.html">
+                                    <button class="menu-item-left" data-target="admin-case-import">
                                         <span class="glyphicon glyphicon-triangle-right"></span>导入案例
                                     </button>
                                 </li>
                                 <li class="list-group-item">
-                                    <button class="menu-item-left" data-target="test2.html">
+                                    <button class="menu-item-left" data-target="admin-caselist">
                                         <span class="glyphicon glyphicon-triangle-right"></span>案例列表
                                     </button>
                                 </li>
                                 <li class="list-group-item">
-                                    <button class="menu-item-left" data-target="test2.html">
+                                    <button class="menu-item-left" data-target="admin-process-error-log">
                                         <span class="glyphicon glyphicon-triangle-right"></span>出错日志
                                     </button>
                                 </li>
@@ -150,12 +150,12 @@
                         <div id="collapseListGroup3" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="collapseListGroupHeading3">
                             <ul class="list-group">
                                 <li class="list-group-item">
-                                    <button class="menu-item-left" data-target="test2.html">
+                                    <button class="menu-item-left" data-target="admin-dic">
                                         <span class="glyphicon glyphicon-triangle-right"></span>词典列表
                                     </button>
                                 </li>
                                 <li class="list-group-item">
-                                    <button class="menu-item-left" data-target="test2.html">
+                                    <button class="menu-item-left" data-target="admin-newword">
                                         <span class="glyphicon glyphicon-triangle-right"></span>新词管理
                                     </button>
                                 </li>
@@ -173,7 +173,7 @@
                         <div id="collapseListGroup4" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="collapseListGroupHeading4">
                             <ul class="list-group">
                                 <li class="list-group-item">
-                                    <button class="menu-item-left" data-target="test2.html">
+                                    <button class="menu-item-left" data-target="admin-log">
                                         <span class="glyphicon glyphicon-triangle-right"></span>操作日志
                                     </button>
                                 </li>
@@ -184,7 +184,7 @@
             </div>
             <div class="col-md-10">
                 <h2 id="menu-name" style="color: #555">用户列表</h2>
-                <iframe id="menu-frame" src="/index" style="border: none;width: 100%;height: auto"></iframe>
+                <iframe id="menu-frame" scrolling="no" src="/admin-userlist" onload="setIframeHeight(this)" style="border: none;width: 100%"></iframe>
             </div>
         </div>
 
@@ -204,7 +204,7 @@
             });
             $(".menu-item-left").click(function (e) {
                 $("#menu-name").text($(this).text());
-                $("#menu-frame").src($(this).attr("data-target"));
+                $("#menu-frame").attr("src",$(this).attr("data-target"));
             })
         });
     </script>
@@ -300,6 +300,16 @@
 
     <script src="assets/js/pages/jsVerifyCode.js"></script>
     <script>
+        function setIframeHeight(iframe) {
+            if (iframe) {
+                var iframeWin = iframe.contentWindow || iframe.contentDocument.parentWindow;
+                if (iframeWin.document.body) {
+                    iframe.height = iframeWin.document.documentElement.scrollHeight || iframeWin.document.body.scrollHeight;
+                }
+            }
+        };
+
+
         function login() {
             var data={
                 userId:parseInt( $("#login-username-input").val()),
