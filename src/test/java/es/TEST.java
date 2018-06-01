@@ -154,6 +154,21 @@ public class TEST {
     }
 
     @Test
+    public void testJavaaa()
+    {
+
+        String s=wordSeparateService.readToString("E:\\测试\\need.txt");
+        String[] nameList=s.split("\r\n");
+        for(int i=0;i<nameList.length;i++)
+        {
+
+            //Files.copy(nameList[i].toPath(), dest.toPath());
+        }
+
+
+    }
+
+    @Test
     public void testS2r()
     {
         //wordSeparateService.getHFWordFormFiles("all");
