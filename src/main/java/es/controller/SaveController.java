@@ -38,7 +38,7 @@ public class SaveController {
     @ResponseBody
     public String upload(@RequestParam("file")MultipartFile file, HttpServletRequest request){
         String uId=IdentityUtil.getCookieValue(request,"userId");
-        if(uId==null)    return "not login";
+        if(uId==null || uId.equals("null"))    return "not login";
 
         int userId = Integer.parseInt(uId);
         String pwd = IdentityUtil.getCookieValue(request,"userPasswd");

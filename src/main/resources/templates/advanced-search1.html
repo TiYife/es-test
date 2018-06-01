@@ -477,8 +477,9 @@
     }
     function operateFormatter(value, row, index) {
         return [
-            '<button type="button" class="btn btn-info detail" show="off"> 详情</button> '+
-            '<button type="button" class="btn btn-info"> 收藏</button> '
+            '<button type="button" class="btn btn-info detail"> 详情</button> '+
+            '<button type="button" class="btn btn-info recommend"> 推荐</button> ' +
+            '<button type="button" class="btn btn-info favor"> 收藏</button> '
         ].join('');
 
     };
@@ -510,6 +511,29 @@
                 $(this).attr("show","off");
                 $('#result-table').find('tr[detail-index=' + index + ']').remove();
             }
+        }
+    };
+
+    window.operateEvents = {
+        'click .recommend': function (e, value, row, index) {
+            location.href = "recommend?docId=" + row["docId"];
+        }
+    };
+
+    window.operateEvents = {
+        'click .favor': function (e, value, row, index) {
+            var data={
+                docId:row["docId"]
+            };
+            $.post("/favor",data,function (rdata) {
+                if(rdata=="success")
+                {
+                    alert("收藏成功");
+                }
+                else {
+                    alert(rdata);
+                }
+            });
         }
     };
 </script>

@@ -72,7 +72,7 @@ public class SearchController {
     @RequestMapping("/favor")
     public String favor(@RequestParam("docId")String docId, HttpServletRequest request){
         String uId= IdentityUtil.getCookieValue(request,"userId");
-        if(uId==null)    return "not login";
+        if(uId==null || uId.equals("null"))    return "not login";
 
         int userId = Integer.parseInt(uId);
         String pwd = IdentityUtil.getCookieValue(request,"userPasswd");
@@ -85,7 +85,7 @@ public class SearchController {
     @RequestMapping("/favorite")
     public String favorite(Model model,HttpServletRequest request){
         String uId= IdentityUtil.getCookieValue(request,"userId");
-        if(uId==null)    return "not login";
+        if(uId==null || uId.equals("null"))    return "not login";
 
         int userId = Integer.parseInt(uId);
         String pwd = IdentityUtil.getCookieValue(request,"userPasswd");
