@@ -39,7 +39,7 @@ public class SaveController {
 //        String uId=IdentityUtil.getCookieValue(request,"userId");
 //        if(uId==null || uId.equals("null"))    return "not login";
 
-        int userId = 123;//Integer.parseInt(uId);
+        int userId = 123;//Integer.parseInt(uId);//todo
         String pwd = IdentityUtil.getCookieValue(request,"userPasswd");
         if(!userRepository.findById(userId).getPassword().equals(pwd))  return "not login";
 
@@ -49,13 +49,13 @@ public class SaveController {
         else return "{error:"+message+"}";
     }
 
-    @RequestMapping("/list-uplog")
+    @RequestMapping("/list-up")
     @ResponseBody
     public String listUploading(){
         return new Gson().toJson(saveService.listUpLog());
     }
 
-    @RequestMapping("/save-file")
+    @RequestMapping("/save-up")
     @ResponseBody
     public String saveFile(String id){
         UpLogEntity entity = upLogRepository.findOne(id);
