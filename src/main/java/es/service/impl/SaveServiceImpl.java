@@ -145,14 +145,13 @@ public class SaveServiceImpl implements SaveService {
             LOGGER.info(entity.getName()+" is saving, can't be deleted ");
             return "the file is saving, can't be deleted ";
         }
-        if(status == -1){
-            LOGGER.info(entity.getName()+" has been deleted, can't be deleted ");
-            return "the file has been deleted, can't be deleted";
-        }
+
         File file = new File(entity.getLocation());
+        File xml = new File(entity.getXmlLocation());
         if (file.exists()) file.delete();
-        entity.setStatus(-1);
-        txtRepository.save(entity);
+        if(xml.exists()) xml.delete();
+
+        txtRepository.delete(entity);
         return "success";
     }
 
