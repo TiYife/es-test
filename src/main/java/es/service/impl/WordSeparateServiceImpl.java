@@ -21,8 +21,6 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static es.Constant.HFWord_PATH;
-
 @Service
 public class WordSeparateServiceImpl implements WordSeparateService {
 
@@ -99,7 +97,7 @@ public class WordSeparateServiceImpl implements WordSeparateService {
                 result+=sp+w+"\t"+Word.get(w).toString();
                 sp="\n";
             }
-            stringToRead(result,HFWord_PATH,false);
+            stringToRead(result,"E:\\测试\\高频词组.txt",false);
             return "success";
         }catch (Exception e)
         {
@@ -208,7 +206,9 @@ public class WordSeparateServiceImpl implements WordSeparateService {
         return fileString.replaceAll("(\r\n)+\t*","\r\n")
                 .replaceAll(" ","")
                 .replaceAll("([^　])　(?!　)","$1")
-                .replaceAll("(</?[a-z0-9]+?>)+\r\n","");
+                .replaceAll("((<[a-z0-9]+?=|<[a-z0-9]+?>|\\{C\\}<!--).+|.+(</[a-z0-9]+?>|-->))\r\n","")
+                .replaceAll("(</?[a-z0-9]+?>)+\r\n","")
+                .replaceAll("(\r\n)+","\r\n");
     }
 
     public void testA(String fileAddress,wordSepaEnity wEnity)
@@ -260,6 +260,8 @@ public class WordSeparateServiceImpl implements WordSeparateService {
     public String fileProcessAndSave(String fileAddress, String fileAddressHead, String saveAddress)
     {
         try {
+
+            //stringToRead("","E:\\桌面存放\\测试\\errorTest.txt",false);//ceshi
             if(NLPTR_Init()!=1) throw new Exception( "分词程序初始化失败");
             String fileString=filePreProcess(readToString(fileAddress));
             if(fileString==""||fileString==null) throw new Exception( "文件读取失败");
@@ -276,15 +278,31 @@ public class WordSeparateServiceImpl implements WordSeparateService {
             String errorDetail="";
             for(int i=0;i<fileLines.length;i++)
             {
+                if(processStep==10) break;
                 String content=fileLines[i].trim();
                 if(content.equals(""))
                     continue;
                 switch (processStep)
                 {
                     case 0:
-                        Pattern pattern2 = Pattern.compile("^.{10,}_([0-9a-z]{8}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{12})(.{3,6}?)\\.txt$");
+                        Pattern pattern2 = Pattern.compile("^.+\\\\[0-9]{8}\\\\(.{2,3})\\\\([0-9]{4})\\\\(.{2}案件)\\\\(（2[0-9]{3}）.+?号)_([0-9a-z]{8}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{12})(.{3,6}?)\\.txt$");
                         Matcher matcher = pattern2.matcher(fileAddress);
                         while (matcher.find()) {
+                            wordSepaEnity1.courtId=matcher.group(2);
+                            wordSepaEnity1.caseType=matcher.group(3);
+                            wordSepaEnity1.caseNo=matcher.group(4);
+                            wordSepaEnity1.docId=matcher.group(5);
+                            wordSepaEnity1.docType=matcher.group(6);
+                            /*String courtId=matcher.group(1);
+                            if(!courtId.equals(""))
+                                wordSepaEnity1.courtId=docId;
+                            else
+                                errorDetail+="\n"+String.valueOf(i+1)+"\t无法获取docId";
+                            String docId=matcher.group(1);
+                            if(!docId.equals(""))
+                                wordSepaEnity1.docId=docId;
+                            else
+                                errorDetail+="\n"+String.valueOf(i+1)+"\t无法获取docId";
                             String docId=matcher.group(1);
                             if(!docId.equals(""))
                                 wordSepaEnity1.docId=docId;
@@ -295,13 +313,19 @@ public class WordSeparateServiceImpl implements WordSeparateService {
                                 wordSepaEnity1.docType=docType;
                             else
                                 errorDetail+="\n"+String.valueOf(i+1)+"\t无法获取docType";
+                                */
                         }
+                        if(wordSepaEnity1.courtId=="")
+                            errorDetail+="\n"+String.valueOf(i+1)+"\t不是合格完整的文件目录";
                         processStep=1;
                         i--;
                         break;
                     case 1:
-                        if(Pattern.matches("^.+书([0-9]+号)?$", fileLines[i])){
+                        //if(Pattern.matches("^.+书([0-9]+号|[0-9]{1,2}|\\([0-9]\\)|（[0-9]）|-[0-9]|（保全）|\\(冻结担保\\)[0-9])?$", fileLines[i])){
+                        if(Pattern.matches("^.+书.*$", fileLines[i])){
                             wordSepaEnity1.caseName = content;
+                            if(wordSepaEnity1.caseName.equals(""))
+                                wordSepaEnity1.caseName="";
                             if (fileLinesAfterProcess[i].contains("/ay")) {
                                 ayResult += getWordByType(fileLinesAfterProcess[i], "ay");
                             }
@@ -545,7 +569,7 @@ public class WordSeparateServiceImpl implements WordSeparateService {
         Pattern pattern = Pattern.compile("(?:/[a-z]+(?: |　)+?|^)([^ ]+?)/"+type);
         Matcher matcher = pattern.matcher(sourceString);
         String re="";
-        String dot=";";
+        String dot="";
         while (matcher.find())
         {
             re+=dot+matcher.group(1);
@@ -635,43 +659,6 @@ public class WordSeparateServiceImpl implements WordSeparateService {
         }
     }
 
-    public  void getHFWord(String file)
-    {
-        try {
-            Thread.sleep(2000);
-            String s = "依法\t\t\t2209\n" +
-                    "中华人民共和国\t2385\n" +
-                    "判决\t\t\t2095\n" +
-                    "纠纷\t\t\t1481\n" +
-                    "法院\t\t\t1757\n" +
-                    "民事\t\t\t1500\n" +
-                    "诉讼\t\t\t1887\n" +
-                    "规定\t\t\t2397\n" +
-                    "人民法院\t\t2394\n" +
-                    "查明\t\t\t1776\n" +
-                    "受理\t\t\t1651\n" +
-                    "合议庭\t\t\t1560\n" +
-                    "审理\t\t\t1977\n" +
-                    "法律\t\t\t1799\n" +
-                    "上诉\t\t\t1874\n" +
-                    "组成\t\t\t1560\n" +
-                    "如下\t\t\t2392\n" +
-                    "二〇一三年\t\t2309\n" +
-                    "期间\t\t\t1459\n" +
-                    "进行\t\t\t1742\n" +
-                    "人民\t\t\t1333\n" +
-                    "依照\t\t\t1853\n" +
-                    "中级\t\t\t2212\n" +
-                    "本案\t\t\t1897\n" +
-                    "认为\t\t\t1997\n" +
-                    "参加\t\t\t2001\n" +
-                    "第一\t\t\t1546\n" +
-                    "发生\t\t\t1311";
-            stringToRead(s, file, false);
-        }catch (Exception e){
-
-        }
-    }
 
     /*public String getHFWordFormFiles(String caseType)//获取高频词组 参数代表案件类型 all所有类型
     {

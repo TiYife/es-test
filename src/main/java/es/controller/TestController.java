@@ -8,7 +8,6 @@ import es.entity.word.Primitive;
 import es.entity.word.WordSimilarity;
 import es.repository.esRepository.DocRepository;
 import es.repository.jpaRepository.DicRepository;
-import es.service.SaveService;
 import es.service.SearchService;
 import es.service.impl.WordSeparateServiceImpl;
 import org.assertj.core.util.Lists;
@@ -23,7 +22,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static es.Constant.dateFormat;
 import static es.Constant.timeFormat;
 
 /**
@@ -201,7 +199,7 @@ public class TestController {
         return wordSeparateService.getHFWordFormFiles("all", docEntities);
     }
 
-    @RequestMapping("/test1")
+    @RequestMapping("/getWord")
     @ResponseBody
     public String test1() {
         List<DicEntity> list = new ArrayList<>();
@@ -212,7 +210,24 @@ public class TestController {
         entity.setType("spr");
         entity.setSepaType("标志词词典");
         entity.setCreateUserId(123);
-        entity.setCreateTime(timeFormat.format(new Date()));
+        entity.setCreateTime("2018-06-02 03:02:05");
+        list.add(entity);
+        return new Gson().toJson(list);
+    }
+
+
+    @RequestMapping("/getManyWord")
+    @ResponseBody
+    public String test3() {
+        List<DicEntity> list = new ArrayList<>();
+        DicEntity entity;
+        entity = new DicEntity();
+        entity.setId(1);
+        entity.setWord("审判人");
+        entity.setType("spr");
+        entity.setSepaType("标志词词典");
+        entity.setCreateUserId(123);
+        entity.setCreateTime("2018-06-02 03:02:05");
         list.add(entity);
 
         entity = new DicEntity();
@@ -221,7 +236,7 @@ public class TestController {
         entity.setType("dsr");
         entity.setSepaType("标志词词典");
         entity.setCreateUserId(123);
-        entity.setCreateTime(timeFormat.format(new Date()));
+        entity.setCreateTime("2018-06-02 03:02:45");
         list.add(entity);
 
         entity = new DicEntity();
@@ -230,7 +245,7 @@ public class TestController {
         entity.setType("na");
         entity.setSepaType("地区词典");
         entity.setCreateUserId(123);
-        entity.setCreateTime(timeFormat.format(new Date()));
+        entity.setCreateTime("2018-06-02 03:02:45");
         list.add(entity);
 
         entity = new DicEntity();
@@ -239,14 +254,29 @@ public class TestController {
         entity.setType("dsr");
         entity.setSepaType("标志词词典");
         entity.setCreateUserId(123);
-        entity.setCreateTime(timeFormat.format(new Date()));
+        entity.setCreateTime("2018-06-02 03:02:45");
         list.add(entity);
         return new Gson().toJson(list);
     }
 
-    @RequestMapping("/test2")
+    @RequestMapping("/getbf")
     @ResponseBody
     public String test2() {
+        List<NewWordEntity> list = new ArrayList<>();
+        NewWordEntity entity = new NewWordEntity();
+        entity.setId(1);
+        entity.setWord("居间合同");
+        entity.setCreateTime(timeFormat.format(new Date()));
+        entity.setCreateLocation("a681599a-2d8e-4895-b257-b8e3074c64c8裁定书.txt");
+        entity.setContext("姜善伟与徐钊、涡阳县长建建筑材料有限公司居间合同纠纷再审民事裁定书");
+        entity.setSepaType("-");
+        entity.setRemark("-");
+        list.add(entity);
+        return new Gson().toJson(list);
+    }
+    @RequestMapping("/getaf")
+    @ResponseBody
+    public String test4() {
         List<NewWordEntity> list = new ArrayList<>();
         NewWordEntity entity = new NewWordEntity();
         entity.setId(1);

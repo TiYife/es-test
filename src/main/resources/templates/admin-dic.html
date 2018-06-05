@@ -82,7 +82,7 @@
             </div>
             <div class="modal-footer" style="text-align: center">
                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                <button type="button" class="btn btn-primary" onclick="jia1()">添加</button>
+                <button type="button" class="btn btn-primary" onclick="jia2()">添加</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal -->
@@ -100,7 +100,7 @@
                 <input id="input-id" type="file" multiple data-preview-file-type="text" name="file">
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" id="close-teacher-modal">Close</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="jia1()">确定</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
@@ -119,7 +119,7 @@
 <script>
     $("#input-id").fileinput({
         language: 'zh', //设置语言
-        uploadUrl: '/Teacher/uploadFiles',
+        uploadUrl: '/upload',
         overwriteInitial: false,
         maxFileSize: 0,
         //: ['jpg', 'gif', 'png', 'xls', 'xlsx', 'pdf', 'txt', 'doc', 'docx', 'rar', 'mp4', 'zip'],//接收的文件后缀
@@ -166,9 +166,6 @@
             'mp3': function (ext) {
                 return ext.match(/(mp3|wav)$/i);
             }
-        },
-        uploadExtraData: function () {
-            return { path: currentFolderPath };
         },
         hideThumbnailContent: true,
     }).off('filepreupload').on('filepreupload', function () {

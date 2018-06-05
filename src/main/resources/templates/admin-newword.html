@@ -28,17 +28,6 @@
     <div class="col-lg-12">
         <div class="panel panel-default">
             <div class="panel-body">
-                <div id="toolbar1" class="btn-group">
-                    <a   type="button" onclick="$('#addDicModal').modal('show')" class="btn btn-default">
-                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增词典
-                    </a>
-                    <a type="button"  onclick="$('#addFileModal').modal('show')" class="btn btn-default">
-                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>导入词典文件
-                    </a>
-                    <a  type="button" onclick="batchDelete()" class="btn btn-default">
-                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>批量删除词典
-                    </a>
-                </div>
                 <table data-toggle="table" data-url="/list-new-words" data-show-refresh="true" data-show-toggle="true" data-show-columns="true" data-search="true" data-select-item-name="toolbar1" data-pagination="true" data-sort-order="desc" data-show-export="true" id="word-table">
                     <thead>
                     <tr>

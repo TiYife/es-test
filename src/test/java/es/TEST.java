@@ -26,6 +26,7 @@ import org.springframework.data.elasticsearch.core.query.SearchQuery;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.File;
+import java.nio.file.Files;
 import java.util.List;
 
 import static es.Constant.xmlLocation;
@@ -183,31 +184,33 @@ public class TEST {
     @Test
     public void testJava4()
     {
-        wordSeparateService.NLPTR_Init();
-        wordSeparateService.getHFWord("E:\\系统测试\\高频词组.txt");
+        String fileString =wordSeparateService.readToString( "E:\\系统测试\\案例元数据\\20150104\\安徽\\1275\\民事案件\\（2014）枞民一初字第01731号_e4b30124-6409-43f1-9c59-eb70f0cd327a判决书.txt");
+        fileString=fileString.replaceAll("(\r\n)+\t*","\r\n");
+        fileString=fileString.replaceAll(" ","");
+        fileString=fileString.replaceAll("([^　])　(?!　)","$1");
+        fileString=fileString.replaceAll("((<[a-z0-9]+?=|<[a-z0-9]+?>|\\{C\\}<!--).+|.+(</[a-z0-9]+?>|-->))\r\n","");
+        fileString=fileString.replaceAll("(</?[a-z0-9]+?>)+\r\n","");
+        fileString=fileString;
     }
 
     @Test
     public void testJavaaa()
     {
-        /*String encoding = "utf-8";
-        File file = new File("E:\\测试\\need.txt");
-        Long filelength = file.length();
-        byte[] filecontent = new byte[filelength.intValue()];
-            FileInputStream in = new FileInputStream(file);
-            in.read(filecontent);
-            in.close();
-        new String(filecontent, encoding);*/
-        String s=wordSeparateService.readToString("E:\\测试\\need.txt");
+        String s=wordSeparateService.readToString("E:\\测试\\案例名称无.txt");
         String[] nameList=s.split("\r\n");
         for(int i=0;i<nameList.length;i++)
         {
             File file = new File(nameList[i]);
-            File file2 = new  File("E:\\桌面存放\\测试3\\"+nameList[i].substring(11,nameList[i].length()));
-            String news="E:\\桌面存放\\测试3\\"+nameList[i].substring(11,nameList[i].length());
+            File file2 = new  File("E:\\测试\\案件名称无\\"+nameList[i].substring(11,nameList[i].length()));
+            String news="E:\\测试\\案件名称无\\"+nameList[i].substring(11,nameList[i].length());
             wordSeparateService.createPreDirectory(news);
             //file.renameTo(file2);
-            file.renameTo(file2);
+            try {
+                Files.copy(file.toPath(), file2.toPath());
+            }catch (Exception e){
+
+            }
+            //file.renameTo(file2);
         }
     }
 
