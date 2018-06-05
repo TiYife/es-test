@@ -91,6 +91,7 @@
                 <div class="col-sm-12" style="margin-top: 25px;text-align: center">
                     <input id="password-input" class="form-control" placeholder="输入新密码" style="width: 100%" />
                 </div>
+                <span style="display: none;" id="user-id"></span>
                 <div style="clear: both"></div>
             </div>
             <div class="modal-footer" style="text-align: center">
@@ -119,14 +120,18 @@
     }
 
     function editPasswd() {
-        $("",{passwd:$("#password-input").val()},function (rdata) {
-            $("#addAdminModal").modal("hide");
+        var data = {
+            passwd:$("#password-input").val(),
+            userId:$("#user-id").text()
+        };
+        $.post("/editPasswd",data,function (rdata) {
+            $("#editPasswdModal").modal("hide");
             if (rdata == "success") {
                 $.gyAlert({
                     title: "操作成功",
                     contentText: "已成功修改该管理员的密码"
                 });
-                $('#assistant-table').bootstrapTable('refresh', { url: '/Teacher/getAssistant' });
+                $('#admin-table').bootstrapTable('refresh', { url: '/list-admins' });
 
             }
             else {
@@ -151,14 +156,14 @@
             passwd:$("#admin-password-input").val(),
             email:$("#admin-email-input").val()
         }
-        $("",data,function (rdata) {
-            $("#editPasswdModal").modal("hide");
+        $.post("/add-admin",data,function (rdata) {
+            $("#addAdminModal").modal("hide");
             if (rdata == "success") {
                 $.gyAlert({
                     title: "操作成功",
                     contentText: "已成功添加该管理员"
                 });
-                $('#admin-table').bootstrapTable('refresh', { url: '/Teacher/getAssistant' });
+                $('#admin-table').bootstrapTable('refresh', { url: '/list-admins' });
 
             }
             else {
@@ -173,6 +178,7 @@
     window.operateEvents = {
         'click .edit': function (e, value, row, index) {
             $("#password-input").val("");
+            $("#user-id").text(row["id"]);
             $("#editPasswdModal").modal("show");
         },
         'click .delete':function (e,value,row,index) {
@@ -181,14 +187,13 @@
                 contentText:"确认删除该管理员吗？",
                 confirm:function () {
                     //点确定之后的操作
-                    $.post("",{id:row["id"]},function (rdata) {
+                    $.post("/delete-user",{userId:row["id"]},function (rdata) {
                         if (rdata == "success") {
                             $.gyAlert({
                                 title: "操作成功",
                                 contentText: "已成功删除该条管理员"
                             });
-                            $('#user-table').bootstrapTable('refresh', { url: '/Teacher/getAssistant' });
-
+                            $('#admin-table').bootstrapTable('refresh', { url: '/list-admins' });
                         }
                         else {
                             $.gyAlert({

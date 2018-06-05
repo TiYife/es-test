@@ -13,6 +13,8 @@ import javax.servlet.http.HttpSession;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import static es.Constant.timeFormat;
+
 /**
  * Created by TYF on 2018/1/29.
  */
@@ -114,6 +116,20 @@ public class UserController {
     {
         UserEntity user = userRepository.findById(userId);
         userRepository.delete(user);
+        return "success";
+    }
+
+    @RequestMapping("/add-admin")
+    @ResponseBody
+    public String addAdmin(String name,String passwd,String email)
+    {
+        UserEntity user = new UserEntity();
+        user.setUserName(name);
+        user.setPassword(passwd);
+        user.setEmail(email);
+        user.setRegisterTime(timeFormat.format(new Date()));
+        user.setRole(1);
+        userRepository.save(user);
         return "success";
     }
 
