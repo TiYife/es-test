@@ -1,6 +1,7 @@
 package es.Util;
 
 import com.github.junrar.Archive;
+import com.github.junrar.rarfile.FileHeader;
 import es.service.impl.SearchServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +34,7 @@ public class FileUtil {
     public static boolean listFile(File file, List<String> list) throws IOException {
         if (!file.exists()) return false;
         if (file.isDirectory()) {
-            LOGGER.info("读取文件夹:" + file.getAbsolutePath());
+            //LOGGER.info("读取文件夹:" + file.getAbsolutePath());
             File[] fileList = file.listFiles();
             for (File sub : fileList
                     ) {
@@ -41,7 +42,7 @@ public class FileUtil {
             }
         } else {
             String location = file.getAbsolutePath();
-            LOGGER.info("读取文件:" + location);
+            //LOGGER.info("读取文件:" + location);
             list.add(location);
         }
         return true;
@@ -129,6 +130,7 @@ public class FileUtil {
                 flag = true;
             }
         }
+        file.delete();
         return flag;
     }
 
@@ -242,11 +244,11 @@ public class FileUtil {
         for (Enumeration<? extends ZipEntry> entries = zip.entries(); entries.hasMoreElements(); ) {
             ZipEntry entry = entries.nextElement();
             String fileName = entry.getName();
-            String outPath = (desDir + name + "/" + fileName).replaceAll("\\*", "/");
+            String outPath = (desDir + name + "/" + fileName).replace('\\', '/');
             File saveFile = new File(outPath);
 
             // 判断路径是否存在,不存在则创建文件路径
-            File parent = new File(outPath.substring(0, outPath.lastIndexOf('\\')));
+            File parent = new File(outPath.substring(0, outPath.lastIndexOf('/')));
             if (!parent.exists()) {
                 parent.mkdirs();
             }
@@ -271,6 +273,7 @@ public class FileUtil {
             }
 
         }
+        zip.close();
         return pathFile;
     }
 
@@ -289,15 +292,16 @@ public class FileUtil {
             pathFile.mkdirs();
         }
 
-        List<com.github.junrar.rarfile.FileHeader> files = archive.getFileHeaders();
-        for (com.github.junrar.rarfile.FileHeader fh : files) {
+       // List<com.github.junrar.rarfile.FileHeader> files = archive.getFileHeaders();
+      //  for (com.github.junrar.rarfile.FileHeader fh : files) {
+        for(FileHeader fh = archive.nextFileHeader(); fh != null ;){
             String fileName = fh.getFileNameW();
             if (fileName != null && fileName.trim().length() > 0) {
-                String outPath = (desDir + name + "/" + fileName).replaceAll("\\*", "/");
+                String outPath = (desDir + name + "/" + fileName).replace('\\', '/');
                 File saveFile = new File(outPath);
 
                 // 判断路径是否存在,不存在则创建文件路径
-                File parent = new File(outPath.substring(0, outPath.lastIndexOf('\\')));
+                File parent = new File(outPath.substring(0, outPath.lastIndexOf('/')));
                 if (!parent.exists()) {
                     parent.mkdirs();
                 }

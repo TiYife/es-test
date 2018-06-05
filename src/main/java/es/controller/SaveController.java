@@ -1,7 +1,6 @@
 package es.controller;
 
 import com.google.gson.Gson;
-import es.Util.FileUtil;
 import es.Util.IdentityUtil;
 import es.entity.jpaEntity.UpLogEntity;
 import es.repository.jpaRepository.UpLogRepository;
@@ -50,16 +49,10 @@ public class SaveController {
         else return "{error:"+message+"}";
     }
 
-    @RequestMapping("/list-uploaded")
-    @ResponseBody
-    public String listUploaded(){
-        return new Gson().toJson(saveService.listUploaded());
-    }
-
-    @RequestMapping("/list-uploading")
+    @RequestMapping("/list-uplog")
     @ResponseBody
     public String listUploading(){
-        return new Gson().toJson(saveService.listUploading());
+        return new Gson().toJson(saveService.listUpLog());
     }
 
     @RequestMapping("/save-file")
@@ -72,9 +65,7 @@ public class SaveController {
     @RequestMapping("/delete-up")
     @ResponseBody
     public String deleteUp(String id){
-        saveService.deleteUpLog(id);
-        //刷新
-        return "success";
+        return saveService.deleteUpLog(id);
     }
 
     @RequestMapping("/list-docs")
@@ -86,7 +77,7 @@ public class SaveController {
     @RequestMapping("/delete-doc")
     @ResponseBody
     public String delete(String id){
-        saveService.deleteDoc(id);
+        saveService.deleteTxt(id);
         //刷新
         return "success";
     }
@@ -94,7 +85,7 @@ public class SaveController {
     @RequestMapping("/save-all")
     @ResponseBody
     public String saveAll(){
-        saveService.saveAllDoc();
+        saveService.saveAll();
         return "success";
     }
 }

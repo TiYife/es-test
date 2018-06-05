@@ -3,7 +3,7 @@ package es.entity.jpaEntity;
 import javax.persistence.*;
 
 /**
- * Created by TYF on 2018/6/1.
+ * Created by TYF on 2018/6/3.
  */
 @Entity
 @Table(name = "up_log", schema = "esWeb", catalog = "")
@@ -14,8 +14,8 @@ public class UpLogEntity {
     private int uploader;
     private String upTime;
     private String location;
-    private Byte isSave;
-    private Byte isDel;
+    private Integer isSave;
+    private Integer isDel;
     private String saveTime;
     private String delTime;
 
@@ -81,21 +81,21 @@ public class UpLogEntity {
 
     @Basic
     @Column(name = "is_save", nullable = true)
-    public Byte getIsSave() {
+    public Integer getIsSave() {
         return isSave;
     }
 
-    public void setIsSave(Byte isSave) {
+    public void setIsSave(Integer isSave) {
         this.isSave = isSave;
     }
 
     @Basic
     @Column(name = "is_del", nullable = true)
-    public Byte getIsDel() {
+    public Integer getIsDel() {
         return isDel;
     }
 
-    public void setIsDel(Byte isDel) {
+    public void setIsDel(Integer isDel) {
         this.isDel = isDel;
     }
 
