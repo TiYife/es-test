@@ -69,14 +69,14 @@
             <div class="modal-body" style="text-align: center;padding: 0px 55px">
 
                 <div class="col-sm-12" style="margin-top: 25px;text-align: center">
-                    <input id="login-username-input" class="form-control" placeholder="词组" style="width: 100%" />
+                    <input id="add-word-input" class="form-control" placeholder="词组" style="width: 100%" />
                 </div>
                 <div class="col-sm-12" style="margin-top: 25px;text-align: center">
-                    <input id="login-password-input" class="form-control" placeholder="词性" type="password" style="width: 100%" />
+                    <input id="add-wordtyppe-input" class="form-control" placeholder="词性" type="password" style="width: 100%" />
                 </div>
 
                 <div class="col-sm-12" style="margin-top: 25px;text-align: center">
-                    <input id="login-code-input" class="form-control" placeholder="类型"  style="width: 100%" />
+                    <input id="add-type-input" class="form-control" placeholder="类型"  style="width: 100%" />
                 </div>
                 <div style="clear: both"></div>
             </div>
@@ -88,6 +88,35 @@
     </div><!-- /.modal -->
 </div>
 
+<div class="modal fade" id="editDicModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="margin-top: 130px;width: 400px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" style="text-align: center">
+                    修改词组
+                </h4>
+            </div>
+            <div class="modal-body" style="text-align: center;padding: 0px 55px">
+
+                <div class="col-sm-12" style="margin-top: 25px;text-align: center">
+                    <input id="edit-word-input" class="form-control" placeholder="词组" disabled="disabled" style="width: 100%" />
+                </div>
+                <div class="col-sm-12" style="margin-top: 25px;text-align: center">
+                    <input id="edit-wordtype-input" class="form-control" placeholder="词性" type="password" style="width: 100%" />
+                </div>
+
+                <div class="col-sm-12" style="margin-top: 25px;text-align: center">
+                    <input id="edit-type-input" class="form-control" placeholder="类型"  style="width: 100%" />
+                </div>
+                <div style="clear: both"></div>
+            </div>
+            <div class="modal-footer" style="text-align: center">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" onclick="jia2()">添加</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
 
 <div id="addFileModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel">
     <div class="modal-dialog" role="document">
@@ -179,6 +208,30 @@
         ].join('');
 
     };
+    function add() {
+        var data={
+            word:$("#add-word-input").val(),
+            type:$("#add-type-input").val(),
+            sepaType:$("#add-wordtyppe-input").val()
+        }
+        $.post("/add-dic",data,function (rdata) {
+            $("#addDicModal").modal("hide");
+            if (rdata == "success") {
+                $.gyAlert({
+                    title: "操作成功",
+                    contentText: "已成功添加该管理员"
+                });
+                $('#word-table').bootstrapTable('refresh', { url: '/list-dics' });
+
+            }
+            else {
+                $.gyAlert({
+                    title: "操作失败",
+                    contentText: "添加失败 " + rdata
+                })
+            }
+        })
+    }
     function idFormatter(index, row) {
         var html = [];
         html.push(''+(index+1));
@@ -186,15 +239,37 @@
         return html.join('');
     }
     window.operateEvents = {
-        'click .detail': function (e, value, row, index) {
-            var html = [];
-            html.push('<div  class="row">');
-            html.push('<div class="col-md-12">');
-            html.push(''+row["content"]+'')
-            html.push('</div>');
-            html.push('</div>');
-            var coln = $('#result-table').bootstrapTable('getVisibleColumns').length;
-            $('#result-table').find('tr[data-index='+index+']').after('<tr class="detail-view" detail-index="'+index+'"><td colspan="'+coln+'">'+html.join('')+'</td></tr>');
+        'click .edit': function (e, value, row, index) {
+            $("#edit-word-input").val(row["word"]);
+            $("#edit-wordtype-input").val(row["sepaType"]);
+            $("#edit-type-input").val(row["type"]);
+            $("#editDicModal").modal("show");
+        },
+        'click .delete':function (e,value,row,index) {
+            $.gyAlert({
+                title:"删除词组",
+                contentText:"确认删除该词组吗？",
+                confirm:function () {
+                    //点确定之后的操作
+                    var data = new Array();
+                        data.push(row["id"]);
+                    $.post("/delete-dic",data,function (rdata) {
+                        if (rdata.startsWith("success")) {
+                            $.gyAlert({
+                                title: "操作成功",
+                                contentText: "已成功删除该条词组"
+                            });
+                            $('#admin-table').bootstrapTable('refresh', { url: '/list-dics' });
+                        }
+                        else {
+                            $.gyAlert({
+                                title: "操作失败",
+                                contentText: "删除失败 " + rdata
+                            })
+                        }
+                    })
+                }
+            })
         }
     };
     

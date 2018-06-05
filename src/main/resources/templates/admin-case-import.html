@@ -52,7 +52,7 @@
                         <th data-field="fileName">文件名</th>
                         <th data-field="uploader">上传人</th>
                         <th data-field="upTime">上传时间</th>
-                        <th data-field="isSave">处理状态</th>
+                        <th data-field="isSave" data-formatter="stateFormatter">处理状态</th>
                         <th data-formatter="operateFormatter" data-events='operateEvents'>操作</th>
                     </tr>
                     </thead>
@@ -160,6 +160,15 @@
             '<button type="button" class="btn btn-info start"> 开始处理</button> '+
             '<button type="button" class="btn btn-danger delete"> 删除</button> '
         ].join('');
+
+    };
+    function operateFormatter(value, row, index) {
+        if(value==0)
+            return "未处理";
+        if(value==1)
+            return "以处理";
+        if(value==2)
+            return "处理中";
 
     };
     window.operateEvents = {

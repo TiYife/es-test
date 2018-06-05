@@ -116,9 +116,10 @@ public class TEST {
             //String ii=instance.NLPIR_ParagraphProcess(ss,1);
             //String sss=wordSeparateService.stringToRead(ii,"E:\\桌面存放\\测试\\1212.txt");
             //int i2=instance.NLPIR_DelUsrWord("法定代表人 dlr");
-            int i2=instance.NLPIR_AddUserWord("人民陪审员 spr");
+            //int i2=instance.NLPIR_AddUserWord("人民陪审员 spr");
             //int i1=instance.NLPIR_ImportUserDict("E:\\毕业设计\\es-test\\dic\\标志词词典.txt");
-            int i3=instance.NLPIR_SaveTheUsrDic();
+            //int i3=instance.NLPIR_SaveTheUsrDic();
+            String s= instance.NLPIR_GetNewWords("克隆",50,false);
             //String s=instance.NLPIR_ParagraphProcess("姓名权纠纷是一个案由",1);
             //String iii=ii.replaceAll("\r\n","\n");
             //String[] lines = ii.split("\r");
@@ -167,7 +168,8 @@ public class TEST {
     public void testJava2()
     {
         wordSeparateService.NLPTR_Init();
-        wordSeparateService.getKeyWord("E:\\桌面存放\\测试\\20150104\\安徽\\1161\\民事案件\\（2013）皖民四终字第00220号_ee7846c9-c0b3-49da-8b68-b49ab6119091判决书.txt");
+        String fileString =wordSeparateService.readToString( "E:\\系统测试\\案例元数据\\20150104\\安徽\\1275\\民事案件\\（2014）枞民一初字第01731号_e4b30124-6409-43f1-9c59-eb70f0cd327a判决书.txt");
+        //wo
     }
 
     //语义相似度模块测试

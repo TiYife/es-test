@@ -1,13 +1,23 @@
 package es.controller;
 
 import com.google.gson.Gson;
+import es.entity.jpaEntity.DicEntity;
+import es.entity.jpaEntity.UserEntity;
 import es.repository.esRepository.DocRepository;
 import es.repository.jpaRepository.*;
+import es.service.WordSeparateService;
 import org.assertj.core.util.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by TYF on 2018/1/29.
@@ -28,6 +38,8 @@ public class AdminController {
     private CaseErrorRepository  caseErrorRepository;
     @Autowired
     private NewWordRepository newWordRepository;
+    @Autowired
+    private WordSeparateService wordSeparateService;
 
 
 
@@ -132,6 +144,44 @@ public class AdminController {
     @ResponseBody
     public String listErrors(){
         return new Gson().toJson(caseErrorRepository.findAll());
+    }
+
+    @RequestMapping("add-dic")
+    @ResponseBody
+    public  String register(@RequestParam("word") String word,
+                            @RequestParam("type") String type,
+                            @RequestParam("sepaType") String sepaType,
+                            HttpSession session)
+    {
+        if(dicRepository.findFirstByWord(word)!=null)
+            return "已存在该词组";
+        int re=wordSeparateService.addDic(word,type);
+        if(re>0)
+        {
+            DicEntity dic=new DicEntity();
+            dic.setWord(word);
+            Date day=new Date();
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            dic.setCreateTime(df.format(day));
+            dic.setSepaType(sepaType);
+            dic.setType(type);
+            UserEntity user=(UserEntity)session.getAttribute("user");
+            dic.setCreateUserId(user.getId());
+            dicRepository.save(dic);
+            return "success";
+        }
+        else {
+            return "词典保存失败";
+        }
+    }
+
+    @RequestMapping("/upload-dic")
+    @ResponseBody
+    public String uploadDic(@RequestParam("file")MultipartFile file, HttpServletRequest request){
+//        String uId=IdentityUtil.getCookieValue(request,"userId");
+//        if(uId==null || uId.equals("null"))    return "not login";
+
+        return "";
     }
 
 }

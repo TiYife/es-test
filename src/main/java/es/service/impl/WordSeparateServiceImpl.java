@@ -4,8 +4,10 @@ import com.sun.jna.Native;
 import es.Constant;
 import es.Util.FileUtil;
 import es.entity.esEntity.DocEntity;
+import es.entity.jpaEntity.NewWordEntity;
 import es.entity.wordSepa.wordSepaEnity;
 import es.repository.esRepository.DocRepository;
+import es.repository.jpaRepository.NewWordRepository;
 import es.service.NLPTRService;
 import es.service.WordSeparateService;
 import org.jdom2.output.Format;
@@ -14,12 +16,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static es.Constant.timeFormat;
 
 @Service
 public class WordSeparateServiceImpl implements WordSeparateService {
@@ -534,6 +535,20 @@ public class WordSeparateServiceImpl implements WordSeparateService {
         return null;
     }
 
+    public String getFileUid(String fileAddress)
+    {
+        Pattern pattern = Pattern.compile("^.+\\\\(（2[0-9]{3}）.+?号)_([0-9a-z]{8}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{12})(.{3,6}?)\\.txt$");
+        Matcher matcher = pattern.matcher(fileAddress);
+        String uid="";
+        while (matcher.find()) {
+            uid=matcher.group(2);
+        }
+        if(uid.equals(""))
+            return "error";
+        else
+            return uid;
+    }
+
     @Override
     public String multiFileProcessAndSave(String fileDirectoryPath,String fileDirectoryPathHead,String fileDirectorySavePath) {//TODO 还得从目录中获取信息
         File dir = new File(fileDirectoryPath);
@@ -657,6 +672,30 @@ public class WordSeparateServiceImpl implements WordSeparateService {
         {
             return e.getMessage();
         }
+    }
+
+    @Autowired
+    public NewWordRepository newWordRepository;
+
+    public void getNewWords(String sourceString,String docId)
+    {
+        String neww=instance.NLPIR_GetNewWords(sourceString,50,false);
+        if(!neww.equals("")){
+            String[] ws=neww.split("#");
+            for(String w : ws)
+            {
+                NewWordEntity newWord=new NewWordEntity();
+                newWord.setCreateTime(timeFormat.format(new Date()));
+                newWord.setWord(w);
+                newWord.setCreateLocation(docId);
+                newWordRepository.save(newWord);
+            }
+        }
+    }
+
+    public int addDic(String word,String type)
+    {
+        return instance.NLPIR_AddUserWord(word+" "+type);
     }
 
 

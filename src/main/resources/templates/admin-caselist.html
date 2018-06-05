@@ -77,7 +77,7 @@
 
     window.operateEvents = {
         'click .detail': function (e, value, row, index) {
-            if($(this).attr("show")=="off") {
+            /*if($(this).attr("show")=="off") {
                 $(this).attr("show","on");
                 var html = [];
                 html.push('<div  class="row">');
@@ -91,7 +91,22 @@
             else {
                 $(this).attr("show","off");
                 $('#result-table').find('tr[detail-index=' + index + ']').remove();
-            }},
+            }},*/
+            $.post("",{id:row["id"]},function (rdata) {
+                if(!rdata.startsWith("error")){
+                    $.gyAlert({
+                        title:"案例详情",
+                        contentHtml:'<pre>'+rdata+'</pre>'
+                    })
+                }
+                else {
+                    $.gyAlert({
+                        title:"错误",
+                        contentText:"获取案例详情时出错"+rdata
+                    })
+                }
+            })
+        },
 
         'click .delete':function (e,value,row,index) {
             $.gyAlert({
