@@ -98,4 +98,23 @@ public class UserController {
         return code;
     }
 
+    @RequestMapping("/editPasswd")
+    @ResponseBody
+    public  String editPasswd(int userId, String passwd)
+    {
+       UserEntity user = userRepository.findById(userId);
+       user.setPassword(passwd);
+       userRepository.save(user);
+       return "success";
+    }
+
+    @RequestMapping("/delete-user")
+    @ResponseBody
+    public  String deleteUser(int userId)
+    {
+        UserEntity user = userRepository.findById(userId);
+        userRepository.delete(user);
+        return "success";
+    }
+
 }

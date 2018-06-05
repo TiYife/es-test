@@ -57,11 +57,12 @@
                 <div class="col-sm-12" style="margin-top: 25px;text-align: center">
                     <input id="password-input" class="form-control" placeholder="输入新密码" style="width: 100%" />
                 </div>
+                <span style="display: none;" id="user-id"></span>
                 <div style="clear: both"></div>
             </div>
             <div class="modal-footer" style="text-align: center">
                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                <button type="button" class="btn btn-primary" onclick="editPasswd()">添加</button>
+                <button type="button" class="btn btn-primary" onclick="editPasswd()">修改</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal -->
@@ -79,14 +80,18 @@
     };
 
     function editPasswd() {
-        $("",{passwd:$("#password-input").val()},function (rdata) {
+        var data = {
+            passwd:$("#password-input").val(),
+            userId:$("#user-id").text()
+        };
+        $.post("/editPasswd",data,function (rdata) {
             $("#editPasswdModal").modal("hide");
             if (rdata == "success") {
                 $.gyAlert({
                     title: "操作成功",
-                    contentText: "已成功修改该管理员的密码"
+                    contentText: "已成功修改该管理员用户的密码"
                 });
-                $('#assistant-table').bootstrapTable('refresh', { url: '/Teacher/getAssistant' });
+                $('#user-table').bootstrapTable('refresh', { url: '/list-users' });
 
             }
             else {
@@ -101,6 +106,7 @@
     window.operateEvents = {
         'click .edit': function (e, value, row, index) {
             $("#password-input").val("");
+            $("#user-id").text(row["id"]);
             $("#editPasswdModal").modal("show");
         },
         'click .delete':function (e,value,row,index) {
@@ -109,13 +115,13 @@
                 contentText:"确认删除该用户吗？",
                 confirm:function () {
                     //点确定之后的操作
-                    $.post("",{id:row["id"]},function (rdata) {
+                    $.post("/delete-user",{userId:row["id"]},function (rdata) {
                         if (rdata == "success") {
                             $.gyAlert({
                                 title: "操作成功",
-                                contentText: "已成功删除该条用户"
+                                contentText: "已成功删除该用户"
                             });
-                            $('#user-table').bootstrapTable('refresh', { url: '/Teacher/getAssistant' });
+                            $('#user-table').bootstrapTable('refresh', { url: '/list-users' });
 
                         }
                         else {
