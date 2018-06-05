@@ -15,6 +15,7 @@ public interface WordSeparateService {
     String multiFileProcessAndSave(String fileDirectoryPath, String fileDirectoryPathHead, String fileDirectorySavePath);
 
     public String readToString(String fileName);
+    public String stringToRead(String sourceString,String fileAddress,boolean append);
 
     String fileProcessAndSave(String fileAddress, String fileAddressHead, String saveAddress);
 
@@ -22,4 +23,5 @@ public interface WordSeparateService {
     ;
 
     public int addDic(String word,String type);
+    public int saveDic();
 }

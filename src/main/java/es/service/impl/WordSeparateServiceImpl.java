@@ -28,11 +28,24 @@ public class WordSeparateServiceImpl implements WordSeparateService {
     @Autowired
     DocRepository docRepository;
 
-    public NLPTRService instance =(NLPTRService) Native.loadLibrary(System.getProperty("user.dir") + "\\source\\NLPIR", NLPTRService.class);
+    public static NLPTRService instance =(NLPTRService) Native.loadLibrary(System.getProperty("user.dir") + "\\source\\NLPIR", NLPTRService.class);
 
     private String FILE_PATH=Constant.xmlLocation;
 
+    static {
 
+        try {
+            int init_flag = instance.NLPIR_Init("", 1, "0");
+            String resultString = null;
+            if (0 == init_flag) {
+                resultString = instance.NLPIR_GetLastErrorMsg();
+                System.err.println("初始化失败！\n" + resultString);
+            }
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
 
     @Override
     public String getHFWordFormFiles(String caseType,List<DocEntity> docEntities)//获取高频词组 参数代表案件类型 all所有类型
@@ -695,7 +708,11 @@ public class WordSeparateServiceImpl implements WordSeparateService {
 
     public int addDic(String word,String type)
     {
-        return instance.NLPIR_AddUserWord(word+" "+type);
+        return instance.NLPIR_AddUserWord(word+"\t"+type);
+    }
+    public int saveDic()
+    {
+        return instance.NLPIR_SaveTheUsrDic();
     }
 
 

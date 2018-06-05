@@ -92,7 +92,7 @@
                 $(this).attr("show","off");
                 $('#result-table').find('tr[detail-index=' + index + ']').remove();
             }},*/
-            $.post("",{id:row["id"]},function (rdata) {
+            $.post("/get-txt",{id:row["id"]},function (rdata) {
                 if(!rdata.startsWith("error")){
                     $.gyAlert({
                         title:"案例详情",

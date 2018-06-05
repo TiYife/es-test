@@ -72,7 +72,7 @@
                     <input id="add-word-input" class="form-control" placeholder="词组" style="width: 100%" />
                 </div>
                 <div class="col-sm-12" style="margin-top: 25px;text-align: center">
-                    <input id="add-wordtyppe-input" class="form-control" placeholder="词性" type="password" style="width: 100%" />
+                    <input id="add-wordtyppe-input" class="form-control" placeholder="词性" style="width: 100%" />
                 </div>
 
                 <div class="col-sm-12" style="margin-top: 25px;text-align: center">
@@ -82,7 +82,7 @@
             </div>
             <div class="modal-footer" style="text-align: center">
                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                <button type="button" class="btn btn-primary" onclick="jia2()">添加</button>
+                <button type="button" class="btn btn-primary" onclick="add()">添加</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal -->
@@ -102,7 +102,7 @@
                     <input id="edit-word-input" class="form-control" placeholder="词组" disabled="disabled" style="width: 100%" />
                 </div>
                 <div class="col-sm-12" style="margin-top: 25px;text-align: center">
-                    <input id="edit-wordtype-input" class="form-control" placeholder="词性" type="password" style="width: 100%" />
+                    <input id="edit-wordtype-input" class="form-control" placeholder="词性" style="width: 100%" />
                 </div>
 
                 <div class="col-sm-12" style="margin-top: 25px;text-align: center">
@@ -148,7 +148,7 @@
 <script>
     $("#input-id").fileinput({
         language: 'zh', //设置语言
-        uploadUrl: '/upload',
+        uploadUrl: '/upload-dic',
         overwriteInitial: false,
         maxFileSize: 0,
         //: ['jpg', 'gif', 'png', 'xls', 'xlsx', 'pdf', 'txt', 'doc', 'docx', 'rar', 'mp4', 'zip'],//接收的文件后缀
@@ -196,6 +196,7 @@
                 return ext.match(/(mp3|wav)$/i);
             }
         },
+        allowedFileTypes:['txt'],
         hideThumbnailContent: true,
     }).off('filepreupload').on('filepreupload', function () {
         //alert("Initial pre-upload message!");
@@ -219,7 +220,7 @@
             if (rdata == "success") {
                 $.gyAlert({
                     title: "操作成功",
-                    contentText: "已成功添加该管理员"
+                    contentText: "已成功添加该词组"
                 });
                 $('#word-table').bootstrapTable('refresh', { url: '/list-dics' });
 

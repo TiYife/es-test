@@ -22,6 +22,7 @@ public class Constant {
     public static String originalDocLocation=FILE_LOCATION+"txt\\";
     public static String xmlLocation=FILE_LOCATION+"xml\\";
     public static String newDocLocation=FILE_LOCATION+"new\\";
+    public static String dicFileLocation=FILE_LOCATION+"dic\\";
 
 
 
