@@ -10,182 +10,30 @@
     <script src="assets/plugins/table/bootstrap.js"></script>
     <script src="assets/plugins/table/bootstrap-table.js"></script>
     <script src="assets/plugins/table/bootstrap-table-export.js"></script>
+    <script src="assets/plugins/gy-alert.js"></script>
     <link href="assets/css/bootstrap-table.css" type="text/css" rel="stylesheet"/>
     <link href="assets/css/bootstrap.css" type="text/css" rel="stylesheet"/>
     <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.12.1/locale/bootstrap-table-zh-CN.min.js"></script>
 </head>
 <body>
-    <div class="row" id="main" style="margin-top: 40px">
-        <div class="col-md-12" style="text-align: center;">
-
-            <div class="panel panel-default">
-                <div class="panel-body" style="padding: 10px 80px">
-
-                    <div class="row" search-group id="search-group" style="padding:5px 30px;width:925px;">
-                        <div class="col-lg-12" style="text-align: left">
-                            <h3>输入检索条件：</h3>
-                        </div>
-                        <div class="col-lg-12" style="text-align: left">
-                            <button class="btn btn-primary" onclick="addItem()">添加检索项</button>
-                        </div>
-                        <div class="col-lg-12" style="text-align: left;margin-top: 10px">
-                            <div class="input-group">
-                                <select class="form-control" id="first-select" style="width:100px;margin-left: 70px">
-                                    <option value="caseName">案件名称</option>
-                                    <option value="courtName">法院名称</option>
-                                    <option value="courtLevel" >法院层级</option>
-                                    <option value="courtProvince">法院省份</option>
-                                    <option value="courtCity" >法院地市</option>
-                                    <option value="courtCountry" >法院区县</option>
-                                    <option value="courtRegion" >法院区域</option>
-                                    <option value="isExpUnit" >法院试点</option>
-                                    <option value="courtType" >法院类型</option>
-                                    <option value="caseType">案件类型</option>
-                                    <option value="trialProcedure" >审判程序</option>
-                                    <option value="docType">文书类型</option>
-                                    <option value="caseNo" >案号</option>
-                                    <option value="caseCause" >案由</option>
-                                    <option value="client" >当事人</option>
-                                    <option value="judge" >审判人员</option>
-                                    <option value="clerk" >书记员</option>
-                                    <option value="trialMonoption" >裁判月份</option>
-                                    <option value="trialDate">裁判日期</option>
-                                    <option value="trialYear" >裁判年份</option>
-                                    <option value="courtLevelOne" >一级法院</option>
-                                    <option value="courtLevelTwo" >二级法院</option>
-                                    <option value="courtLeveloptionree" >三级法院</option>
-                                    <option value="courtLevelFour" >四级法院</option>
-                                    <option value="courtSuperior" >上级法院名称</option>
-                                </select>
-                                <input class="form-control" id="first-input"  style="width:500px;margin-left: 5px"/>
-                                <select class="form-control" id="first-weight" style="width:100px">
-                                    <option value="1">权重=1</option>
-                                    <option value="2">权重=2</option>
-                                    <option value="3">权重=3</option>
-                                    <option value="4">权重=4</option>
-                                    <option value="5">权重=5</option>
-                                </select>
-                                <!--<select class="form-control" style="width:65px;margin-left: 5px">-->
-                                <!--<option>并含</option>-->
-                                <!--<option>或者</option>-->
-                                <!--<option>不含</option>-->
-                                <!--</select>-->
-                                <!--<input  class="form-control" style="width:220px;margin-left: 5px"/>-->
-                                <!--<select class="form-control" style="width:65px">-->
-                                <!--<option>模糊</option>-->
-                                <!--<option>精确</option>-->
-                                <!--</select>-->
-                            </div>
-                        </div>
-
-                        <div class="col-lg-12" id="item-block" item-type style="text-align: left;margin-top: 10px;display: none">
-                            <div class="input-group">
-                                <select class="form-control" input-type="type" style="width:58px">
-                                    <option value="and">并含</option>
-                                    <option value="or">或者</option>
-                                    <option value="not">不含</option>
-                                </select>
-                                <select class="form-control" input-type="attr" style="width:100px;margin-left: 12px">
-                                    <option value="caseName">案件名称</option>
-                                    <option value="courtName">法院名称</option>
-                                    <option value="courtLevel" >法院层级</option>
-                                    <option value="courtProvince">法院省份</option>
-                                    <option value="courtCity" >法院地市</option>
-                                    <option value="courtCountry" >法院区县</option>
-                                    <option value="courtRegion" >法院区域</option>
-                                    <option value="isExpUnit" >法院试点</option>
-                                    <option value="courtType" >法院类型</option>
-                                    <option value="caseType">案件类型</option>
-                                    <option value="trialProcedure" >审判程序</option>
-                                    <option value="docType">文书类型</option>
-                                    <option value="caseNo" >案号</option>
-                                    <option value="caseCause" >案由</option>
-                                    <option value="client" >当事人</option>
-                                    <option value="judge" >审判人员</option>
-                                    <option value="clerk" >书记员</option>
-                                    <option value="trialMonoption" >裁判月份</option>
-                                    <option value="trialDate">裁判日期</option>
-                                    <option value="trialYear" >裁判年份</option>
-                                    <option value="courtLevelOne" >一级法院</option>
-                                    <option value="courtLevelTwo" >二级法院</option>
-                                    <option value="courtLeveloptionree" >三级法院</option>
-                                    <option value="courtLevelFour" >四级法院</option>
-                                    <option value="courtSuperior" >上级法院名称</option>
-                                </select>
-                                <input class="form-control" input-type="keyword" style="width:500px;margin-left: 5px"/>
-                                <select class="form-control" input-type="weight" style="width:100px">
-                                    <option value="1">权重=1</option>
-                                    <option value="2">权重=2</option>
-                                    <option value="3">权重=3</option>
-                                    <option value="4">权重=4</option>
-                                    <option value="5">权重=5</option>
-                                </select>
-                                <span onclick="$(this).parent().parent().remove()" style="background: #ff3e2f;height: 26px;width: 26px;cursor: pointer; line-height: 26px;border-radius: 13px;margin: 4px 0px 0px 20px;color: white;display: inline-block;text-align: center;font-size: x-large;font-weight: bold;text-decoration: none">-</span>
-                                <!--<select class="form-control" style="width:65px;margin-left: 5px">-->
-                                <!--<option>并含</option>-->
-                                <!--<option>或者</option>-->
-                                <!--<option>不含</option>-->
-                                <!--</select>-->
-                                <!--<input  class="form-control" style="width:220px;margin-left: 5px"/>-->
-                                <!--<select class="form-control" style="width:65px">-->
-                                <!--<option>模糊</option>-->
-                                <!--<option>精确</option>-->
-                                <!--</select>-->
-                            </div>
-                        </div>
-
-                        <!--<div class="col-lg-12 form-inline" style="text-align: left;margin-top: 20px">-->
-                        <!--<label style="line-height: 34px;font-size: large;font-weight: normal">时间范围:</label>-->
-                        <!--<input class="form-control"  style="width:220px;margin-left: 45px"/>-->
-                        <!--<span style="margin-left: 25px">至</span>-->
-                        <!--<input class="form-control" style="width:220px;margin-left: 25px"/>-->
-                        <!--</div>-->
-
-                        <div class="col-lg-12" style="text-align: right;margin-top: 10px">
-                            <button class="btn btn-success" style="margin-right: 60px"  onclick="multi_search_submit()">开始检索</button>
-                        </div>
-
-                    </div>
-
-
-
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-12" style="text-align: center;margin-top: 50px">
+    <div class="row" id="main">
+        <div class="col-sm-12" style="text-align: center;">
             <div class="row">
                 <div class="col-lg-12">
                     <div class="panel panel-default">
                         <div class="panel-body">
-                            <table data-toggle="table" data-url="/list-cases" data-show-refresh="true" data-show-toggle="true" data-show-columns="true" data-search="true" data-select-item-name="toolbar1" data-pagination="true" data-sort-order="desc" data-show-export="true" id="result-table">
+                            <table data-toggle="table" data-url="/list-docs" data-show-refresh="true" data-show-toggle="true" data-show-columns="true" data-search="true" data-select-item-name="toolbar1" data-pagination="true" data-sort-order="desc" data-show-export="true" id="result-table">
                                 <thead>
                                 <tr>
-                                    <th data-field="caseName" >案件名称</th>
-                                    <th data-field="courtName">法院名称</th>
-                                    <th data-field="courtLevel" data-visible="false">法院层级</th>
-                                    <th data-field="courtProvince">法院省份</th>
-                                    <th data-field="courtCity" data-visible="false">法院地市</th>
-                                    <th data-field="courtCountry" data-visible="false">法院区县</th>
-                                    <th data-field="courtRegion" data-visible="false">法院区域</th>
-                                    <th data-field="isExpUnit" data-visible="false">法院试点</th>
-                                    <th data-field="courtType" data-visible="false">法院类型</th>
-                                    <th data-field="caseType">案件类型</th>
-                                    <th data-field="trialProcedure" data-visible="false">审判程序</th>
-                                    <th data-field="docType">文书类型</th>
-                                    <th data-field="caseNo" data-visible="false">案号</th>
-                                    <th data-field="caseCause" data-visible="false">案由</th>
-                                    <th data-field="client" data-visible="false">当事人</th>
-                                    <th data-field="judge" data-visible="false">审判人员</th>
-                                    <th data-field="clerk" data-visible="false">书记员</th>
-                                    <th data-field="trialMonth" data-visible="false">裁判月份</th>
-                                    <th data-field="trialDate">裁判日期</th>
-                                    <th data-field="trialYear" data-visible="false">裁判年份</th>
-                                    <th data-field="courtLevelOne" data-visible="false">一级法院</th>
-                                    <th data-field="courtLevelTwo" data-visible="false">二级法院</th>
-                                    <th data-field="courtLevelThree" data-visible="false">三级法院</th>
-                                    <th data-field="courtLevelFour" data-visible="false">四级法院</th>
-                                    <th data-field="courtSuperior" data-visible="false">上级法院名称</th>
-                                    <th data-field="content" data-visible="false" >判决内容</th>
+                                    <th data-field="id"  data-visible="false">文本编号</th>
+                                    <th data-field="name">文本名</th>
+                                    <th data-field="upLog">上传批次</th>
+                                    <th data-field="location"  data-visible="false">文本位置</th>
+                                    <th data-field="xmlLocation" data-visible="false">分词文本位置</th>
+                                    <th data-field="upTime">上传时间</th>
+                                    <th data-field="saveTime">处理时间</th>
+                                    <th data-field="status" >文本状态</th>
+                                    <th data-field="uploader" >上传人</th>
                                     <th data-formatter="operateFormatter" data-events='operateEvents'>操作</th>
                                 </tr>
                                 </thead>
@@ -244,19 +92,20 @@
                 $(this).attr("show","off");
                 $('#result-table').find('tr[detail-index=' + index + ']').remove();
             }},
+
         'click .delete':function (e,value,row,index) {
             $.gyAlert({
-                title:"删除管理员",
-                contentText:"确认删除该管理员吗？",
+                title:"删除文本",
+                contentText:"确认删除该文本吗？",
                 confirm:function () {
                     //点确定之后的操作
-                    $.post("",{id:row["id"]},function (rdata) {
+                    $.post("/delete-doc",{id:row["id"]},function (rdata) {
                         if (rdata == "success") {
                             $.gyAlert({
                                 title: "操作成功",
-                                contentText: "已成功删除该条管理员"
+                                contentText: "已成功删除该条文本"
                             });
-                            $('#user-table').bootstrapTable('refresh', { url: '/Teacher/getAssistant' });
+                            $('#result-table').bootstrapTable('refresh', { url: '/list-docs' });
 
                         }
                         else {

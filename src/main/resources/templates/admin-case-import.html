@@ -45,7 +45,7 @@
     <div class="col-sm-12"style="margin-top: 10px">
         <div class="panel panel-default">
             <div class="panel-body">
-                <table data-toggle="table" data-url="/list-uploading" data-show-refresh="true" data-show-toggle="true" data-show-columns="true" data-search="true" data-select-item-name="toolbar1" data-pagination="true" data-sort-order="desc" data-show-export="true" id="user-table">
+                <table data-toggle="table" data-url="/list-up" data-show-refresh="true" data-show-toggle="true" data-show-columns="true" data-search="true" data-select-item-name="toolbar1" data-pagination="true" data-sort-order="desc" data-show-export="true" id="user-table">
                     <thead>
                     <tr>
                         <th data-field="id">编号</th>
@@ -169,13 +169,13 @@
                 contentText:"即将对该次上传进行结构化处理和导入，确定操作吗",
                 confirm:function () {
                     //点确定之后的操作
-                    $.post("/save-file",{id:row["id"]},function (rdata) {
+                    $.post("/save-up",{id:row["id"]},function (rdata) {
                         if (rdata == "success") {
                             $.gyAlert({
                                 title: "操作成功",
                                 contentText: "正在进行结构化处理和导入，该过程可能会花费比较长的时间，请耐心等候"
                             });
-                            $('#user-table').bootstrapTable('refresh', { url: '/list-uploading' });
+                            $('#user-table').bootstrapTable('refresh', { url: '/list-up' });
 
                         }
                         else {
@@ -200,7 +200,7 @@
                                 title: "操作成功",
                                 contentText: "正在进行删除，该过程可能会花费比较长的时间，请耐心等候"
                             });
-                            $('#user-table').bootstrapTable('refresh', { url: '/list-uploading' });
+                            $('#user-table').bootstrapTable('refresh', { url: '/list-up' });
 
                         }
                         else {

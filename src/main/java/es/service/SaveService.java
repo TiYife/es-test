@@ -1,8 +1,7 @@
 package es.service;
 
-import es.entity.jpaEntity.OriDocEntity;
+import es.entity.jpaEntity.TxtEntity;
 import es.entity.jpaEntity.UpLogEntity;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -16,19 +15,17 @@ public interface SaveService {
 
     String saveFile(UpLogEntity upLogEntity);
 
-    boolean saveAllDoc();
+    String saveAll();
 
-    List<OriDocEntity> listDocs();
+    List<TxtEntity> listDocs();
 
-    void deleteDoc(String docId);
+    String deleteTxt(String docId);
 
-    void deleteDoc(List<String> docIds);
+    void deleteTxt(List<String> docIds);
 
-    List<UpLogEntity> listUploading();
+    List<UpLogEntity> listUpLog();
 
-    List<UpLogEntity> listUploaded();
-
-    void deleteUpLog(String id);
+    String deleteUpLog(String id);
 
     void deleteUpLog(List<String> docIds);
 }

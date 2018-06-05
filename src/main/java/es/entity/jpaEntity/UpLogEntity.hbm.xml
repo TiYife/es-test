@@ -24,10 +24,10 @@
             <column name="location" sql-type="varchar(200)" length="200"/>
         </property>
         <property name="isSave">
-            <column name="is_save" sql-type="tinyint(4)" not-null="true"/>
+            <column name="is_save" sql-type="int(11)" not-null="true"/>
         </property>
         <property name="isDel">
-            <column name="is_del" sql-type="tinyint(4)" not-null="true"/>
+            <column name="is_del" sql-type="int(11)" not-null="true"/>
         </property>
         <property name="saveTime">
             <column name="save_time" sql-type="varchar(45)" length="45" not-null="true"/>
