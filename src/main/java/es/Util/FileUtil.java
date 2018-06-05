@@ -15,6 +15,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -317,6 +319,20 @@ public class FileUtil {
             }
         }
         return pathFile;
+    }
+
+    public static String getFileUid(String fileAddress)
+    {
+        Pattern pattern = Pattern.compile("^.+\\\\(（2[0-9]{3}）.+?号)_([0-9a-z]{8}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{12})(.{3,6}?)\\.txt$");
+        Matcher matcher = pattern.matcher(fileAddress);
+        String uid="";
+        while (matcher.find()) {
+            uid=matcher.group(2);
+        }
+        if(uid.equals(""))
+            return "error";
+        else
+            return uid;
     }
 
 }

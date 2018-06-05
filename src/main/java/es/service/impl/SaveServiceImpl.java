@@ -341,8 +341,8 @@ public class SaveServiceImpl implements SaveService {
     private TxtEntity recordTxt(String fileName, int userId , String upLogId) {
         File f= new File(fileName);
         TxtEntity entity = new TxtEntity();
-        String uuid = UUID.randomUUID().toString().replaceAll("-", "");
-        entity.setId(uuid);
+        String uid = FileUtil.getFileUid(f.getAbsolutePath());
+        entity.setId(uid);
         entity.setName(FileUtil.getFileName(f.getName()));
         entity.setUpLog(upLogId);
         entity.setLocation(f.getAbsolutePath());

@@ -548,20 +548,6 @@ public class WordSeparateServiceImpl implements WordSeparateService {
         return null;
     }
 
-    public String getFileUid(String fileAddress)
-    {
-        Pattern pattern = Pattern.compile("^.+\\\\(（2[0-9]{3}）.+?号)_([0-9a-z]{8}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{12})(.{3,6}?)\\.txt$");
-        Matcher matcher = pattern.matcher(fileAddress);
-        String uid="";
-        while (matcher.find()) {
-            uid=matcher.group(2);
-        }
-        if(uid.equals(""))
-            return "error";
-        else
-            return uid;
-    }
-
     @Override
     public String multiFileProcessAndSave(String fileDirectoryPath,String fileDirectoryPathHead,String fileDirectorySavePath) {//TODO 还得从目录中获取信息
         File dir = new File(fileDirectoryPath);
