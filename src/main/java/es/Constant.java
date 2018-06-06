@@ -23,10 +23,11 @@ public class Constant {
     public static String xmlLocation=FILE_LOCATION+"xml\\";
     public static String newDocLocation=FILE_LOCATION+"new\\";
     public static String dicFileLocation=FILE_LOCATION+"dic\\";
+    public static String hfwordFileLocation=FILE_LOCATION+"hfword\\";
 
 
 
-    public static final String HFWord_PATH="E:\\桌面存放\\测试\\全局高频词组.txt";
+    public static final String HFWord_PATH=hfwordFileLocation+"全局高频词组.txt";
 
     public enum WordType {PREFIX,
         PREP,

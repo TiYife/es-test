@@ -40,6 +40,7 @@
                 <table data-toggle="table" data-url="/list-dics" data-show-refresh="true" data-show-toggle="true" data-show-columns="true" data-search="true" data-select-item-name="toolbar1" data-pagination="true" data-sort-order="desc" data-show-export="true" id="word-table">
                     <thead>
                     <tr>
+                        <th data-field="state" data-checkbox="true">vmName</th>
                         <th data-field="id">编号</th>
                         <th data-field="word">词组</th>
                         <th data-field="type">类型</th>
@@ -196,7 +197,7 @@
                 return ext.match(/(mp3|wav)$/i);
             }
         },
-        allowedFileTypes:['txt'],
+        allowedFileExtensions : [ 'txt' ],
         hideThumbnailContent: true,
     }).off('filepreupload').on('filepreupload', function () {
         //alert("Initial pre-upload message!");

@@ -13,6 +13,7 @@ public interface WordSeparateService {
     public int NLPTR_Exit();
 
     String multiFileProcessAndSave(String fileDirectoryPath, String fileDirectoryPathHead, String fileDirectorySavePath);
+    public void createPreDirectory(String fileAddress);
 
     public String readToString(String fileName);
     public String stringToRead(String sourceString,String fileAddress,boolean append);
@@ -24,4 +25,6 @@ public interface WordSeparateService {
 
     public int addDic(String word,String type);
     public int saveDic();
+    public String getEncoding(String str);
+    public String getUTF8StringFromGBKString(String gbkStr);
 }

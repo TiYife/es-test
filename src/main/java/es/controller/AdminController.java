@@ -2,9 +2,9 @@ package es.controller;
 
 import com.google.gson.Gson;
 import es.Constant;
+import es.Util.IdentityUtil;
 import es.entity.jpaEntity.DicEntity;
 import es.entity.jpaEntity.TxtEntity;
-import es.entity.jpaEntity.UserEntity;
 import es.repository.esRepository.DocRepository;
 import es.repository.jpaRepository.*;
 import es.service.WordSeparateService;
@@ -168,6 +168,7 @@ public class AdminController {
     public  String register(@RequestParam("word") String word,
                             @RequestParam("type") String type,
                             @RequestParam("sepaType") String sepaType,
+                            HttpServletRequest request,
                             HttpSession session)
     {
         if(dicRepository.findFirstByWord(word)!=null)
@@ -183,8 +184,10 @@ public class AdminController {
             dic.setCreateTime(df.format(day));
             dic.setSepaType(sepaType);
             dic.setType(type);
-            UserEntity user=(UserEntity)session.getAttribute("user");
-            dic.setCreateUserId(user.getId());
+            //UserEntity user=(UserEntity)session.getAttribute("user");
+            //dic.setCreateUserId(user.getId());
+            String uId= IdentityUtil.getCookieValue(request,"userId");
+            dic.setCreateUserId(Integer.parseInt(uId));
             dicRepository.save(dic);
             return "success";
         }
@@ -201,8 +204,11 @@ public class AdminController {
                 try {
                     String errorTxt="";
             String content=new String(file.getBytes(), "utf-8");
+            //String content=new String( contentGBK.getBytes("utf-8") , "utf-8");
+                    //String content=wordSeparateService.getUTF8StringFromGBKString(contentGBK);
             String[] lines=content.split("\r\n");
             totalNum=lines.length;
+
             for(int i=0;i<lines.length;i++)
             {
                 String line=lines[i];
@@ -223,8 +229,11 @@ public class AdminController {
                     dic.setCreateTime(df.format(day));
                     dic.setSepaType(attrs[1]);
                     dic.setType(attrs[2]);
-                    UserEntity user=(UserEntity)session.getAttribute("user");
-                    dic.setCreateUserId(user.getId());
+                    //UserEntity user=(UserEntity)session.getAttribute("user");
+                    //dic.setCreateUserId(user.getId());
+                    String uId= IdentityUtil.getCookieValue(request,"userId");
+                    dic.setCreateUserId(Integer.parseInt(uId));
+                    //session.refresh(object)
                     dicRepository.save(dic);
                     successNum++;
                 }
@@ -234,14 +243,15 @@ public class AdminController {
                 }
 
             }
-            String fileAddress=Constant.dicFileLocation + UUID.randomUUID().toString() + file.getName();
+            String fileAddress=Constant.dicFileLocation + UUID.randomUUID().toString() + file.getOriginalFilename();
+            wordSeparateService.createPreDirectory(fileAddress);
                     file.transferTo(new File(fileAddress));
-                    wordSeparateService.stringToRead(errorTxt,fileAddress,true);
+                    wordSeparateService.stringToRead(errorTxt,fileAddress+".error",false);
                 }catch (Exception e)
                 {
                     return e.getMessage();
                 }
-        return "导入"+totalNum+"条词组，"+"成功"+successNum+"条词"+(successNum!=0?"”，错误详情请查看错误日志文件":"");
+        return "{success:'导入"+totalNum+"条词组，"+"成功"+successNum+"条词"+(successNum==totalNum?"”，错误详情请查看错误日志文件":"")+"'}";
     }
 
 

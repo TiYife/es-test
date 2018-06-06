@@ -7,6 +7,7 @@
     <class name="es.entity.jpaEntity.DicEntity" table="dic" schema="esWeb">
         <id name="id">
             <column name="id" sql-type="int(11)"/>
+            <generator class="increment" />
         </id>
         <property name="word">
             <column name="word" sql-type="varchar(30)" length="30"/>
