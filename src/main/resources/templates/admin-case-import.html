@@ -145,7 +145,7 @@
                 return ext.match(/(mp3|wav)$/i);
             }
         },
-        allowedFileTypes:['zip'],
+        allowedFileExtensions :['zip'],
         hideThumbnailContent: true,
     }).off('filepreupload').on('filepreupload', function () {
         //alert("Initial pre-upload message!");

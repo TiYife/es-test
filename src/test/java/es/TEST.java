@@ -116,15 +116,15 @@ public class TEST {
             //String ii=instance.NLPIR_ParagraphProcess(ss,1);
             //String sss=wordSeparateService.stringToRead(ii,"E:\\桌面存放\\测试\\1212.txt");
             //int i2=instance.NLPIR_DelUsrWord("法定代表人 dlr");
-            int i2=instance.NLPIR_DelUsrWord("申请人\tdsr");
+            //int i2=instance.NLPIR_DelUsrWord("申请人\tdsr");
             //int i1=instance.NLPIR_ImportUserDict("E:\\毕业设计\\es-test\\dic\\标志词词典.txt");
-            int i3=instance.NLPIR_SaveTheUsrDic();
+            //int i3=instance.NLPIR_SaveTheUsrDic();
             //String s= instance.NLPIR_GetNewWords("克隆",50,false);
             //String s=instance.NLPIR_ParagraphProcess("姓名权纠纷是一个案由",1);
             //String iii=ii.replaceAll("\r\n","\n");
             //String[] lines = ii.split("\r");
 
-            //wordSeparateService.fileProcessAndSave("E:\\桌面存放\\测试\\12.txt","E:\\桌面存放\\测试","E:\\桌面存放\\测试\\12.txt");
+            wordSeparateService.fileProcessAndSave("E:\\桌面存放\\测试\\12.txt","E:\\桌面存放\\测试","E:\\桌面存放\\测试\\1223.txt");
             //String[] fileLines=fileString.split("\r\n");
 
 

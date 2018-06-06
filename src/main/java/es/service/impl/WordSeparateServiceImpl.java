@@ -20,6 +20,7 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static es.Constant.HFWord_PATH;
 import static es.Constant.timeFormat;
 
 @Service
@@ -32,6 +33,8 @@ public class WordSeparateServiceImpl implements WordSeparateService {
 
     private String FILE_PATH=Constant.xmlLocation;
 
+    public static List<String> hfWordList=new ArrayList<String>();
+
     static {
 
         try {
@@ -41,11 +44,40 @@ public class WordSeparateServiceImpl implements WordSeparateService {
                 resultString = instance.NLPIR_GetLastErrorMsg();
                 System.err.println("初始化失败！\n" + resultString);
             }
+
+            String encoding = "utf-8";
+            File file = new File(HFWord_PATH);
+            Long filelength = file.length();
+            byte[] filecontent = new byte[filelength.intValue()];
+            try {
+                FileInputStream in = new FileInputStream(file);
+                in.read(filecontent);
+                in.close();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                String hfWordString=new String(filecontent, encoding);
+                String[] lines=hfWordString.split("\r\n");
+                for(String line:lines)
+                {
+                    String[] attrs=line.split("\t");
+                    hfWordList.add(attrs[0]);
+                }
+
+            } catch (UnsupportedEncodingException e) {
+                System.err.println("The OS does not support " + encoding);
+                e.printStackTrace();
+            }
+            //hfWordList=this.readToString()
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
+
 
     @Override
     public String getHFWordFormFiles(String caseType,List<DocEntity> docEntities)//获取高频词组 参数代表案件类型 all所有类型
@@ -109,7 +141,7 @@ public class WordSeparateServiceImpl implements WordSeparateService {
             String sp="";
             for (String w : Word.keySet()) {
                 result+=sp+w+"\t"+Word.get(w).toString();
-                sp="\n";
+                sp="\r\n";
             }
             stringToRead(result,"E:\\测试\\高频词组.txt",false);
             return "success";
@@ -521,14 +553,15 @@ public class WordSeparateServiceImpl implements WordSeparateService {
                 }
             }
             //TODO 关键字重写
-            String keyword=instance.NLPIR_GetKeyWords(wordSepaEnity1.content,10,false);
-            wordSepaEnity1.keyWord=keyword;
+            String keywordOrigin=instance.NLPIR_GetKeyWords(wordSepaEnity1.content,10,false);
+            wordSepaEnity1.keyWord=produceKeyword(keywordOrigin);
 
             //TODO 继续添加其他属性
             if(ayResult.equals(""))
                 errorDetail+="\n无法获取案由";
 
             stringToRead(errorDetail,fileAddress+".error.etxt",false);
+            getNewWords(wordSepaEnity1.content,wordSepaEnity1.docId);
 
             String saveFileAddress="";
             if(fileAddress.indexOf(fileAddressHead)==0)
@@ -546,6 +579,20 @@ public class WordSeparateServiceImpl implements WordSeparateService {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public String produceKeyword(String keywordOrigin)
+    {
+        String[] keywordOriginList=keywordOrigin.split("#");
+        String keyword="";
+        String s="";
+        for(String kw :keywordOriginList)
+        {
+            if(!hfWordList.contains(kw))
+                keyword+=s+kw;
+            s="#";
+        }
+        return keyword;
     }
 
     @Override
@@ -676,20 +723,26 @@ public class WordSeparateServiceImpl implements WordSeparateService {
     @Autowired
     public NewWordRepository newWordRepository;
 
-    public void getNewWords(String sourceString,String docId)
+    public String getNewWords(String sourceString,String docId)
     {
-        String neww=instance.NLPIR_GetNewWords(sourceString,50,false);
-        if(!neww.equals("")){
-            String[] ws=neww.split("#");
-            for(String w : ws)
-            {
-                NewWordEntity newWord=new NewWordEntity();
-                newWord.setCreateTime(timeFormat.format(new Date()));
-                newWord.setWord(w);
-                newWord.setCreateLocation(docId);
-                newWordRepository.save(newWord);
+        try {
+            if(sourceString==null) return "";
+            String neww = instance.NLPIR_GetNewWords(sourceString, 50, false);
+            if (!neww.equals("")) {
+                String[] ws = neww.split("#");
+                for (String w : ws) {
+                    NewWordEntity newWord = new NewWordEntity();
+                    newWord.setCreateTime(timeFormat.format(new Date()));
+                    newWord.setWord(w);
+                    newWord.setCreateLocation(docId);
+                    newWordRepository.save(newWord);
+                }
             }
+        }catch (Exception e)
+        {
+            return e.getMessage();
         }
+        return "";
     }
 
     public int addDic(String word,String type)
@@ -700,6 +753,81 @@ public class WordSeparateServiceImpl implements WordSeparateService {
     {
         return instance.NLPIR_SaveTheUsrDic();
     }
+
+    public String getEncoding(String str){
+        String encoding = "UTF-8";
+        try {
+            if (str.equals(new String(str.getBytes(),encoding))) {
+                return encoding;
+            }
+        } catch (UnsupportedEncodingException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        encoding = "GBK";
+        try {
+            if (str.equals(new String(str.getBytes(),encoding))) {
+                return encoding;
+            }
+        } catch (UnsupportedEncodingException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        encoding = "ISO-8859-1";
+        try {
+            if (str.equals(new String(str.getBytes(),encoding))) {
+                return encoding;
+            }
+        } catch (UnsupportedEncodingException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        encoding = "GB2312";
+        try {
+            if (str.equals(new String(str.getBytes(),encoding))) {
+                return encoding;
+            }
+        } catch (UnsupportedEncodingException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public String getUTF8StringFromGBKString(String gbkStr) {
+        try {
+            return new String(getUTF8BytesFromGBKString(gbkStr), "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            throw new InternalError();
+        }
+    }
+
+    public static byte[] getUTF8BytesFromGBKString(String gbkStr) {
+        int n = gbkStr.length();
+        byte[] utfBytes = new byte[3 * n];
+        int k = 0;
+        for (int i = 0; i < n; i++) {
+            int m = gbkStr.charAt(i);
+            if (m < 128 && m >= 0) {
+                utfBytes[k++] = (byte) m;
+                continue;
+            }
+            utfBytes[k++] = (byte) (0xe0 | (m >> 12));
+            utfBytes[k++] = (byte) (0x80 | ((m >> 6) & 0x3f));
+            utfBytes[k++] = (byte) (0x80 | (m & 0x3f));
+        }
+        if (k < utfBytes.length) {
+            byte[] tmp = new byte[k];
+            System.arraycopy(utfBytes, 0, tmp, 0, k);
+            return tmp;
+        }
+        return utfBytes;
+    }
+
 
 
     /*public String getHFWordFormFiles(String caseType)//获取高频词组 参数代表案件类型 all所有类型
