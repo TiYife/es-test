@@ -11,6 +11,7 @@ import es.service.WordSeparateService;
 import org.assertj.core.util.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -50,7 +51,17 @@ public class AdminController {
 
 
     @RequestMapping("/admin1")
-    public String admin1(){
+    public String admin1(HttpSession session,Model model){
+        UserEntity user = (UserEntity)session.getAttribute("user");
+
+        if(user==null) {
+            model.addAttribute("msg","你还没有登录，请登录后再进行访问");
+            return "error-page";
+        }
+        if(user.getRole()!=1){
+            model.addAttribute("msg","你没有权限访问该页面");
+            return "error-page";
+        }
         return "admin1";
     }
 

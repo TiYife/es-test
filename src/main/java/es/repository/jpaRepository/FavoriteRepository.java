@@ -9,5 +9,5 @@ import java.util.List;
 public interface FavoriteRepository extends CrudRepository<FavoriteEntity,Integer> {
     List<FavoriteEntity> findByUserId(int userId);
 
-    FavoriteEntity findByUserIdAndDocId(int userId, String  docId);
+    List<FavoriteEntity> findByUserIdAndDocId(int userId, String  docId);
 }

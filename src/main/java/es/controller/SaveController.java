@@ -3,6 +3,7 @@ package es.controller;
 import com.google.gson.Gson;
 import es.Util.IdentityUtil;
 import es.entity.jpaEntity.UpLogEntity;
+import es.entity.jpaEntity.UserEntity;
 import es.repository.jpaRepository.UpLogRepository;
 import es.repository.jpaRepository.UserRepository;
 import es.service.SaveService;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 /**
  * Created by TYF on 2018/5/14.
@@ -35,15 +37,17 @@ public class SaveController {
 
     @RequestMapping("/upload")
     @ResponseBody
-    public String upload(@RequestParam("file")MultipartFile file, HttpServletRequest request){
-//        String uId=IdentityUtil.getCookieValue(request,"userId");
-//        if(uId==null || uId.equals("null"))    return "not login";
-
-        int userId = 123;//Integer.parseInt(uId);//todo
-        String pwd = IdentityUtil.getCookieValue(request,"userPasswd");
-        if(!userRepository.findById(userId).getPassword().equals(pwd))  return "not login";
-
-        String message = saveService.uploadFile(file,userId);
+    public String upload(@RequestParam("file")MultipartFile file, HttpSession session){
+        String message;
+        UserEntity user = (UserEntity) session.getAttribute("user");
+        if(user==null)
+            message = "你还没有登录";
+        else if(user.getRole()!= 1)
+            message = "你没有进行该操作的权限";
+        else {
+        int userId = user.getId();
+        message = saveService.uploadFile(file,userId);
+        }
         if(message.equals("success"))
             return "{}";
         else return "{error:"+message+"}";

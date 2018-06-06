@@ -3,6 +3,7 @@ package es.controller;
 import com.google.gson.Gson;
 import es.Util.IdentityUtil;
 import es.entity.esEntity.DocEntity;
+import es.entity.jpaEntity.UserEntity;
 import es.repository.esRepository.DocRepository;
 import es.repository.jpaRepository.UserRepository;
 import es.service.SearchService;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.net.URLEncoder;
 import java.util.List;
 
@@ -72,38 +74,37 @@ public class SearchController {
 
     @RequestMapping("/favor")
     @ResponseBody
-    public String favor(@RequestParam("docId")String docId, HttpServletRequest request){
-        String uId= IdentityUtil.getCookieValue(request,"userId");
-        if(uId==null || uId.equals("null"))    return "not login";
-
-       // int userId = Integer.parseInt(uId);
-        int userId = linshi;
-        String pwd = IdentityUtil.getCookieValue(request,"userPasswd");
-        if(!userRepository.findById(userId).getPassword().equals(pwd))
-            return "not login";
-        searchService.favorDoc(userId,docId);
-        return "success";
+    public String favor(@RequestParam("docId")String docId, HttpSession session){
+        UserEntity user = (UserEntity)session.getAttribute("user");
+        if(user==null)
+            return "你还没有登录，请登录之后再进行该操作";
+        int userId= user.getId();
+        return searchService.favorDoc(userId,docId);
     }
 
     @RequestMapping("/delete-favor")
     @ResponseBody
-    public String deleteFavor(@RequestParam("docId")String docId, HttpServletRequest request){
-        int userId = linshi;
+    public String deleteFavor(@RequestParam("docId")String docId, HttpSession session){
+        UserEntity user = (UserEntity)session.getAttribute("user");
+        if(user==null)
+            return "你还没有登录，请登录之后再进行该操作";
+        int userId= user.getId();
         searchService.deleteFavorDoc(userId,docId);
         return "success";
     }
 
     @RequestMapping("/favorite")
-    public String favorite(Model model,HttpServletRequest request){
-        String uId= IdentityUtil.getCookieValue(request,"userId");
-        if(uId==null || uId.equals("null"))    return "not login";
+    public String favorite(Model model,HttpSession session){
+        UserEntity user = (UserEntity)session.getAttribute("user");
 
-        int userId = linshi;// = Integer.parseInt(uId);
-        String pwd = IdentityUtil.getCookieValue(request,"userPasswd");
-        if(!userRepository.findById(userId).getPassword().equals(pwd))
-            return "not login";
-        model.addAttribute("userId",userId);
-        return "favorites";
+        if(user==null) {
+            model.addAttribute("msg","你还没有登录，请登录后再进行访问");
+            return "error-page";
+        }else{
+            int userId = user.getId();
+            model.addAttribute("userId",userId);
+            return "favorites";
+        }
     }
 
     @RequestMapping("list-favorite")
