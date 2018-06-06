@@ -54,6 +54,17 @@ public class UserController {
         }
     }
 
+    @RequestMapping("uLogout")
+    public  String login(@RequestParam("userId") String userId,
+                         HttpSession session)
+    {
+        UserEntity user = (UserEntity)session.getAttribute("user");
+        if(user==null) return "你还没有登录";
+        session.removeAttribute("user");
+        session.invalidate();
+        return "success";
+    }
+
     @RequestMapping("/uRegister")
     @ResponseBody
     public  String register(@RequestParam("userId") String userId,

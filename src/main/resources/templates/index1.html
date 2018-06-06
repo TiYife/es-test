@@ -272,6 +272,16 @@
         $.cookie("userName",null);
         $.cookie("userId",null);
         $.cookie("userPasswd",null);
+        $.post("/uLogout",function (rdata) {
+            if(rdata=="success")
+            {
+                $("#registerModal").hide();
+                alert("注销成功");
+            }
+            else {
+                alert(rdata);
+            }
+        });
         location.reload();
     }
 </script>

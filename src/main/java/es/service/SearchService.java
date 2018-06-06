@@ -20,7 +20,7 @@ List<DocEntity> searchLaw(Integer pageNumber, Integer pageSize,String searchAttr
 
     void deleteFavorDoc(int userId, String docId);
 
-    void favorDoc(int userId, String docId);
+    String favorDoc(int userId, String docId);
 
     List<DocEntity> listFavorDocs(int userId);
 }

@@ -105,18 +105,22 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @Override
-    public void favorDoc(int userId, String docId){
+    public String favorDoc(int userId, String docId){
         DocEntity docEntity = docRepository.findOne(docId);
+        List<FavoriteEntity> list = favoriteRepository.findByUserIdAndDocId(userId,docId);
+        if(list.size()!=0)
+            return "你已经收藏过该文本了";
         FavoriteEntity favoriteEntity = new FavoriteEntity();
         favoriteEntity.setUserId(userId);
-        favoriteEntity.setDocId(docEntity.getDocId());
+        favoriteEntity.setDocId(docId);
         favoriteEntity.setDocName(docEntity.getCaseName());
         favoriteEntity.setFavorTime(timeFormat.format(new Date()));
         favoriteRepository.save(favoriteEntity);
+        return "success";
     }
 
     public void deleteFavorDoc(int userId, String docId){
-        FavoriteEntity favoriteEntity= favoriteRepository.findByUserIdAndDocId(userId,docId);
+        FavoriteEntity favoriteEntity= favoriteRepository.findByUserIdAndDocId(userId,docId).get(0);
         favoriteRepository.delete(favoriteEntity);
     }
 
