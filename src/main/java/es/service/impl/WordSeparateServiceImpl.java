@@ -37,7 +37,7 @@ public class WordSeparateServiceImpl implements WordSeparateService {
     @Autowired
     private NewWordRepository newWordRepository;
 
-    public static NLPTRService instance =(NLPTRService) Native.loadLibrary(System.getProperty("user.dir") + "/source/NLPIR", NLPTRService.class);
+    public static NLPTRService instance =(NLPTRService) Native.loadLibrary(System.getProperty("user.dir") + "\\source\\NLPIR", NLPTRService.class);
 
     private String FILE_PATH=Constant.xmlLocation;
 

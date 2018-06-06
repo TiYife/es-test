@@ -23,7 +23,7 @@ public class Constant {
 
     //文件位置相关
     //public static final String FILE_LOCATION="E:\\系统测试\\data\\";;
-    public static final String FILE_LOCATION="~\\ES-FILES\\";
+    public static final String FILE_LOCATION="C:\\ES-FILES\\";
     public static String originalDocLocation=FILE_LOCATION+"txt\\";
     public static String xmlLocation=FILE_LOCATION+"xml\\";
     public static String newDocLocation=FILE_LOCATION+"new\\";
