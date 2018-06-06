@@ -5,6 +5,7 @@ import es.Constant;
 import es.Util.IdentityUtil;
 import es.entity.jpaEntity.DicEntity;
 import es.entity.jpaEntity.TxtEntity;
+import es.entity.jpaEntity.UserEntity;
 import es.repository.esRepository.DocRepository;
 import es.repository.jpaRepository.*;
 import es.service.WordSeparateService;

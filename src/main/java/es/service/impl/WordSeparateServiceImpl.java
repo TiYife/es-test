@@ -46,7 +46,16 @@ public class WordSeparateServiceImpl implements WordSeparateService {
             }
 
             String encoding = "utf-8";
+
             File file = new File(HFWord_PATH);
+            if (!file.exists())
+            {
+                String lastDir = HFWord_PATH.substring(0, HFWord_PATH.lastIndexOf("\\") + 1);
+                File file1 = new File(lastDir);
+                if (!file1.exists())
+                    file1.mkdirs();
+                file.createNewFile();
+            }
             Long filelength = file.length();
             byte[] filecontent = new byte[filelength.intValue()];
             try {
