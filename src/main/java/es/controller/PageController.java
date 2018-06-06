@@ -25,10 +25,6 @@ public class PageController {
         return "index1";
     }
 
-    @RequestMapping("/admin")
-    public String toAdmin(){
-        return "admin1";
-    }
 
     @RequestMapping("/advanced-search")
     public String toAdvancedSearch(){

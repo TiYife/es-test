@@ -253,15 +253,13 @@
                 contentText:"确认删除该词组吗？",
                 confirm:function () {
                     //点确定之后的操作
-                    var data = new Array();
-                        data.push(row["id"]);
-                    $.post("/delete-dic",data,function (rdata) {
+                    $.post("/delete-dic",{id:row["id"]},function (rdata) {
                         if (rdata.startsWith("success")) {
                             $.gyAlert({
                                 title: "操作成功",
                                 contentText: "已成功删除该条词组"
                             });
-                            $('#admin-table').bootstrapTable('refresh', { url: '/list-dics' });
+                            $('#word-table').bootstrapTable('refresh', { url: '/list-dics' });
                         }
                         else {
                             $.gyAlert({
@@ -286,15 +284,16 @@
         else {
             var data = new Array();
             for (var i = 0 ; i < obj.length ; i++) {
-                data.push(obj[id]);
+                data.push(obj[i]["id"]);
             }
-            $.post("",data,function (rdata) {
+            $.post("/delete-dics",{ids:data},function (rdata) {
                 if(rdata.startsWith("success")){
                     $.gyAlert({
                    title:"删除成功",
                     contentText:"已成功删除"+rdata.substring(8)+"条词组",
                     confirm:function () {
                         //点确定之后的操作
+                        $('#word-table').bootstrapTable('refresh', { url: '/list-dics' });
                     }
                     });
                 }

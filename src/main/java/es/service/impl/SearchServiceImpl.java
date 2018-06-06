@@ -33,6 +33,8 @@ import static es.Constant.timeFormat;
 import static es.service.impl.SearchServiceImpl.SearchType.and;
 import static es.service.impl.SearchServiceImpl.SearchType.or;
 import static org.elasticsearch.index.query.QueryBuilders.boolQuery;
+import static org.elasticsearch.index.query.QueryBuilders.rangeQuery;
+import static org.elasticsearch.index.query.QueryBuilders.regexpQuery;
 
 /**
  * Created by TYF on 2018/1/29.
@@ -57,7 +59,7 @@ public class SearchServiceImpl implements SearchService {
     FavoriteRepository favoriteRepository;
 
     @Override
-    public List<DocEntity> searchLaw(Integer pageNumber, Integer pageSize, String searchAttr, String searchKeyWord) {
+    public Page<DocEntity> searchLaw(Integer pageNumber, Integer pageSize, String searchAttr, String searchKeyWord) {
         // 校验分页参数
         if (pageSize == null || pageSize <= 0) {
             pageSize = this.pageSize;
@@ -72,12 +74,11 @@ public class SearchServiceImpl implements SearchService {
                         "\tsearchAttr =" + searchAttr + "\n" +
                         "\tsearchKeyWord =" + searchKeyWord + " \n " +
                         "DSL  = \n " + searchQuery.getQuery().toString());
-        Page<DocEntity> lawPage = docRepository.search(searchQuery);
-        return lawPage.getContent();
+        return docRepository.search(searchQuery);
     }
 
     @Override
-    public List<DocEntity> multiSearch(Integer pageNumber, Integer pageSize, JSONArray json) throws JSONException {
+    public Page<DocEntity> multiSearch(Integer pageNumber, Integer pageSize, JSONArray json) throws JSONException {
         if (pageSize == null || pageSize <= 0) {
             pageSize = this.pageSize;
         }
@@ -85,12 +86,11 @@ public class SearchServiceImpl implements SearchService {
             pageNumber = defaultPageNumber;
         }
         SearchQuery searchQuery = getMultiSearchQuery(pageNumber,pageSize,json);
-        Page<DocEntity> lawPage = docRepository.search(searchQuery);
-        return lawPage.getContent();
+        return docRepository.search(searchQuery);
     }
 
     @Override
-    public List<DocEntity> similarSearch(Integer pageNumber, Integer pageSize, String searchContent){
+    public Page<DocEntity> similarSearch(Integer pageNumber, Integer pageSize, String searchContent){
         // 校验分页参数
         if (pageSize == null || pageSize <= 0) {
             pageSize = this.pageSize;
@@ -100,8 +100,7 @@ public class SearchServiceImpl implements SearchService {
         }
         // 构建搜索查询
         SearchQuery searchQuery = getSimilarSearchQuery(pageNumber, pageSize,searchContent);
-        Page<DocEntity> lawPage = docRepository.search(searchQuery);
-        return lawPage.getContent();
+        return docRepository.search(searchQuery);
     }
 
     @Override
