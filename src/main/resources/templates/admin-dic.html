@@ -33,14 +33,13 @@
                     <a type="button"  onclick="$('#addFileModal').modal('show')" class="btn btn-default">
                         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>导入词典文件
                     </a>
-                    <a  type="button" onclick="batchDelete()" class="btn btn-default">
+                    <!--<a  type="button" onclick="batchDelete()" class="btn btn-default">
                         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>批量删除词典
-                    </a>
+                    </a>-->
                 </div>
                 <table data-toggle="table" data-url="/list-dics" data-show-refresh="true" data-show-toggle="true" data-show-columns="true" data-search="true" data-select-item-name="toolbar1" data-pagination="true" data-sort-order="desc" data-show-export="true" id="word-table">
                     <thead>
                     <tr>
-                        <th data-field="state" data-checkbox="true">vmName</th>
                         <th data-field="id">编号</th>
                         <th data-field="word">词组</th>
                         <th data-field="type">类型</th>
@@ -138,11 +137,11 @@
 
 <script>
     function jia1() {
-        $('#word-table').bootstrapTable('refresh', { url: '/getManyWord' });
+        $('#word-table').bootstrapTable('refresh', { url: '/list-dics' });
     }
 
     function jia2() {
-        $('#word-table').bootstrapTable('refresh', { url: '/getWord' });
+        $('#word-table').bootstrapTable('refresh', { url: '/list-dics' });
     }
 </script>
 

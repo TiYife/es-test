@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import es.Constant;
 import es.Util.IdentityUtil;
 import es.entity.jpaEntity.DicEntity;
+import es.entity.jpaEntity.NewWordEntity;
 import es.entity.jpaEntity.TxtEntity;
 import es.entity.jpaEntity.UserEntity;
 import es.repository.esRepository.DocRepository;
@@ -252,7 +253,59 @@ public class AdminController {
                 {
                     return e.getMessage();
                 }
-        return "{success:'导入"+totalNum+"条词组，"+"成功"+successNum+"条词"+(successNum==totalNum?"”，错误详情请查看错误日志文件":"")+"'}";
+        return "['<p>导入"+totalNum+"条词组，"+"成功"+successNum+"条词"+(successNum==totalNum?"，错误详情请查看错误日志文件":"")+"</p>']";
+    }
+
+
+    @RequestMapping("label-newword")
+    @ResponseBody
+    public  String labelNewword(@RequestParam("word") String word,
+                                @RequestParam("id") int id,
+                            @RequestParam("mark") String mark,
+                            @RequestParam("sepaType") String sepaType,
+                            HttpServletRequest request,
+                            HttpSession session)
+    {
+        try {
+            if(dicRepository.findFirstByWord(word)!=null)
+                return "词典已存在该词组";
+            int re1=wordSeparateService.addDic(word,sepaType);
+            int re2=wordSeparateService.saveDic();
+            if(re1>0&&re2>0) {
+                NewWordEntity newWordEntity = newWordRepository.findOne(id);
+                newWordEntity.setSepaType(sepaType);
+                newWordEntity.setRemark(mark);
+                newWordEntity.setProcessFlag(1);
+                newWordRepository.save(newWordEntity);
+                return "success";
+            }
+            else {
+                return "从词典保存失败,"+re1+re2;
+            }
+        }catch (Exception e)
+        {
+            return e.getMessage();
+        }
+    }
+
+
+    @RequestMapping("ignore-newword")
+    @ResponseBody
+    public  String ignoreNewword(
+                                @RequestParam("id") int id,
+                                HttpServletRequest request,
+                                HttpSession session)
+    {
+        try {
+                NewWordEntity newWordEntity = newWordRepository.findOne(id);
+                newWordEntity.setProcessFlag(2);
+                newWordRepository.save(newWordEntity);
+                return "success";
+
+        }catch (Exception e)
+        {
+            return e.getMessage();
+        }
     }
 
 

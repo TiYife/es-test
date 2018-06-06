@@ -35,9 +35,8 @@
                         <th data-field="word">新词</th>
                         <th data-field="createTime">发现时间</th>
                         <th data-field="createLocation">发现文件位置</th>
-                        <th data-field="context">上下文语境</th>
                         <th data-field="sepaType">分词词性</th>
-                        <th data-field="processFlag">处理结果</th>
+                        <th data-formatter="stateFormatter" data-field="processFlag">处理结果</th>
                         <th data-field="remark">备注</th>
                         <th data-formatter="operateFormatter" data-events='operateEvents'>操作</th>
                     </tr>
@@ -61,27 +60,26 @@
                 <div class="col-sm-12" style="margin-top: 25px;display: inline-table">
                     <label style="width: 30%;text-align: right">词组：</label>
                     <p id="word-p" style="width: 70%;display: inline-block">.</p>
+                    <p id="word-id-p" style="display: none"></p>
                 </div>
                 <div class="col-sm-12" style="margin-top: 25px;display: inline-table">
                     <label style="width: 30%;text-align: right">词性：</label>
-                    <select id="word-type-select" class="form-control" style="width: 70%;display: inline-block" id="editable-select">
-                        <option>Alfa Romeo</option>
-                        <option>Audi</option>
-                        <option>中国人民银行</option>
-                        <option>中国人民</option>
-                        <option>中国</option>
-                        <option>BMW</option>
+                    <select id="word-type-select" class="form-control" style="width: 70%;display: inline-block">
+                        <option value="dsr">dsr <i>(当事人)</i></option>
+                        <option value="spr">spr <i>(审判人)</i></option>
+                        <option value="ay">ay <i>(案由)</i></option>
+                        <option value="sjy">sjy <i>(书记员)</i></option>
                     </select>
                 </div>
                 <div class="col-sm-12" style="margin-top: 25px;display: inline-table">
                     <label style="width: 30%;text-align: right">备注：</label>
-                    <input id="word-mark-input" class="form-control" style="width: 70%;display: inline-block" id="editable-se" />
+                    <input id="word-mark-input" class="form-control" style="width: 70%;display: inline-block" />
                 </div>
                 <div style="clear: both"></div>
             </div>
             <div class="modal-footer" style="text-align: center">
                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                <button type="button" class="btn btn-primary">添加</button>
+                <button type="button" class="btn btn-primary" onclick="labelNewword()">添加</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal -->
@@ -92,7 +90,7 @@
 <script>
 
 
-    $('#editable-select').editableSelect({
+    $('#word-type-select').editableSelect({
         effects: 'slide'
     });
 
@@ -109,8 +107,47 @@
 
         return html.join('');
     }
+
+    function stateFormatter(value, row, index) {
+        if(value==0)
+            return "未处理";
+        if(value==1)
+            return "已标注";
+        if(value==2)
+            return "已忽略";
+
+    };
+
+    function labelNewword() {
+        var data={
+            id:parseInt( $("#word-id-p").text()),
+              word:$("#word-p").text(),
+              sepaType:$("#word-type-select").val(),
+              mark:$("#word-mark-input").val()
+        };
+        $.post("label-newword",data,function (rdata) {
+
+            $("#newWordModal").modal("hide");
+            if (rdata == "success") {
+                $.gyAlert({
+                    title: "操作成功",
+                    contentText: "已成功标注并添加该条新词"
+                });
+                $('#word-table').bootstrapTable('refresh', { url: '/list-new-words' });
+
+            }
+            else {
+                $.gyAlert({
+                    title: "操作失败",
+                    contentText: "标注失败 " + rdata
+                })
+            }
+        })
+    }
+
     window.operateEvents = {
         'click .mark': function (e, value, row, index) {
+            $("#word-id-p").text(row["id"]);
             $("#word-p").text( row["word"]    );
             $("#word-mark-input").val("");
             $("#newWordModal").modal("show");
@@ -121,13 +158,13 @@
                 contentText:"确认忽略该新词吗？",
                 confirm:function () {
                     //点确定之后的操作
-                    $.post("",{id:row["id"]},function (rdata) {
+                    $.post("ignore-newword",{id:row["id"]},function (rdata) {
                         if (rdata == "success") {
                             $.gyAlert({
                                 title: "操作成功",
                                 contentText: "已成功忽略该条新词"
                             });
-                            $('#assistant-table').bootstrapTable('refresh', { url: '/Teacher/getAssistant' });
+                            $('#word-table').bootstrapTable('refresh', { url: '/list-new-words' });
 
                         }
                         else {

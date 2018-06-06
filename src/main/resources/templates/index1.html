@@ -71,6 +71,8 @@
                 $("#username-a").text($.cookie("userName"));
                 $("#after-login").show();
                 $("#before-login").remove();
+                if($.cookie("userId").toString()=="123")
+                    $("#toadmin-a").show();
             }
             else
             {

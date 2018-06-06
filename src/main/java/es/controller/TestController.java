@@ -216,47 +216,11 @@ public class TestController {
     }
 
 
-    @RequestMapping("/getManyWord")
+    @RequestMapping("/gette")
     @ResponseBody
     public String test3() {
-        List<DicEntity> list = new ArrayList<>();
-        DicEntity entity;
-        entity = new DicEntity();
-        entity.setId(1);
-        entity.setWord("审判人");
-        entity.setType("spr");
-        entity.setSepaType("标志词词典");
-        entity.setCreateUserId(123);
-        entity.setCreateTime("2018-06-02 03:02:05");
-        list.add(entity);
-
-        entity = new DicEntity();
-        entity.setId(2);
-        entity.setWord("上诉人");
-        entity.setType("dsr");
-        entity.setSepaType("标志词词典");
-        entity.setCreateUserId(123);
-        entity.setCreateTime("2018-06-02 03:02:45");
-        list.add(entity);
-
-        entity = new DicEntity();
-        entity.setId(3);
-        entity.setWord("西岔镇");
-        entity.setType("na");
-        entity.setSepaType("地区词典");
-        entity.setCreateUserId(123);
-        entity.setCreateTime("2018-06-02 03:02:45");
-        list.add(entity);
-
-        entity = new DicEntity();
-        entity.setId(4);
-        entity.setWord("被告人");
-        entity.setType("dsr");
-        entity.setSepaType("标志词词典");
-        entity.setCreateUserId(123);
-        entity.setCreateTime("2018-06-02 03:02:45");
-        list.add(entity);
-        return new Gson().toJson(list);
+        wordSeparateService.multiFileProcessAndSave("E:\\桌面存放\\测试3\\20150104","E:\\桌面存放\\测试3\\20150104","E:\\桌面存放\\测试4");
+        return "1";
     }
 
     @RequestMapping("/getbf")

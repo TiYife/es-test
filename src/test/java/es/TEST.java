@@ -25,6 +25,7 @@ import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilde
 import org.springframework.data.elasticsearch.core.query.SearchQuery;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import javax.annotation.Resource;
 import java.io.File;
 import java.nio.file.Files;
 import java.util.List;
@@ -48,8 +49,8 @@ public class TEST {
     @Autowired
     private ElasticsearchTemplate elasticsearchTemplate;
 
-
-    private WordSeparateServiceImpl wordSeparateService = new WordSeparateServiceImpl();
+    @Resource
+    private WordSeparateServiceImpl wordSeparateService;
 
     @Test
     public void testXml() {
@@ -110,6 +111,7 @@ public class TEST {
                 "原审裁定认为，徐惠等五人与六安元和置业集团有限公司在履行案涉《元和山庄商品房预售合同》、《商品房买卖合同》及《补充协议》过程中，并未产生争议，徐惠等五人的本次起诉，不符合民事诉讼法规定的起诉条件。据此，案经原审法院审判委员会讨论决定，依照《中华人民共和国民事诉讼法》第一百一十九条之规定，裁定：驳回徐惠、黄农兵、黄琪、黄小岚、武贤勇的起诉。\n" +
                 "徐惠等五人上诉称：因六安元和置业集团有限公司不履行合同及协议约定的义务，导致双方产生纠纷。原审驳回徐惠等五人起诉的法律依据不明确。请求二审法院撤销原审裁定。\n" +
                 "六安元和置业集团有限公司清算组未向本院提交书面答辩状。";
+        sInput="聂先锋#法律#申请#准许#原告#吴本翠";
         try {
             //double i1= instance.NLPIR_FileProcess("E:\\桌面存放\\测试\\12.txt","E:\\桌面存放\\测试\\12.txt"+".stxt",1);
             //String ss=wordSeparateService.readToString("E:\\桌面存放\\测试\\12.txt");
@@ -124,10 +126,13 @@ public class TEST {
             //String iii=ii.replaceAll("\r\n","\n");
             //String[] lines = ii.split("\r");
 
-            wordSeparateService.fileProcessAndSave("E:\\桌面存放\\测试\\12.txt","E:\\桌面存放\\测试","E:\\桌面存放\\测试\\1223.txt");
+            //wordSeparateService.fileProcessAndSave("E:\\桌面存放\\测试\\12.txt","E:\\桌面存放\\测试","E:\\桌面存放\\测试\\1223.txt");
             //String[] fileLines=fileString.split("\r\n");
 
-
+            //int i1=instance.NLPIR_AddUserWord("原告\tdsr");
+            String sssss=instance.NLPIR_ParagraphProcess(sInput,1);
+            //i1=instance.NLPIR_AddUserWord("原告 dsr");
+            //sssss=instance.NLPIR_ParagraphProcess(sInput,1);
             instance.NLPIR_Exit();
 
         } catch (Exception e) {

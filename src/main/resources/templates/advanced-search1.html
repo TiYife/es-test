@@ -329,7 +329,7 @@
                 <div class="col-lg-12">
                     <div class="panel panel-default">
                         <div class="panel-body">
-                            <table data-toggle="table" data-url="/multi-search-result2" data-show-refresh="true" data-show-toggle="true" data-show-columns="true" data-search="true" data-select-item-name="toolbar1" data-pagination="true" data-sort-order="desc" data-show-export="true" id="result-table">
+                            <table data-toggle="table" data-url="/multi-search-result2" data-show-refresh="true" data-show-toggle="true" data-show-columns="true" data-search="true" data-select-item-name="toolbar1"  data-sort-order="desc" data-show-export="true" id="result-table">
                                 <thead>
                                 <tr>
                                     <th data-field="caseName" >案件名称</th>
@@ -362,6 +362,13 @@
                                 </tr>
                                 </thead>
                             </table>
+                            <span style="line-height: 34px;margin-right: 50px">共<span id="data-num">250</span>条数据</span>
+                            <ul class="pagination" style="margin:20px 0px 0px 0px">
+                                <li><a href="#">&laquo;</a></li>
+                                <li><a href="javascript:" class="active" id="current-page">1</a></li>
+                                <li><a href="#">&raquo;</a></li>
+                            </ul>
+                            <span style="line-height: 34px;margin-left: 50px">共<span id="page-num">0</span>页</span>
                         </div>
                     </div>
                 </div>
@@ -471,6 +478,12 @@
         $("#"+$(this).attr("search-for")).show();
     })
 
+    $("#result-table").bootstrapTable({
+        onLoadSuccess: function(rdata){  //加载成功时执行
+            console.log("加载成功"+rdata);
+        }
+    })
+
     function addItem() {
         //$("#item-block").clone(true).after($("#item-block").last()).show();
         $("[item-type]").last().after($("#item-block").clone(true).attr("item-type","item").show());
@@ -496,21 +509,20 @@
 
     window.operateEvents = {
         'click .detail': function (e, value, row, index) {
-            if($(this).attr("show")=="off") {
-                $(this).attr("show","on");
-                var html = [];
-                html.push('<div  class="row">');
-                html.push('<div class="col-md-12">');
-                html.push('' + row["content"] + '')
-                html.push('</div>');
-                html.push('</div>');
-                var coln = $('#result-table').bootstrapTable('getVisibleColumns').length;
-                $('#result-table').find('tr[data-index=' + index + ']').after('<tr class="detail-view" detail-index="' + index + '"><td colspan="' + coln + '">' + html.join('') + '</td></tr>');
-            }
-            else {
-                $(this).attr("show","off");
-                $('#result-table').find('tr[detail-index=' + index + ']').remove();
-            }
+            $.post("/get-txt",{id:row["docId"]},function (rdata) {
+                if(!rdata.startsWith("error")){
+                    $.gyAlert({
+                        title:"案例详情",
+                        contentHtml:'<pre style="width: 100%">'+rdata+'</pre>'
+                    })
+                }
+                else {
+                    $.gyAlert({
+                        title:"错误",
+                        contentText:"获取案例详情时出错"+rdata
+                    })
+                }
+            })
         },
 
         'click .recommend': function (e, value, row, index) {

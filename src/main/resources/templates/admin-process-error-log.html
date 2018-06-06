@@ -79,9 +79,21 @@
     };
 
     window.operateEvents = {
-        'click .edit': function (e, value, row, index) {
-            $("#error-detail-pre").text("");
-            $("#errorDetailModal").modal("show");
+        'click .detail': function (e, value, row, index) {
+            $.post("/get-txt",{id:row["errorLocation"]},function (rdata) {
+                if(!rdata.startsWith("error")){
+                    $.gyAlert({
+                        title:"案例详情",
+                        contentHtml:'<pre style="width: 100%">'+rdata+'</pre>'
+                    })
+                }
+                else {
+                    $.gyAlert({
+                        title:"错误",
+                        contentText:"获取案例详情时出错"+rdata
+                    })
+                }
+            })
         }
     };
 
