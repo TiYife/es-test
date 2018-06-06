@@ -140,7 +140,7 @@ public class AdminController {
 
     @RequestMapping("/delete-dics")
     @ResponseBody
-    public String deleteDics(@RequestParam("ids") String jsonStr) throws JSONException {
+    public String deleteDics(@RequestParam("jsonStr") String jsonStr) throws JSONException {
         JSONArray json=new JSONArray(jsonStr);
         for (int i = 0; i < json.length(); i++) {
             int id = json.getInt(i);
