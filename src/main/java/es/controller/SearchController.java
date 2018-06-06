@@ -1,7 +1,6 @@
 package es.controller;
 
 import com.google.gson.Gson;
-import es.Util.IdentityUtil;
 import es.entity.esEntity.DocEntity;
 import es.entity.jpaEntity.UserEntity;
 import es.repository.esRepository.DocRepository;
@@ -9,7 +8,6 @@ import es.repository.jpaRepository.UserRepository;
 import es.service.SearchService;
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -18,10 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.net.URLEncoder;
-import java.util.List;
 
 /**
  * Created by TYF on 2018/4/8.
@@ -36,7 +31,7 @@ public class SearchController {
     @Autowired
     UserRepository userRepository;
 
-    private int pageSize = 9999;
+    private int pageSize = 203;
 
     @RequestMapping("/simple-search")
     public String simpleSearchResult(@RequestParam("attr")String attr,

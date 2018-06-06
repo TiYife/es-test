@@ -318,7 +318,7 @@ public class WordSeparateServiceImpl implements WordSeparateService {
                 +"\r\n";
 
         String errorType="";
-        Pattern pattern = Pattern.compile("(?=\\t\\t)([^\\t]{2,10}无)");
+        Pattern pattern = Pattern.compile("(?=\\t\\t)(.{2,10}?无)");
         Matcher matcher = pattern.matcher(fileAddress);
         while (matcher.find()) {
             errorType+= matcher.group(1);
