@@ -63,16 +63,16 @@ public class TEST {
 //        saveService.saveDoc(file);
 //    }
 
-    @Test
-    public void testSearch(){
-        List<DocEntity> docEntities=searchService.searchLaw(1,10,"content","被告人");
-    }
-
-    @Test
-    public void testSimilarSearch(){
-        List<DocEntity> docEntities = searchService.similarSearch(0,10,"宋皓以“其与黄某某是合作关系，借款与担保是两人之间约定的特殊合作方式，其参与了公司的日常经营管理活动；原判认定事实不清，适用法律错误”为由，向贵州省高级人民法院申诉，该院于2011年12月16日作出（2011）黔高调刑监字第25号通知驳回申诉。");
-        assert docEntities.size()>0;
-    }
+//    @Test
+//    public void testSearch(){
+//        List<DocEntity> docEntities=searchService.searchLaw(1,10,"content","被告人");
+//    }
+//
+//    @Test
+//    public void testSimilarSearch(){
+//        List<DocEntity> docEntities = searchService.similarSearch(0,10,"宋皓以“其与黄某某是合作关系，借款与担保是两人之间约定的特殊合作方式，其参与了公司的日常经营管理活动；原判认定事实不清，适用法律错误”为由，向贵州省高级人民法院申诉，该院于2011年12月16日作出（2011）黔高调刑监字第25号通知驳回申诉。");
+//        assert docEntities.size()>0;
+//    }
 
     @Test
     public void testSimilar2Search(){

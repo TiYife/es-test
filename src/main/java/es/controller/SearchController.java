@@ -11,6 +11,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,7 +36,8 @@ public class SearchController {
     @Autowired
     UserRepository userRepository;
 
-    private int linshi = 123;
+    private int pageSize = 9999;
+
     @RequestMapping("/simple-search")
     public String simpleSearchResult(@RequestParam("attr")String attr,
                                      @RequestParam("keyword") String keyword,
@@ -50,26 +52,23 @@ public class SearchController {
     @ResponseBody
     public String simpleSearch(@RequestParam("attr")String attr,
                                @RequestParam("keyword") String keyword){
-        List<DocEntity> list = searchService.searchLaw(0,10,attr,keyword);
-        Gson gson = new Gson();
-        return gson.toJson(list);
+        Page<DocEntity> page = searchService.searchLaw(0,pageSize,attr,keyword);
+        return new Gson().toJson(page.getContent());
     }
 
     @RequestMapping("/multi-search-result")
     @ResponseBody
     public String multiSearchResult(@RequestParam("json")String jsonStr) throws JSONException {
         JSONArray json=new JSONArray(jsonStr);
-        List<DocEntity> list = searchService.multiSearch(0,10,json);
-        Gson gson = new Gson();
-        return gson.toJson(list);
+        Page<DocEntity> page = searchService.multiSearch(0,pageSize,json);
+        return new Gson().toJson(page.getContent());
     }
 
     @RequestMapping("/similar-search-result")
     @ResponseBody
     public String similarSearchResult(@RequestParam("describe") String describe){
-        List<DocEntity> list = searchService.similarSearch(0,10,describe);
-        Gson gson = new Gson();
-        return gson.toJson(list);
+        Page<DocEntity> page = searchService.similarSearch(0,pageSize,describe);
+        return new Gson().toJson(page.getContent());
     }
 
     @RequestMapping("/favor")
@@ -123,7 +122,7 @@ public class SearchController {
     @ResponseBody
     public String recommendation(@RequestParam("docId")String docId){
         DocEntity docEntity = docRepository.findOne(docId);
-        List<DocEntity> list = searchService.similarSearch(0,10,docEntity.getContent());
-        return new Gson().toJson(list);
+        Page<DocEntity> page = searchService.similarSearch(0,10,docEntity.getContent());
+        return new Gson().toJson(page.getContent());
     }
 }

@@ -11,6 +11,8 @@ import es.repository.esRepository.DocRepository;
 import es.repository.jpaRepository.*;
 import es.service.WordSeparateService;
 import org.assertj.core.util.Lists;
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -52,7 +54,7 @@ public class AdminController {
 
 
 
-    @RequestMapping("/admin1")
+    @RequestMapping("/admin")
     public String admin1(HttpSession session,Model model){
         UserEntity user = (UserEntity)session.getAttribute("user");
 
@@ -124,6 +126,28 @@ public class AdminController {
     @ResponseBody
     public String listDics(){
         return new Gson().toJson(dicRepository.findAll());
+    }
+
+    @RequestMapping("/delete-dic")
+    @ResponseBody
+    public String deleteDic(@RequestParam("id") int id){
+        DicEntity dic = dicRepository.findOne(id);
+        if(dic==null) return "该文本词条被删除";
+        else {
+            dicRepository.delete(dic);
+            return "success";
+        }
+    }
+
+    @RequestMapping("/delete-dics")
+    @ResponseBody
+    public String deleteDics(@RequestParam("jsonStr") String jsonStr) throws JSONException {
+        JSONArray json=new JSONArray(jsonStr);
+        for (int i = 0; i < json.length(); i++) {
+            int id = json.getInt(i);
+            dicRepository.delete(id);
+        }
+        return "success";
     }
 
 
@@ -245,7 +269,8 @@ public class AdminController {
                 }
 
             }
-            String fileAddress=Constant.dicFileLocation + UUID.randomUUID().toString() + file.getOriginalFilename();
+            File dic = new File(Constant.dicFileLocation);
+            String fileAddress=dic.getAbsolutePath() + UUID.randomUUID().toString() + file.getOriginalFilename();
             wordSeparateService.createPreDirectory(fileAddress);
                     file.transferTo(new File(fileAddress));
                     wordSeparateService.stringToRead(errorTxt,fileAddress+".error",false);

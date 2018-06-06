@@ -37,7 +37,7 @@ public class WordSeparateServiceImpl implements WordSeparateService {
     @Autowired
     private NewWordRepository newWordRepository;
 
-    public static NLPTRService instance =(NLPTRService) Native.loadLibrary(System.getProperty("user.dir") + "\\source\\NLPIR", NLPTRService.class);
+    public static NLPTRService instance =(NLPTRService) Native.loadLibrary(System.getProperty("user.dir") + "/source/NLPIR", NLPTRService.class);
 
     private String FILE_PATH=Constant.xmlLocation;
 
@@ -347,6 +347,9 @@ public class WordSeparateServiceImpl implements WordSeparateService {
 
     public String fileProcessAndSave(String fileAddress, String fileAddressHead, String saveAddress)
     {
+        File save = new File(saveAddress);
+        if(!save.exists())
+            save.mkdir();
         try {
 
             //stringToRead("","E:\\桌面存放\\测试\\errorTest.txt",false);//ceshi

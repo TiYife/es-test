@@ -82,13 +82,13 @@ public class TestController {
 //        return "false";
 //    }
 
-    @RequestMapping("search")
-    public String search(@RequestParam("attr") String attr,
-                         @RequestParam("content") String content, Model model) {
-        List<DocEntity> docEntities = searchService.searchLaw(1, 20, attr, content);
-        model.addAttribute("list", docEntities);
-        return "searchResult";
-    }
+//    @RequestMapping("search")
+//    public String search(@RequestParam("attr") String attr,
+//                         @RequestParam("content") String content, Model model) {
+//        List<DocEntity> docEntities = searchService.searchLaw(1, 20, attr, content);
+//        model.addAttribute("list", docEntities);
+//        return "searchResult";
+//    }
 
     @RequestMapping("ss")
     @ResponseBody

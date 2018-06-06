@@ -1,5 +1,9 @@
 package es;
 
+import org.springframework.util.ResourceUtils;
+
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.text.SimpleDateFormat;
 
 /**
@@ -18,7 +22,8 @@ public class Constant {
     public static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
 
     //文件位置相关
-    public static final String FILE_LOCATION="E:\\系统测试\\data\\";
+    //public static final String FILE_LOCATION="E:\\系统测试\\data\\";;
+    public static final String FILE_LOCATION="~\\ES-FILES\\";
     public static String originalDocLocation=FILE_LOCATION+"txt\\";
     public static String xmlLocation=FILE_LOCATION+"xml\\";
     public static String newDocLocation=FILE_LOCATION+"new\\";
@@ -28,6 +33,9 @@ public class Constant {
 
 
     public static final String HFWord_PATH=hfwordFileLocation+"全局高频词组.txt";
+
+    public Constant() throws FileNotFoundException {
+    }
 
     public enum WordType {PREFIX,
         PREP,
