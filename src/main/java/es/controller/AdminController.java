@@ -268,7 +268,8 @@ public class AdminController {
                 }
 
             }
-            String fileAddress=Constant.dicFileLocation + UUID.randomUUID().toString() + file.getOriginalFilename();
+            File dic = new File(Constant.dicFileLocation);
+            String fileAddress=dic.getAbsolutePath() + UUID.randomUUID().toString() + file.getOriginalFilename();
             wordSeparateService.createPreDirectory(fileAddress);
                     file.transferTo(new File(fileAddress));
                     wordSeparateService.stringToRead(errorTxt,fileAddress+".error",false);

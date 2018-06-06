@@ -93,7 +93,7 @@
                                 <button class="form-control" style="width: 60px" onclick="search_submit()"> 搜索</button>
                                 <input type="radio" id="mohu"/>
                                 <span for="mohu"> 开启模糊搜索</span>
-                                <a href="/advanced-search" th:text="1+${totalPage}" style="margin-left: 20px">高级检索</a>
+                                <a href="/advanced-search"  style="margin-left: 20px">高级检索</a>
                             </div>
                         </div>
                     </div>
@@ -111,9 +111,6 @@
                                 <th data-field="courtProvince" data-visible="false">法院省份</th>
                                 <th data-field="courtCity" data-visible="false">法院地市</th>
                                 <th data-field="courtCountry">法院区县</th>
-                                <th data-field="courtRegion" data-visible="false">法院区域</th>
-                                <th data-field="isExpUnit" data-visible="false">法院试点</th>
-                                <th data-field="courtType" data-visible="false">法院类型</th>
                                 <th data-field="caseType" data-visible="false">案件类型</th>
                                 <th data-field="trialProcedure" data-visible="false">审判程序</th>
                                 <th data-field="docType">文书类型</th>
@@ -125,11 +122,6 @@
                                 <th data-field="trialMonth" data-visible="false">裁判月份</th>
                                 <th data-field="trialDate" data-visible="false">裁判日期</th>
                                 <th data-field="trialYear" data-visible="false">裁判年份</th>
-                                <th data-field="courtLevelOne" data-visible="false">一级法院</th>
-                                <th data-field="courtLevelTwo" data-visible="false">二级法院</th>
-                                <th data-field="courtLevelThree" data-visible="false">三级法院</th>
-                                <th data-field="courtLevelFour" data-visible="false">四级法院</th>
-                                <th data-field="courtSuperior" data-visible="false">上级法院名称</th>
                                 <th data-field="content" data-visible="false" data-formatter="contentFormatter">判决内容</th>
                                 <th data-formatter="operateFormatter" data-events='operateEvents'>操作</th>
                             </tr>

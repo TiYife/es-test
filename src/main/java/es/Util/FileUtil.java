@@ -6,6 +6,7 @@ import es.service.impl.SearchServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotNull;
@@ -185,7 +186,7 @@ public class FileUtil {
             String suffix = oldName.substring(oldName.lastIndexOf("."));
             String newName = uuid.toString().replaceAll("-", "");
             String fileTotalName = newName + suffix;
-            File isFile = new File(saveLocation + fileTotalName);
+            File isFile = new File(file.getAbsolutePath() + fileTotalName);
             try {
                 multipartFile.transferTo(isFile);
                 return isFile;

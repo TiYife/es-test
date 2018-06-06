@@ -5,7 +5,6 @@
 
 	<groupId>es</groupId>
 	<artifactId>es-test</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
 	<build>
 		<plugins>
 			<plugin>
@@ -128,5 +127,13 @@
 			<version>0.7</version>
 		</dependency>
 
+		<dependency>
+			<groupId>org.wltea.analyzer</groupId>
+			<artifactId>IKAnalyzer</artifactId>
+			<version>2012FF_u1</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/lib/jna-4.0.0.jar
+			</systemPath>
+		</dependency>
 	</dependencies>
 </project>

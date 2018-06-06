@@ -314,6 +314,9 @@ public class WordSeparateServiceImpl implements WordSeparateService {
 
     public String fileProcessAndSave(String fileAddress, String fileAddressHead, String saveAddress)
     {
+        File save = new File(saveAddress);
+        if(!save.exists())
+            save.mkdir();
         try {
 
             //stringToRead("","E:\\桌面存放\\测试\\errorTest.txt",false);//ceshi
