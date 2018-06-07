@@ -92,8 +92,12 @@
                                 </div>
                                 <input id="search-input" class="form-control" style="width: 400px" th:value="${keyword}" onkeydown="onEnterDown()"/>
                                 <button class="form-control" style="width: 60px" onclick="search_submit()"> 搜索</button>
-                                <input type="checkbox" id="mohu"/>
+                                <input type="checkbox" onchange="changeMohu(this)" id="mohu"/>
                                 <span for="mohu"> 开启模糊搜索</span>
+                                <script>
+                                    if($.cookie("mohu")!=null&&$.cookie("mohu").toString()!= "null")
+                                        $("#mohu").attr("checked","true");
+                                </script>
                                 <a href="/advanced-search"  style="margin-left: 20px">高级检索</a>
                                 <span id="search-info" style="float: right;right: 100px;display: none;color: green">共查询到<span id="total-span"></span>条记录，在<span id="time-span"></span>s内</span>
                             </div>
@@ -416,10 +420,41 @@
     }
     //提交表单
     function search_submit() {
-        var attr = $("#type-select").val();
-        var keyword = $("#search-input").val();
-        searchArgs={attr:$("#type-select").val(),keyword:$("#search-input").val()};
-        location.href = "simple-search?attr=" + attr + "&keyword=" + keyword+ "&pageSize=10&pageNumber=1";
+        if(!$("#mohu").is(':checked')||$("#type-select").val()!="content") {
+            var attr = $("#type-select").val();
+            var keyword = $("#search-input").val();
+            searchArgs = {attr: $("#type-select").val(), keyword: $("#search-input").val()};
+            location.href = "simple-search?attr=" + attr + "&keyword=" + keyword + "&pageSize=10&pageNumber=1";
+        }
+        else {
+            var json = [];
+            var j = {};
+            j.type = 'and';
+            j.attr = "content";
+            j.keyword = $("#search-input").val();
+            j.weight = 1;
+            json.push(j);
+            for(var i=0;i<j.keyword.length;i++)
+            {
+                var item = {};
+                item.type = 'and';
+                item.attr = "content";
+                item.keyword = j.keyword.substr(i,1);
+                item.weight = 1;
+                json.push(item);
+            }
+            json_str = JSON.stringify(json);
+            searchArgs={json:json_str};
+            $('#result-table').bootstrapTable('refresh', { url: '/multi-search-result',query:{pageSize:10,pageNumber:1,json:json_str}});
+            $('#result-table').bootstrapTable({url: '/multi-search-result'});
+        }
+    }
+
+    function changeMohu(ee) {
+        if(!$(ee).is(':checked'))
+            $.cookie("mohu",null, { expires: 1 });
+        else
+            $.cookie("mohu","1", { expires: 1 })
     }
 </script>
 </body>
