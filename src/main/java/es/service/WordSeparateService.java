@@ -18,7 +18,7 @@ public interface WordSeparateService {
     public String readToString(String fileName);
     public String stringToRead(String sourceString,String fileAddress,boolean append);
 
-    String fileProcessAndSave(String fileAddress, String fileAddressHead, String saveAddress);
+    String fileProcessAndSave(String fileAddress, String fileAddressHead, String saveAddress) throws Exception;
 
     String getHFWordFormFiles(String caseType, List<DocEntity> docEntities)//获取高频词组 参数代表案件类型 all所有类型
     ;
