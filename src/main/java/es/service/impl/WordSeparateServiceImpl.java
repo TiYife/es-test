@@ -358,7 +358,7 @@ public class WordSeparateServiceImpl implements WordSeparateService {
                 continue;
             switch (processStep) {
                 case 0:
-                    Pattern pattern2 = Pattern.compile("^.+\\\\[0-9]{8}\\\\(.{2,3})\\\\([0-9]{4})\\\\(.{2}案件)\\\\(（2[0-9]{3}）.+?号)_([0-9a-z]{8}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{12})(.{3,6}?)\\.txt$");
+                    Pattern pattern2 = Pattern.compile("^.+\\\\[0-9]{8}\\\\(.{2,3})\\\\([0-9]{2,5})\\\\(.{2}案件)\\\\(（2[0-9]{3}）.+?号)_([0-9a-z]{8}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{12})(.{3,6}?)\\.txt$");
                     Matcher matcher = pattern2.matcher(fileAddress);
                     while (matcher.find()) {
                         wordSepaEnity1.courtId = matcher.group(2);

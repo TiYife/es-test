@@ -323,7 +323,7 @@ public class SaveServiceImpl implements SaveService {
             if (counter % 500 == 0) {
                 elasticsearchTemplate.bulkIndex(queries);
                 queries.clear();
-                LOGGER.info("分组索引: " + counter);
+                LOGGER.info("group indexing: " + counter);
             }
         }
         //不足批的索引
@@ -331,7 +331,7 @@ public class SaveServiceImpl implements SaveService {
             elasticsearchTemplate.bulkIndex(queries);
         }
         elasticsearchTemplate.refresh(Constant.INDEX_NAME);
-        LOGGER.info("索引完成");
+        LOGGER.info("index done");
     }
 
     private List<TxtEntity> recordTxts(File file, int userId, String upLogId) {
