@@ -31,13 +31,13 @@
                 <table data-toggle="table" data-url="/list-new-words" data-show-refresh="true" data-show-toggle="true" data-show-columns="true" data-search="true" data-select-item-name="toolbar1" data-pagination="true" data-sort-order="desc" data-show-export="true" id="word-table">
                     <thead>
                     <tr>
-                        <th data-formatter="idFormatter" data-field="id">编号</th>
+                        <th data-formatter="idFormatter" data-formatter="idFormatter" data-field="id">编号</th>
                         <th data-field="word">新词</th>
                         <th data-field="createTime">发现时间</th>
                         <th data-field="createLocation">发现文件位置</th>
                         <th data-field="sepaType">分词词性</th>
                         <th data-formatter="stateFormatter" data-field="processFlag">处理结果</th>
-                        <th data-field="remark">备注</th>
+                        <th data-field="remark" data-visible="false">备注</th>
                         <th data-formatter="operateFormatter" data-events='operateEvents' data-width=" 180px">操作</th>
                     </tr>
                     </thead>

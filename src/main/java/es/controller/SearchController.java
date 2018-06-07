@@ -77,9 +77,17 @@ public class SearchController {
 
     @RequestMapping("/similar-search-result")
     @ResponseBody
-    public String similarSearchResult(@RequestParam("describe") String describe){
-        Page<DocEntity> page = searchService.similarSearch(0,pageSize,describe);
-        return new Gson().toJson(page.getContent());
+    public String similarSearchResult(@RequestParam("pageNumber")int pageNumber,
+                                      @RequestParam("pageSize")int pSize,
+                                      @RequestParam("json") String json) throws JSONException {
+        JSONObject jsonO=new JSONObject(json);
+        Page<DocEntity> page = searchService.similarSearch(pageNumber,pSize,jsonO.get("describe").toString());
+        JSONObject jsonObject=new JSONObject();
+        double timeCost=1.0;
+        jsonObject.put("total",page.getTotalElements());
+        jsonObject.put("time",timeCost);
+        jsonObject.put("rows",new JSONArray(new Gson().toJson(page.getContent())));
+        return jsonObject.toString();
     }
 
     @RequestMapping("/favor")
