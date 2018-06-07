@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"></meta>
-    <title>Title</title>
+    <title>法律案例检索系统</title>
 
     <script src="assets/plugins/jquery-1.10.2.js"></script>
     <script src="assets/plugins/jquery.cookie.js"></script>
@@ -10,6 +10,7 @@
     <script src="assets/plugins/table/bootstrap.js"></script>
     <script src="assets/plugins/table/bootstrap-table.js"></script>
     <script src="assets/plugins/table/bootstrap-table-export.js"></script>
+    <script src="assets/plugins/gy-alert.js"></script>
     <link href="assets/css/bootstrap-table.css" type="text/css" rel="stylesheet"/>
     <link href="assets/css/bootstrap.css" type="text/css" rel="stylesheet"/>
     <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.12.1/locale/bootstrap-table-zh-CN.min.js"></script>
@@ -207,10 +208,10 @@
 
 <script src="assets/js/pages/jsVerifyCode.js"></script>
 <script>
-    function contant() {
+    function contact() {
         $.gyAlert({
             title: "联系我们",
-            contentHtml:"如果您对我们的网站有什么建议"
+            contentHtml:"<P>如果您对我们的网站有什么建议，请联系我们</p><p>邮箱：1223008289@qq.com</p>"
         })
     }
 
