@@ -105,7 +105,7 @@
         </div>
         <div class="col-sm-6" style="text-align: left;margin-top: 50px;color: #00aced">
             <span class="glyphicon glyphicon-send" style="font-size: 30px"></span>
-            <h2 onclick="$('#registerModal').modal('show')" style="display: inline-block;height: 70px;line-height: 70px;font-family: alihanyi">联系我们</h2>
+            <h2 onclick="contact()" style="display: inline-block;height: 70px;line-height: 70px;font-family: alihanyi">联系我们</h2>
         </div>
     </div><!--/.row-->
     <div class="row" id="footer">
@@ -207,6 +207,13 @@
 
 <script src="assets/js/pages/jsVerifyCode.js"></script>
 <script>
+    function contant() {
+        $.gyAlert({
+            title: "联系我们",
+            contentHtml:"如果您对我们的网站有什么建议"
+        })
+    }
+
     function login() {
         var data={
             userId:$("#login-username-input").val(),

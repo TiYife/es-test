@@ -8,6 +8,7 @@ import es.repository.jpaRepository.UserRepository;
 import es.service.SearchService;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -45,18 +46,33 @@ public class SearchController {
 
     @RequestMapping("/simple-search-result")
     @ResponseBody
-    public String simpleSearch(@RequestParam("attr")String attr,
-                               @RequestParam("keyword") String keyword){
-        Page<DocEntity> page = searchService.searchLaw(0,pageSize,attr,keyword);
-        return new Gson().toJson(page.getContent());
+    public String simpleSearch(@RequestParam("pageNumber")int pageNumber,
+                               @RequestParam("pageSize")int pSize,
+                               @RequestParam("attr")String attr,
+                               @RequestParam("keyword") String keyword) throws JSONException {
+        Page<DocEntity> page = searchService.searchLaw(pageNumber,pSize,attr,keyword);
+        JSONObject jsonObject=new JSONObject();
+        double timeCost=1.0;
+        jsonObject.put("total",page.getTotalElements());
+        jsonObject.put("time",timeCost);
+        jsonObject.put("rows",new JSONArray(new Gson().toJson(page.getContent())));
+        return jsonObject.toString();
     }
 
     @RequestMapping("/multi-search-result")
     @ResponseBody
-    public String multiSearchResult(@RequestParam("json")String jsonStr) throws JSONException {
+    public String multiSearchResult(@RequestParam("pageNumber")int pageNumber,
+                                    @RequestParam("pageSize")int pSize,
+                                    @RequestParam("json")String jsonStr) throws JSONException {
         JSONArray json=new JSONArray(jsonStr);
-        Page<DocEntity> page = searchService.multiSearch(0,pageSize,json);
-        return new Gson().toJson(page.getContent());
+        Page<DocEntity> page = searchService.multiSearch(pageNumber,pSize,json);
+        JSONObject jsonObject=new JSONObject();
+        double timeCost=1.0;
+        jsonObject.put("total",page.getTotalElements());
+        jsonObject.put("time",timeCost);
+        jsonObject.put("rows",new JSONArray(new Gson().toJson(page.getContent())));
+        return jsonObject.toString();
+        //return new Gson().toJson(page.getContent());
     }
 
     @RequestMapping("/similar-search-result")

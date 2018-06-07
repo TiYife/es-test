@@ -307,7 +307,7 @@ public class WordSeparateServiceImpl implements WordSeparateService {
 
         String errorType = "";
         Pattern pattern = Pattern.compile("(?=\\t\\t)(.{2,10}?无)");
-        Matcher matcher = pattern.matcher(fileAddress);
+        Matcher matcher = pattern.matcher(re);
         while (matcher.find()) {
             errorType += matcher.group(1) + " ";
         }
@@ -358,7 +358,7 @@ public class WordSeparateServiceImpl implements WordSeparateService {
                 continue;
             switch (processStep) {
                 case 0:
-                    Pattern pattern2 = Pattern.compile("^.+\\\\(.{2,6})\\\\([0-9]{2,5})\\\\(.{2}案件)\\\\(（2[0-9]{3}）.+?号)_([0-9a-z]{8}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{12})(.{3,6}?)\\.txt$");
+                    Pattern pattern2 = Pattern.compile("^.+\\\\(.{2,6})\\\\([0-9]{2,5})\\\\(.{2}案件|知识产权)\\\\(（2[0-9]{3}）.+?号)_([0-9a-z]{8}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{12})(.{3,6}?)\\.txt$");
                     Matcher matcher = pattern2.matcher(fileAddress);
                     while (matcher.find()) {
                         wordSepaEnity1.courtId = matcher.group(2);
