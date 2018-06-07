@@ -95,6 +95,7 @@
                                 <input type="radio" id="mohu"/>
                                 <span for="mohu"> 开启模糊搜索</span>
                                 <a href="/advanced-search"  style="margin-left: 20px">高级检索</a>
+                                <span id="search-info" style="float: right;right: 100px;display: none;color: green">共查询到<span id="total-span"></span>条记录，在<span id="time-span"></span>s内</span>
                             </div>
                         </div>
                     </div>
@@ -103,7 +104,7 @@
             <div class="col-lg-12">
                 <div class="panel panel-default">
                     <div class="panel-body">
-                        <table data-toggle="table" th:attr="data-url='/simple-search-result?attr='+${attr}+'&keyword='+${keyword}" data-url="/simpleSearch?type=" data-show-refresh="true" data-show-toggle="true" data-show-columns="true" data-search="true" data-page-list="[10, 25, 50, 100, All]" data-pagination="true" data-sort-name="id" data-sort-order="desc" data-show-export="true" id="result-table">
+                        <table data-toggle="table" th:attr="data-url='/simple-search-result?attr='+${attr}+'&keyword='+${keyword}+'&pageNumber=1&pageSize=10'" data-url="/simpleSearch?type=" data-show-refresh="true" data-show-toggle="true" data-show-columns="true" data-search="true" data-page-list="[10, 25, 50, 100, All]" data-pagination="true" data-sort-name="id" data-sort-order="desc" data-show-export="true" id="result-table">
                             <thead>
                             <tr>
                                 <th data-field="caseName" data-formatter="contentFormatter">案件名称</th>
@@ -229,9 +230,39 @@
             </div><!-- /.modal-content -->
         </div><!-- /.modal -->
     </div>
+    <span id="attr-span" style="display: none;" th:text="${attr}"></span>
+    <span id="keyword-span" style="display: none;" th:text="${keyword}"></span>
 
 
     <script>
+        var searchArgs={attr:$("#attr-span").text(),keyword:$("#keyword-span").text()};
+
+        $("#result-table").bootstrapTable({
+            url:"/simple-search-result",
+            queryParamsType:'',
+            queryParams: function queryParams(params) {
+                var param = {
+                    pageNumber: params.pageNumber,
+                    pageSize: params.pageSize
+                };
+                for(var key in searchArgs){
+                    param[key]=searchArgs[key]
+                }
+                return param;
+            },
+            pagination: true,//是否开启分页（*）
+            pageNumber:1,//初始化加载第一页，默认第一页
+            pageSize: 10,//每页的记录行数（*）
+            pageList: [10,20,50],//可供选择的每页的行数（*）
+            sidePagination: "server", //分页方式：client客户端分页，server服务端分页（*）
+            onLoadSuccess: function(rdata){  //加载成功时执行
+                //console.log("加载成功"+rdata);
+                $("#time-span").text(rdata["time"]);
+                $("#total-span").text(rdata["total"]);
+                $("#search-info").show();
+            }
+        });
+
         function operateFormatter(value, row, index) {
             return [
                 '<button type="button" class="btn btn-info detail"> 详情</button> '+
@@ -374,7 +405,8 @@
     function search_submit() {
         var attr = $("#type-select").val();
         var keyword = $("#search-input").val();
-        location.href = "simple-search?attr=" + attr + "&keyword=" + keyword;
+        searchArgs={attr:$("#type-select").val(),keyword:$("#search-input").val()};
+        location.href = "simple-search?attr=" + attr + "&keyword=" + keyword+ "&pageSize=10&pageNumber=1";
     }
 </script>
 </body>

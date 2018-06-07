@@ -319,7 +319,7 @@ public class WordSeparateServiceImpl implements WordSeparateService {
 
         String errorType="";
         Pattern pattern = Pattern.compile("(?=\\t\\t)(.{2,10}?无)");
-        Matcher matcher = pattern.matcher(fileAddress);
+        Matcher matcher = pattern.matcher(re);
         while (matcher.find()) {
             errorType+= matcher.group(1)+" ";
         }

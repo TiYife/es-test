@@ -102,6 +102,7 @@
                 </div>
                 <div class="col-lg-12" style="text-align: left">
                     <button class="btn btn-primary" onclick="addItem()">添加检索项</button>
+                    <span id="search-info" style="float: right;right: 100px;display: none;color: green">共查询到<span id="total-span"></span>条记录，在<span id="time-span"></span>s内</span>
                 </div>
                 <div class="col-lg-12" style="text-align: left;margin-top: 10px">
                     <div class="input-group">
@@ -323,7 +324,7 @@
                 <div class="col-lg-12">
                     <div class="panel panel-default">
                         <div class="panel-body">
-                            <table data-toggle="table" data-url="/multi-search-result2" data-show-refresh="true" data-show-toggle="true" data-show-columns="true" data-search="true" data-select-item-name="toolbar1"  data-sort-order="desc" data-show-export="true" id="result-table">
+                            <table data-toggle="table"  data-show-refresh="true" data-show-toggle="true" data-show-columns="true" data-search="true" data-select-item-name="toolbar1"  data-sort-order="desc" data-show-export="true" id="result-table">
                                 <thead>
                                 <tr>
                                     <th data-field="caseName" >案件名称</th>
@@ -356,13 +357,6 @@
                                 </tr>
                                 </thead>
                             </table>
-                            <span style="line-height: 34px;margin-right: 50px">共<span id="data-num">250</span>条数据</span>
-                            <ul class="pagination" style="margin:20px 0px 0px 0px">
-                                <li><a href="#">&laquo;</a></li>
-                                <li><a href="javascript:" class="active" id="current-page">1</a></li>
-                                <li><a href="#">&raquo;</a></li>
-                            </ul>
-                            <span style="line-height: 34px;margin-left: 50px">共<span id="page-num">0</span>页</span>
                         </div>
                     </div>
                 </div>
@@ -470,13 +464,33 @@
     $("[search-for]").click(function () {
         $("[search-group]").hide();
         $("#"+$(this).attr("search-for")).show();
-    })
+    });
+    var json_str="";
 
     $("#result-table").bootstrapTable({
+        url:"/multi-search-result2",
+        queryParamsType:'',
+        queryParams: function queryParams(params) {
+            var param = {
+                pageNumber: params.pageNumber,
+                pageSize: params.pageSize,
+                json:json_str
+            };
+            return param;
+        },
+        pagination: true,//是否开启分页（*）
+        pageNumber:1,//初始化加载第一页，默认第一页
+        pageSize: 10,//每页的记录行数（*）
+        pageList: [10,20,50],//可供选择的每页的行数（*）
+        sidePagination: "server", //分页方式：client客户端分页，server服务端分页（*）
         onLoadSuccess: function(rdata){  //加载成功时执行
-            console.log("加载成功"+rdata);
+            //console.log("加载成功"+rdata);
+            $("#time-span").text(rdata["time"]);
+            $("#total-span").text(rdata["total"]);
+            $("#search-info").show();
         }
-    })
+    });
+
 
     function addItem() {
         //$("#item-block").clone(true).after($("#item-block").last()).show();
@@ -565,8 +579,8 @@
             };
             json.push(item);
         })
-        var json_str = JSON.stringify(json);
-        $('#result-table').bootstrapTable('refresh', { url: '/multi-search-result',query:{json:json_str}});
+        json_str = JSON.stringify(json);
+        $('#result-table').bootstrapTable('refresh', { url: '/multi-search-result',query:{pageSize:10,pageNumber:1,json:json_str}});
     }
 </script>
 
