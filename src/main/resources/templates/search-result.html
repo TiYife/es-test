@@ -279,14 +279,26 @@
 
         window.operateEvents = {
             'click .detail': function (e, value, row, index) {
-                var html = [];
-                html.push('<div  class="row">');
-                html.push('<div class="col-md-12">');
-                html.push(''+row["content"]+'')
-                html.push('</div>');
-                html.push('</div>');
-                var coln = $('#result-table').bootstrapTable('getVisibleColumns').length;
-                $('#result-table').find('tr[data-index='+index+']').after('<tr class="detail-view" detail-index="'+index+'"><td colspan="'+coln+'">'+html.join('')+'</td></tr>');
+                $.post("/get-txt",{id:row["docId"]},function (rdata) {
+                    if(!rdata.startsWith("error")){
+                        $.gyAlert({
+                            title:"案例详情",
+                            contentHtml:'<pre style="width: 100%">'+rdata+'</pre>'
+                        })
+                    }
+                    else {
+                        if(row["content"]!="")
+                            $.gyAlert({
+                                title:"案例详情",
+                                contentHtml:'<pre style="width: 100%">'+row["content"]+'</pre>'
+                            });
+                        else
+                            $.gyAlert({
+                                title:"错误",
+                                contentText:"获取案例详情时出错"+rdata
+                            });
+                    }
+                })
             },
 
             'click .recommend': function (e, value, row, index) {

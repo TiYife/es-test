@@ -191,7 +191,7 @@ public class AdminController {
 
     @RequestMapping("add-dic")
     @ResponseBody
-    public  String register(@RequestParam("word") String word,
+    public  String addDic(@RequestParam("word") String word,
                             @RequestParam("type") String type,
                             @RequestParam("sepaType") String sepaType,
                             HttpServletRequest request,
@@ -219,6 +219,42 @@ public class AdminController {
         }
         else {
             return "词典保存失败,"+re1+re2;
+        }
+    }
+
+    @RequestMapping("edit-dic")
+    @ResponseBody
+    public  String editDic(@RequestParam("word") String word,
+                            @RequestParam("type") String type,
+                            @RequestParam("sepaType") String sepaType,
+                            HttpServletRequest request,
+                            HttpSession session)
+    {
+
+        if(dicRepository.findFirstByWord(word)==null)
+            return "不存在该词组";
+        DicEntity dic=dicRepository.findFirstByWord(word);
+        //int re1=wordSeparateService.addDic(word,sepaType);
+        //int re2=wordSeparateService.saveDic();
+        //if(re1>0&&re2>0)
+        if(true)
+        {
+            dic.setType(type);
+            dic.setSepaType(sepaType);
+            Date day=new Date();
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            dic.setCreateTime(df.format(day));
+            dic.setRemark("edit:"+df.format(day));
+            //UserEntity user=(UserEntity)session.getAttribute("user");
+            //dic.setCreateUserId(user.getId());
+            String uId= IdentityUtil.getCookieValue(request,"userId");
+            dic.setRemark(dic.getRemark()+"edit:"+df.format(day)+" "+uId+"#");
+            dicRepository.save(dic);
+            return "success";
+        }
+        else {
+            //return "词典保存失败,"+re1+re2;
+            return "success";
         }
     }
 

@@ -235,9 +235,9 @@
         })
     }
 
-    function add() {
+    function edit() {
         var data={
-            id:parseInt( $("#word-id-p").text()),
+            word:$("#eidt-word-input").val(),
             type:$("#edit-type-input").val(),
             sepaType:$("#edit-wordtyppe-input").val()
         }
@@ -270,6 +270,7 @@
             $("#edit-word-input").val(row["word"]);
             $("#edit-wordtype-input").val(row["sepaType"]);
             $("#edit-type-input").val(row["type"]);
+            $("#word-id-p").text(row["id"]);
             $("#editDicModal").modal("show");
         },
         'click .delete':function (e,value,row,index) {

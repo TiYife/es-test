@@ -561,12 +561,6 @@
 </script>
 
 <script>
-    function onEnterDown(event) {
-        var e = event || window.event || arguments.callee.caller.arguments[0];
-        if (e&&e.keyCode==13){
-            ;
-        }
-    }
     //提交表单
     function multi_search_submit() {
         var json = [];
@@ -688,18 +682,6 @@
 
 <script>
 
-    function onEnterDown(event) {
-        var e = event || window.event || arguments.callee.caller.arguments[0];
-        if (e&&e.keyCode==13){
-            search_submit();
-        }
-    }
-    //提交表单
-    function search_submit() {
-        var attr = $("#type-select").val();
-        var keyword = $("#search-input").val();
-        location.href = "simple-search?attr=" + attr + "&keyword=" + keyword;
-    }
 </script>
 </body>
 </html>
