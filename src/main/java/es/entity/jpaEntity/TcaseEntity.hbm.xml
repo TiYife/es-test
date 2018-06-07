@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="es.entity.jpaEntity.TcaseEntity" table="tcase" schema="esWeb">
+        <id name="docId">
+            <column name="doc_id" sql-type="int(11)"/>
+        </id>
+        <property name="caseType">
+            <column name="case_type" sql-type="varchar(32)" length="32" not-null="true"/>
+        </property>
+        <property name="caseName">
+            <column name="case_name" sql-type="varchar(3024)" length="3024" not-null="true"/>
+        </property>
+        <property name="courtName">
+            <column name="court_name" sql-type="varchar(3024)" length="3024" not-null="true"/>
+        </property>
+        <property name="docType">
+            <column name="doc_type" sql-type="varchar(3024)" length="3024" not-null="true"/>
+        </property>
+        <property name="caseNo">
+            <column name="case_no" sql-type="varchar(3024)" length="3024" not-null="true"/>
+        </property>
+        <property name="client">
+            <column name="client" sql-type="mediumtext" not-null="true"/>
+        </property>
+        <property name="clerk">
+            <column name="CLERK" sql-type="varchar(512)" length="512" not-null="true"/>
+        </property>
+        <property name="trailDate">
+            <column name="trail_date" sql-type="varchar(3024)" length="3024" not-null="true"/>
+        </property>
+        <property name="judge">
+            <column name="judge" sql-type="varchar(5014)" length="5014" not-null="true"/>
+        </property>
+        <property name="content">
+            <column name="content" sql-type="longtext" not-null="true"/>
+        </property>
+        <property name="courtId">
+            <column name="court_id" sql-type="varchar(128)" length="128" not-null="true"/>
+        </property>
+        <property name="trailYear">
+            <column name="trail_year" sql-type="int(11)" not-null="true"/>
+        </property>
+        <property name="courtProvince">
+            <column name="court_province" sql-type="varchar(16)" length="16" not-null="true"/>
+        </property>
+        <property name="caseCause">
+            <column name="case_cause" sql-type="varchar(8)" length="8" not-null="true"/>
+        </property>
+        <property name="trailProcedure">
+            <column name="trail_procedure" sql-type="varchar(8)" length="8" not-null="true"/>
+        </property>
+    </class>
+</hibernate-mapping>

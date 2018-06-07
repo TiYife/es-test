@@ -3,9 +3,12 @@ package es;
 
 import com.sun.jna.Native;
 import es.Util.FileUtil;
+import es.controller.TestController;
 import es.entity.esEntity.DocEntity;
+import es.entity.jpaEntity.TcaseEntity;
 import es.entity.word.WordSimilarity;
 import es.repository.esRepository.DocRepository;
+import es.repository.jpaRepository.TcaseRepository;
 import es.service.NLPTRService;
 import es.service.SaveService;
 import es.service.SearchService;
@@ -16,8 +19,10 @@ import org.elasticsearch.index.query.functionscore.FunctionScoreQueryBuilder;
 import org.elasticsearch.index.query.functionscore.ScoreFunctionBuilders;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
@@ -28,10 +33,12 @@ import org.springframework.test.context.junit4.SpringRunner;
 import javax.annotation.Resource;
 import java.io.File;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.List;
 
 import static es.Constant.xmlLocation;
 import static org.elasticsearch.index.query.QueryBuilders.boolQuery;
+import static org.elasticsearch.index.query.QueryBuilders.limitQuery;
 
 /**
  * Created by 13051 on 2018/2/27.
@@ -43,7 +50,7 @@ public class TEST {
     @Autowired
     SaveService saveService;
     @Autowired
-    SearchService searchService;
+    TcaseRepository tcaseRepository;
     @Autowired
     DocRepository docRepository;
     @Autowired
@@ -51,6 +58,7 @@ public class TEST {
 
     @Resource
     private WordSeparateServiceImpl wordSeparateService;
+    private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(Test.class);
 
     @Test
     public void testXml() {
@@ -318,6 +326,49 @@ public class TEST {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Test
+    public void testImport(){
+        Pageable pageable = new PageRequest(0, 100);
+        Page<TcaseEntity> page = tcaseRepository.findAll(pageable);
+        List<TcaseEntity> caseList;
+        List<DocEntity> docList;
+        DocEntity doc;
+        for(int i =109;i<page.getTotalPages();i++){
+            LOGGER.info("importing "+i);
+            page = tcaseRepository.findAll(new PageRequest(i,100));
+            caseList = page.getContent();
+            docList = new ArrayList<>();
+            for (TcaseEntity entity:caseList
+                    ) {
+                if(entity.getContent()==null||entity.getContent().equals(""))
+                    continue;
+                doc=new DocEntity();
+                doc.setDocId(entity.getDocId()+"");
+                doc.setCaseName(entity.getCaseName());
+                doc.setCourtName(entity.getCourtName());
+                doc.setCourtProvince(entity.getCourtProvince());
+                doc.setCaseType(entity.getCaseType());
+                doc.setTrialProcedure(entity.getTrailProcedure());
+                doc.setDocType(entity.getDocType());
+                doc.setCaseNo(entity.getCaseNo());
+                doc.setCaseCause(entity.getCaseCause());
+                doc.setClient(entity.getClient());
+                doc.setJudge(entity.getJudge());
+                doc.setClient(entity.getClerk());
+                doc.setTrialDate(entity.getTrailDate());
+                doc.setTrialYear(entity.getTrailYear()+"");
+                doc.setContent(entity.getContent());
+                docList.add(doc);
+            }
+            docRepository.save(docList);
+        }
+    }
+
+    @Test
+    public void deleteDoc(){
+        docRepository.delete("2061464");
     }
 }
 
