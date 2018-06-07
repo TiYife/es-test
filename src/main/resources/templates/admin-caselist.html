@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"></meta>
-    <title>Title</title>
+    <title>法律案例检索系统</title>
 
     <script src="assets/plugins/jquery-1.10.2.js"></script>
     <script src="assets/plugins/jquery.cookie.js"></script>
@@ -34,7 +34,7 @@
                                     <th data-field="saveTime">处理时间</th>
                                     <th data-field="status" >文本状态</th>
                                     <th data-field="uploader" >上传人</th>
-                                    <th data-formatter="operateFormatter" data-events='operateEvents'>操作</th>
+                                    <th data-formatter="operateFormatter" data-events='operateEvents' data-width=" 140px">操作</th>
                                 </tr>
                                 </thead>
                             </table>
@@ -100,10 +100,16 @@
                     })
                 }
                 else {
-                    $.gyAlert({
-                        title:"错误",
-                        contentText:"获取案例详情时出错"+rdata
-                    })
+                    if(row["content"]!="")
+                        $.gyAlert({
+                            title:"案例详情",
+                            contentHtml:'<pre style="width: 100%">'+row["content"]+'</pre>'
+                        });
+                    else
+                        $.gyAlert({
+                            title:"错误",
+                            contentText:"获取案例详情时出错"+rdata
+                        });
                 }
             })
         },

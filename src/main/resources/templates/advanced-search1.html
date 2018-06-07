@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"></meta>
-    <title>Title</title>
+    <title>法律案例检索系统</title>
 
     <script src="assets/plugins/jquery-1.10.2.js"></script>
     <script src="assets/plugins/jquery.cookie.js"></script>
@@ -149,7 +149,7 @@
 
                 <div class="col-lg-12" id="item-block" item-type style="text-align: left;margin-top: 10px;display: none">
                     <div class="input-group">
-                        <select class="form-control" input-type="type" style="width:58px">
+                        <select class="form-control" input-type="type" style="width:108px">
                             <option value="and">并含</option>
                             <option value="or">或者</option>
                             <option value="not">不含</option>
@@ -222,7 +222,7 @@
                     <h3>输入情况：</h3>
                 </div>
                 <div class="col-lg-12" style="text-align: left">
-                    <textarea id="similar-search-text" class="form-control" style="min-width: 100%;max-width: 100%;height: 150px" placeholder="请尽可能详细的描述你遇到的情况" onkeydown="onEnterDown()"></textarea>
+                    <textarea id="similar-search-text" class="form-control" data-width=" 100%;max-width: 100%;height: 150px" placeholder="请尽可能详细的描述你遇到的情况" onkeydown="onEnterDown()"></textarea>
                 </div>
                 <div class="col-lg-12 form-inline" style="text-align: left">
                     <label style="margin-right: 20px">匹配程度：</label>
@@ -319,7 +319,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-sm-12" style="text-align: center;margin-top: 50px">
+        <div class="col-sm-12" style="text-align: center;margin-top: 20px">
             <div class="row">
                 <div class="col-lg-12">
                     <div class="panel panel-default">
@@ -330,9 +330,9 @@
                                     <th data-field="caseName" >案件名称</th>
                                     <th data-field="courtName">法院名称</th>
                                     <th data-field="courtLevel" data-visible="false">法院层级</th>
-                                    <th data-field="courtProvince" data-visible="false">法院省份</th>
+                                    <th data-field="courtProvince">法院省份</th>
                                     <th data-field="courtCity" data-visible="false">法院地市</th>
-                                    <th data-field="courtCountry" >法院区县</th>
+                                    <th data-field="courtCountry"  data-visible="false">法院区县</th>
                                     <th data-field="courtRegion" data-visible="false">法院区域</th>
                                     <th data-field="isExpUnit" data-visible="false">法院试点</th>
                                     <th data-field="courtType" data-visible="false">法院类型</th>
@@ -353,7 +353,7 @@
                                     <th data-field="courtLevelFour" data-visible="false">四级法院</th>
                                     <th data-field="courtSuperior" data-visible="false">上级法院名称</th>
                                     <th data-field="content" data-visible="false" >判决内容</th>
-                                    <th data-formatter="operateFormatter" data-events='operateEvents'>操作</th>
+                                    <th data-formatter="operateFormatter" data-events='operateEvents' data-width="200px">操作</th>
                                 </tr>
                                 </thead>
                             </table>
@@ -525,10 +525,16 @@
                     })
                 }
                 else {
-                    $.gyAlert({
-                        title:"错误",
-                        contentText:"获取案例详情时出错"+rdata
-                    })
+                    if(row["content"]!="")
+                        $.gyAlert({
+                            title:"案例详情",
+                            contentHtml:'<pre style="width: 100%">'+row["content"]+'</pre>'
+                        });
+                    else
+                        $.gyAlert({
+                            title:"错误",
+                            contentText:"获取案例详情时出错"+rdata
+                        });
                 }
             })
         },

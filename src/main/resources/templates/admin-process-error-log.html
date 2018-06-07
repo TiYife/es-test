@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>法律案例检索系统</title>
 
     <script src="assets/plugins/jquery-1.10.2.js"></script>
     <script src="assets/plugins/jquery.cookie.js"></script>
@@ -88,10 +88,16 @@
                     })
                 }
                 else {
-                    $.gyAlert({
-                        title:"错误",
-                        contentText:"获取案例详情时出错"+rdata
-                    })
+                    if(row["content"]!="")
+                        $.gyAlert({
+                            title:"案例详情",
+                            contentHtml:'<pre style="width: 100%">'+row["content"]+'</pre>'
+                        });
+                    else
+                        $.gyAlert({
+                            title:"错误",
+                            contentText:"获取案例详情时出错"+rdata
+                        });
                 }
             })
         }

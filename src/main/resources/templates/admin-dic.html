@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>法律案例检索系统</title>
 
     <script src="assets/plugins/jquery-1.10.2.js"></script>
     <script src="assets/plugins/jquery.cookie.js"></script>
@@ -49,7 +49,7 @@
                         <th data-field="createUserId">创建人编号</th>
                         <th data-field="createId">词典导入编号</th>
                         <th data-field="remark">备注</th>
-                        <th data-formatter="operateFormatter" data-events='operateEvents'>操作</th>
+                        <th data-formatter="operateFormatter" data-events='operateEvents' data-width=" 165px">操作</th>
                     </tr>
                     </thead>
                 </table>
@@ -100,6 +100,7 @@
 
                 <div class="col-sm-12" style="margin-top: 25px;text-align: center">
                     <input id="edit-word-input" class="form-control" placeholder="词组" disabled="disabled" style="width: 100%" />
+                    <span id="word-id-s" style="display: none"></span>
                 </div>
                 <div class="col-sm-12" style="margin-top: 25px;text-align: center">
                     <input id="edit-wordtype-input" class="form-control" placeholder="词性" style="width: 100%" />
@@ -112,7 +113,7 @@
             </div>
             <div class="modal-footer" style="text-align: center">
                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                <button type="button" class="btn btn-primary" onclick="jia2()">添加</button>
+                <button type="button" class="btn btn-primary" onclick="edit()">添加</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal -->
@@ -140,7 +141,7 @@
         $('#word-table').bootstrapTable('refresh', { url: '/list-dics' });
     }
 
-    function jia2() {
+    function edit() {
         $('#word-table').bootstrapTable('refresh', { url: '/list-dics' });
     }
 </script>
@@ -229,6 +230,31 @@
                 $.gyAlert({
                     title: "操作失败",
                     contentText: "添加失败 " + rdata
+                })
+            }
+        })
+    }
+
+    function add() {
+        var data={
+            id:parseInt( $("#word-id-p").text()),
+            type:$("#edit-type-input").val(),
+            sepaType:$("#edit-wordtyppe-input").val()
+        }
+        $.post("/edit-dic",data,function (rdata) {
+            $("#editDicModal").modal("hide");
+            if (rdata == "success") {
+                $.gyAlert({
+                    title: "操作成功",
+                    contentText: "已成功修改该词组"
+                });
+                $('#word-table').bootstrapTable('refresh', { url: '/list-dics' });
+
+            }
+            else {
+                $.gyAlert({
+                    title: "操作失败",
+                    contentText: "修改失败 " + rdata
                 })
             }
         })
