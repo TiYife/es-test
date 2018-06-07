@@ -75,6 +75,7 @@ public class SaveServiceImpl implements SaveService {
     @Async
     public String saveFile(UpLogEntity upLogEntity) {
         String rMsg;
+        if(upLogEntity.getIsSave()!=0)return "该记录正在处理";
         upLogEntity.setIsSave(2);
         int userId = upLogEntity.getUploader();
         String upLogId = upLogEntity.getId();
