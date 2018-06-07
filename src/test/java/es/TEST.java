@@ -365,5 +365,10 @@ public class TEST {
             docRepository.save(docList);
         }
     }
+
+    @Test
+    public void deleteDoc(){
+        docRepository.delete("2061464");
+    }
 }
 

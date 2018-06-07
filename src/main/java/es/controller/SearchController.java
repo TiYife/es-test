@@ -32,8 +32,6 @@ public class SearchController {
     @Autowired
     UserRepository userRepository;
 
-    private int pageSize = 203;
-
     @RequestMapping("/simple-search")
     public String simpleSearchResult(@RequestParam("attr")String attr,
                                      @RequestParam("keyword") String keyword,
@@ -50,10 +48,10 @@ public class SearchController {
                                @RequestParam("pageSize")int pSize,
                                @RequestParam("attr")String attr,
                                @RequestParam("keyword") String keyword) throws JSONException {
-        Page<DocEntity> page = searchService.searchLaw(pageNumber,pSize,attr,keyword);
+        Page<DocEntity> page = searchService.searchLaw(pageNumber-1,pSize,attr,keyword);
         JSONObject jsonObject=new JSONObject();
         double timeCost=1.0;
-        jsonObject.put("total",page.getTotalElements());
+        jsonObject.put("total",page.getTotalElements()-1);
         jsonObject.put("time",timeCost);
         jsonObject.put("rows",new JSONArray(new Gson().toJson(page.getContent())));
         return jsonObject.toString();
@@ -65,10 +63,10 @@ public class SearchController {
                                     @RequestParam("pageSize")int pSize,
                                     @RequestParam("json")String jsonStr) throws JSONException {
         JSONArray json=new JSONArray(jsonStr);
-        Page<DocEntity> page = searchService.multiSearch(pageNumber,pSize,json);
+        Page<DocEntity> page = searchService.multiSearch(pageNumber-1,pSize,json);
         JSONObject jsonObject=new JSONObject();
         double timeCost=1.0;
-        jsonObject.put("total",page.getTotalElements());
+        jsonObject.put("total",page.getTotalElements()-1);
         jsonObject.put("time",timeCost);
         jsonObject.put("rows",new JSONArray(new Gson().toJson(page.getContent())));
         return jsonObject.toString();
@@ -78,7 +76,7 @@ public class SearchController {
     @RequestMapping("/similar-search-result")
     @ResponseBody
     public String similarSearchResult(@RequestParam("describe") String describe){
-        Page<DocEntity> page = searchService.similarSearch(0,pageSize,describe);
+        Page<DocEntity> page = searchService.similarSearch(0,50,describe);
         return new Gson().toJson(page.getContent());
     }
 
