@@ -75,6 +75,7 @@ public class SaveServiceImpl implements SaveService {
     @Async
     public String saveFile(UpLogEntity upLogEntity) {
         String rMsg;
+        if(upLogEntity.getIsSave()!=0)return "该记录正在处理";
         upLogEntity.setIsSave(2);
         int userId = upLogEntity.getUploader();
         String upLogId = upLogEntity.getId();
@@ -205,7 +206,12 @@ public class SaveServiceImpl implements SaveService {
     //private String saveTxt(File up, String oldName, int userId) {
     private String saveTxt(TxtEntity entity) {
         File up = new File(entity.getLocation());
-        String filePath = wordSeparateService.fileProcessAndSave(up.getAbsolutePath(), Constant.newDocLocation, xmlLocation);
+        String filePath;
+        try {
+            filePath = wordSeparateService.fileProcessAndSave(up.getAbsolutePath(), Constant.newDocLocation, xmlLocation);
+        }catch (Exception e){
+            return "分词处理错误";
+        }
         if (filePath == null) {
             entity.setStatus(-2);
             return "word separate error";
@@ -235,9 +241,18 @@ public class SaveServiceImpl implements SaveService {
 
         //分词+转移
         LOGGER.info("word separating ");
+        int i = 1;
         for (TxtEntity entity: list) {
+            i++;
+            if(i%100==0)LOGGER.info("separating "+i);
             up = new File(entity.getLocation());
-            filePath = wordSeparateService.fileProcessAndSave(up.getAbsolutePath(), Constant.newDocLocation, xmlLocation);
+            try {
+                filePath = wordSeparateService.fileProcessAndSave(up.getAbsolutePath(), Constant.newDocLocation, xmlLocation);
+            }
+            catch (Exception e){
+                entity.setStatus(-2);
+                continue;
+            }
             if (filePath == null) {
                 entity.setStatus(-2);
                 continue;
@@ -294,7 +309,9 @@ public class SaveServiceImpl implements SaveService {
         List queries = new ArrayList();
         for (TxtEntity entity : list) {
             counter++;
-            File fileToUp = new File(entity.getXmlLocation());
+            String location = entity.getXmlLocation();
+            if(location==null||location.equals(null)) continue;
+            File fileToUp = new File(location);
             JSONObject json = ConvertUtil.xmlToJson(fileToUp);
             IndexQuery indexQuery = new IndexQuery();
             indexQuery.setId(entity.getId());
@@ -306,7 +323,7 @@ public class SaveServiceImpl implements SaveService {
             if (counter % 500 == 0) {
                 elasticsearchTemplate.bulkIndex(queries);
                 queries.clear();
-                LOGGER.info("分组索引: " + counter);
+                LOGGER.info("group indexing: " + counter);
             }
         }
         //不足批的索引
@@ -314,12 +331,12 @@ public class SaveServiceImpl implements SaveService {
             elasticsearchTemplate.bulkIndex(queries);
         }
         elasticsearchTemplate.refresh(Constant.INDEX_NAME);
-        LOGGER.info("索引完成");
+        LOGGER.info("index done");
     }
 
     private List<TxtEntity> recordTxts(File file, int userId, String upLogId) {
         //遍历
-        LOGGER.info("file recording");
+        LOGGER.info("list files");
        // File file = new File(newDocLocation + FileUtil.getFileName(dir.getName()));
         //File file = new File(dir);todo 为啥不直接dir
         List<String> fileList = new ArrayList<>();
@@ -330,9 +347,14 @@ public class SaveServiceImpl implements SaveService {
         }
 
         //记录
+        LOGGER.info("file recording");
+        int i = 0;
         List<TxtEntity> entityList = new ArrayList<>();
         for (String s : fileList
                 ) {
+            i++;
+            if(i%100==0)
+                LOGGER.info("recording "+i);
             entityList.add(recordTxt(s, userId, upLogId));
         }
         return entityList;
