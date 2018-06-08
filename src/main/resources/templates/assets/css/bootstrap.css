@@ -21,6 +21,11 @@
 #header{
   background: #2365a5!important;
 }
+.modal-body pre{
+  white-space:pre-wrap;
+  white-space:-moz-pre-wrap;
+  white-space:-o-pre-wrap;
+}
 
 /*! normalize.css v3.0.0 | MIT License | git.io/normalize */
 html {

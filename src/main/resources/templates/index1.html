@@ -232,7 +232,7 @@
                 $.cookie("userName",$("#login-username-input").val(), { expires: 1 });
                 $.cookie("userPasswd",$("#login-password-input").val(), { expires: 1 });
                 $("#loginModal").modal("hide");
-                $("#username-a").text(rdata.substring(9));
+                $("#username-a").text($("#login-username-input").val());
                 if(rdata.substring(8).startsWith("1"))
                     $("#toadmin-a").show();
                 else
