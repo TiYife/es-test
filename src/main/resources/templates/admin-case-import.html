@@ -49,14 +49,14 @@
     <div class="col-sm-12"style="margin-top: 10px">
         <div class="panel panel-default">
             <div class="panel-body">
-                <table data-toggle="table" data-url="/list-up" data-show-refresh="true" data-show-toggle="true" data-show-columns="true" data-search="true" data-select-item-name="toolbar1" data-pagination="true" data-sort-order="desc" data-show-export="true" id="user-table">
+                <table data-toggle="table" data-url="/list-up" data-show-refresh="true" data-show-toggle="true" data-show-columns="true" data-search="true" data-select-item-name="toolbar1" data-pagination="true" data-sort-name="upTime" data-sort-order="desc" data-show-export="true" id="user-table">
                     <thead>
                     <tr>
                         <th data-field="id">编号</th>
-                        <th data-field="fileName">文件名</th>
-                        <th data-field="uploader">上传人</th>
-                        <th data-field="upTime">上传时间</th>
-                        <th data-field="isSave" data-formatter="stateFormatter">处理状态</th>
+                        <th data-field="fileName" data-sortable="true">文件名</th>
+                        <th data-field="uploader" data-sortable="true">上传人</th>
+                        <th data-field="upTime" data-sortable="true">上传时间</th>
+                        <th data-field="isSave" data-formatter="stateFormatter" data-sortable="true">处理状态</th>
                         <th data-formatter="operateFormatter" data-events='operateEvents' data-width=" 165px">操作</th>
                     </tr>
                     </thead>

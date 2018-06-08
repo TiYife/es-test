@@ -37,18 +37,18 @@
                         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>批量删除词典
                     </a>-->
                 </div>
-                <table data-toggle="table" data-url="/list-dics" data-show-refresh="true" data-show-toggle="true" data-show-columns="true" data-search="true" data-select-item-name="toolbar1" data-pagination="true" data-sort-order="desc" data-show-export="true" id="word-table">
+                <table data-toggle="table" data-url="/list-dics" data-show-refresh="true" data-show-toggle="true" data-show-columns="true" data-search="true" data-select-item-name="toolbar1" data-pagination="true" data-sort-name="createTime" data-sort-order="desc" data-show-export="true" id="word-table">
                     <thead>
                     <tr>
                         <th data-formatter="idFormatter" data-field="id">编号</th>
                         <th data-field="word">词组</th>
-                        <th data-field="type">类型</th>
-                        <th data-field="sepaType">分词词性</th>
+                        <th data-field="type" data-sortable="true">类型</th>
+                        <th data-field="sepaType" data-sortable="true">分词词性</th>
                         <th data-field="parentId"  data-visible="false">父级编号</th>
-                        <th data-field="createTime">创建时间</th>
-                        <th data-field="createUserId">创建人编号</th>
+                        <th data-field="createTime" data-sortable="true">创建时间</th>
+                        <th data-field="createUserId" data-sortable="true">创建人编号</th>
                         <th data-field="createId" data-visible="false">词典导入编号</th>
-                        <th data-field="remark" data-visible="false">备注</th>
+                        <th data-field="remark" data-visible="false" data-sortable="true">备注</th>
                         <th data-formatter="operateFormatter" data-events='operateEvents' data-width=" 165px">操作</th>
                     </tr>
                     </thead>
