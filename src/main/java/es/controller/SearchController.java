@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
+import java.util.Calendar;
 
 /**
  * Created by TYF on 2018/4/8.
@@ -48,10 +49,13 @@ public class SearchController {
                                @RequestParam("pageSize")int pSize,
                                @RequestParam("attr")String attr,
                                @RequestParam("keyword") String keyword) throws JSONException {
+        long t1 = Calendar.getInstance().getTimeInMillis();
         Page<DocEntity> page = searchService.searchLaw(pageNumber-1,pSize,attr,keyword);
+        long t2 = Calendar.getInstance().getTimeInMillis();
+        long t = t2-t1;
+        double timeCost=(double)t/1000;
         JSONObject jsonObject=new JSONObject();
-        double timeCost=1.0;
-        jsonObject.put("total",page.getTotalElements()-1);
+        jsonObject.put("total",page.getTotalElements());
         jsonObject.put("time",timeCost);
         jsonObject.put("rows",new JSONArray(new Gson().toJson(page.getContent())));
         return jsonObject.toString();
@@ -63,10 +67,13 @@ public class SearchController {
                                     @RequestParam("pageSize")int pSize,
                                     @RequestParam("json")String jsonStr) throws JSONException {
         JSONArray json=new JSONArray(jsonStr);
+        long t1 = Calendar.getInstance().getTimeInMillis();
         Page<DocEntity> page = searchService.multiSearch(pageNumber-1,pSize,json);
+        long t2 = Calendar.getInstance().getTimeInMillis();
+        long t = t2-t1;
+        double timeCost=(double)t/1000;
         JSONObject jsonObject=new JSONObject();
-        double timeCost=1.0;
-        jsonObject.put("total",page.getTotalElements()-1);
+        jsonObject.put("total",page.getTotalElements());
         jsonObject.put("time",timeCost);
         jsonObject.put("rows",new JSONArray(new Gson().toJson(page.getContent())));
         return jsonObject.toString();
@@ -79,10 +86,13 @@ public class SearchController {
                                       @RequestParam("pageSize")int pSize,
                                       @RequestParam("json") String json) throws JSONException {
         JSONObject jsonO=new JSONObject(json);
+        long t1 = Calendar.getInstance().getTimeInMillis();
         Page<DocEntity> page = searchService.similarSearch(pageNumber-1,pSize,jsonO.get("describe").toString());
+        long t2 = Calendar.getInstance().getTimeInMillis();
+        long t = t2-t1;
+        double timeCost=(double)t/1000;
         JSONObject jsonObject=new JSONObject();
-        double timeCost=1.0;
-        jsonObject.put("total",page.getTotalElements()-1);
+        jsonObject.put("total",page.getTotalElements());
         jsonObject.put("time",timeCost);
         jsonObject.put("rows",new JSONArray(new Gson().toJson(page.getContent())));
         return jsonObject.toString();
