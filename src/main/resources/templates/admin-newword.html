@@ -31,7 +31,7 @@
                 <table data-toggle="table" data-url="/list-new-words" data-show-refresh="true" data-show-toggle="true" data-show-columns="true" data-search="true" data-select-item-name="toolbar1" data-pagination="true" data-sort-order="desc" data-show-export="true" id="word-table">
                     <thead>
                     <tr>
-                        <th data-formatter="idFormatter" data-formatter="idFormatter" data-field="id">编号</th>
+                        <th data-formatter="idFormatter" data-field="id">编号</th>
                         <th data-field="word">新词</th>
                         <th data-field="createTime">发现时间</th>
                         <th data-field="createLocation">发现文件位置</th>
@@ -59,12 +59,12 @@
 
                 <div class="col-sm-12" style="margin-top: 25px;display: inline-table">
                     <label style="width: 30%;text-align: right">词组：</label>
-                    <p id="word-p" style="width: 70%;display: inline-block">.</p>
+                    <p id="word-p" style="width: 68%;display: inline-block">.</p>
                     <p id="word-id-p" style="display: none"></p>
                 </div>
                 <div class="col-sm-12" style="margin-top: 25px;display: inline-table">
                     <label style="width: 30%;text-align: right">词性：</label>
-                    <select id="word-type-select" class="form-control" style="width: 70%;display: inline-block">
+                    <select id="word-type-select" class="form-control" style="width: 68%;display: inline-block">
                         <option value="dsr">dsr <i>(当事人)</i></option>
                         <option value="spr">spr <i>(审判人)</i></option>
                         <option value="ay">ay <i>(案由)</i></option>
@@ -73,7 +73,7 @@
                 </div>
                 <div class="col-sm-12" style="margin-top: 25px;display: inline-table">
                     <label style="width: 30%;text-align: right">备注：</label>
-                    <input id="word-mark-input" class="form-control" style="width: 70%;display: inline-block" />
+                    <input id="word-mark-input" class="form-control" style="width: 68%;display: inline-block" />
                 </div>
                 <div style="clear: both"></div>
             </div>
@@ -101,7 +101,7 @@
         ].join('');
 
     };
-    function idFormatter(index, row) {
+    function idFormatter(value, row, index) {
         var html = [];
         html.push(''+(index+1));
 
